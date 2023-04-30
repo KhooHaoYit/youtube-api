@@ -37,7 +37,7 @@ export class AppController {
     }).then(stringify);
   }
 
-  @Get('videos/:id/exists')
+  @Get('video/:id/exists')
   async hasVideo(@Param('id') id: string) {
     const result = await this.prisma.video.findUnique({
       where: { id },
