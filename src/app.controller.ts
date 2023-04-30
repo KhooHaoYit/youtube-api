@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { PrismaService } from 'nestjs-prisma';
 import { YoutubeScraper } from './youtube/scraper';
 
+@Controller()
 export class AppController {
 
   constructor(
