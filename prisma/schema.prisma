@@ -1,0 +1,108 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator nestgraphql {
+  provider                        = "node node_modules/prisma-nestjs-graphql"
+  output                          = "../src/@generated"
+  purgeOutput                     = true
+  graphqlScalars_BigInt_name      = "GraphQLBigInt"
+  graphqlScalars_BigInt_specifier = "graphql-scalars"
+}
+
+model Playlist {
+  id String @id @unique
+
+  title          String?
+  view           Int?
+  estimatedCount Int?
+  lastUpdated    String?
+  description    String?
+  visibility     String?
+
+  videoIds String[]
+
+  channelId String?
+  channel   Channel? @relation(fields: [channelId], references: [id])
+
+  i_createdAt DateTime  @default(now())
+  i_updatedAt DateTime  @updatedAt
+  i_fetchedAt DateTime?
+}
+
+model Video {
+  id            String      @id @unique
+  visibility    Visibility?
+  removedReason String?
+
+  title       String?
+  description String?
+
+  keywords           String[]
+  category           String?
+  publishDate        String?
+  uploadDate         String?
+  liveStartTimestamp DateTime?
+  liveEndTimestamp   DateTime?
+  viewCount          BigInt?
+  duration           Int?
+
+  isLivestream        Boolean?
+  isAgeRestricted     Boolean?
+  isMembershipContent Boolean?
+
+  channelId String?
+  channel   Channel? @relation(fields: [channelId], references: [id])
+
+  i_createdAt DateTime  @default(now())
+  i_updatedAt DateTime  @updatedAt
+  i_fetchedAt DateTime?
+}
+
+enum Visibility {
+  public
+  unlisted
+  private
+  deleted
+  removed
+}
+
+model Channel {
+  id String @unique
+
+  name        String?
+  handle      String?
+  avatarUrl   String?
+  bannerUrl   String?
+  description String?
+  location    String?
+  joinedAt    String?
+
+  viewCount       BigInt?
+  subscriberCount Int?
+
+  verified              Boolean?
+  haveBusinessEmail     Boolean?
+  haveMembershipFeature Boolean?
+
+  featuredDisplay  Json?
+  playlistsDisplay Json?
+  channels         Json?
+  // amountShown
+  links            Json?
+
+  videos    Video[]
+  playlists Playlist[]
+
+  i_createdAt DateTime  @default(now())
+  i_updatedAt DateTime  @updatedAt
+  i_fetchedAt DateTime?
+}

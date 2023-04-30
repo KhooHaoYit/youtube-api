@@ -1,3 +1,6 @@
+Dockerfile
+.dockerignore
+
 src/@generated
 src/youtube/types/data
 
