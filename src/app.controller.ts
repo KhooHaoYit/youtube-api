@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { PrismaService } from 'nestjs-prisma';
@@ -91,13 +92,17 @@ export class AppController {
   }
 
   @Post('channel/:id/fetchAll')
-  async fetchChannelAll(@Param('id') id: string) {
-    await this.scraper.scrapeChannelAbout(id);
-    await this.scraper.scrapeChannelChannels(id);
-    await this.scraper.scrapeChannelFeatured(id);
-    await this.scraper.scrapeChannelPlaylists(id);
+  async fetchChannelAll(
+    @Param('id') channelId: string,
+    @Query('includeVideo') _includeVideo?: string
+  ) {
+    const includeVideo = _includeVideo !== '0';
+    await this.scraper.scrapeChannelAbout(channelId);
+    await this.scraper.scrapeChannelChannels(channelId);
+    await this.scraper.scrapeChannelFeatured(channelId);
+    await this.scraper.scrapeChannelPlaylists(channelId);
     const { playlists } = await this.prisma.channel.findUniqueOrThrow({
-      where: { id },
+      where: { id: channelId },
       select: {
         playlists: {
           select: { id: true },
@@ -106,13 +111,32 @@ export class AppController {
     });
     for (const { id } of playlists)
       await this.service.updatePlaylist(id);
-    return await this.getChannel(id);
+    await this.service.updatePlaylist(channelId.replace('UC', 'UU'));
+    await this.service.updatePlaylist(channelId.replace('UC', 'UUMO'))
+      .catch(err => {
+        if (err.message === 'API-Error: The playlist does not exist.')
+          return;
+        throw err;
+      });
+    if (includeVideo)
+      for (
+        const videoId
+        of await this.prisma.channel.findUniqueOrThrow({
+          where: { id: channelId },
+          select: {
+            videos: {
+              select: { id: true },
+            },
+          },
+        }).then(channel => channel.videos.map(video => video.id))
+      ) await this.service.updateVideo(videoId);
+    return await this.getChannel(channelId);
   }
 
   @Get('channel/:id/videos')
-  async getChannelVideos(@Param('id') id: string) {
+  async getChannelVideos(@Param('id') channelId: string) {
     return await this.prisma.channel.findUnique({
-      where: { id },
+      where: { id: channelId },
       select: {
         videos: {
           select: { id: true },
