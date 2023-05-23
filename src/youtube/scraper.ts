@@ -147,16 +147,20 @@ export class YoutubeScraper {
     });
     return {
       badges: <[months: number, url: string][]>getChannelTab(ytInitialData, 'Membership')
-        ?.tabRenderer.content.sectionListRenderer.contents[0].sponsorshipsExpandablePerksRenderer
-        .expandableItems[0].sponsorshipsPerkRenderer.loyaltyBadges.sponsorshipsLoyaltyBadgesRenderer
+        ?.tabRenderer.content.sectionListRenderer.contents
+        .find((content: any) => 'sponsorshipsExpandablePerksRenderer' in content)
+        .sponsorshipsExpandablePerksRenderer.expandableItems[0]
+        .sponsorshipsPerkRenderer.loyaltyBadges.sponsorshipsLoyaltyBadgesRenderer
         .loyaltyBadges.map((badge: any) => [
           +(badge.sponsorshipsLoyaltyBadgeRenderer.title.runs
             .map((run: any) => run.text).join('').match(/\d+/)?.[0] || 0),
           badge.sponsorshipsLoyaltyBadgeRenderer.icon.thumbnails[0].url.replace(/=[^]*$/, '=s0'),
         ]),
       emojis: <[name: string, url: string][]>getChannelTab(ytInitialData, 'Membership')
-        ?.tabRenderer.content.sectionListRenderer.contents[0].sponsorshipsExpandablePerksRenderer
-        .expandableItems[1].sponsorshipsPerkRenderer.images.map((image: any) => [
+        ?.tabRenderer.content.sectionListRenderer.contents
+        .find((content: any) => 'sponsorshipsExpandablePerksRenderer' in content)
+        .sponsorshipsExpandablePerksRenderer.expandableItems[1]
+        .sponsorshipsPerkRenderer.images.map((image: any) => [
           image.accessibility.accessibilityData.label,
           image.thumbnails[0].url.replace(/=[^]*$/, '=s0'),
         ]),
