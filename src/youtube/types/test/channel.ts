@@ -21,6 +21,7 @@ import { Data as AkaiHaato_featured } from '../data/AkaiHaato/featured';
 import { Data as fuurayuri_featured } from '../data/fuurayuri/featured';
 import { Data as fuurayuri_about } from '../data/fuurayuri/about';
 import { Data as AsahinaAkane_community } from '../data/AsahinaAkane/community';
+import { Data as AmrzsMonstar_community } from '../data/AmrzsMonstar/community';
 
 import { Channel } from '../export/channel';
 
@@ -49,3 +50,4 @@ import { Channel } from '../export/channel';
 <fuurayuri_featured>{} satisfies Channel;
 <fuurayuri_about>{} satisfies Channel;
 <AsahinaAkane_community>{} satisfies Channel;
+<AmrzsMonstar_community>{} satisfies Channel;

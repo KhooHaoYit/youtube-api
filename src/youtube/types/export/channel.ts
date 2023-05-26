@@ -380,6 +380,10 @@ export type TabCommunity = {
                    */
                   "postId": string,
                 },
+              } | {
+                sharedPostRenderer: {
+                  postId: string,
+                },
               },
             },
           } | {

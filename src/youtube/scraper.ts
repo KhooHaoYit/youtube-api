@@ -48,9 +48,12 @@ export class YoutubeScraper {
       .tabRenderer.content!.sectionListRenderer
       .contents[0].itemSectionRenderer.contents;
     for await (
-      const { backstagePostThreadRenderer: { post: { backstagePostRenderer: { postId } } } }
+      const { backstagePostThreadRenderer: { post } }
       of this.youtube.requestAll(innertubeApiKey, initialPosts)
     ) {
+      const postId = 'backstagePostRenderer' in post
+        ? post.backstagePostRenderer.postId
+        : post.sharedPostRenderer.postId;
       await this.model.handleCommunityPostUpdate({
         id: postId,
         channelId,
