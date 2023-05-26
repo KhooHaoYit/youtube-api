@@ -6,9 +6,11 @@ export type C4TabbedHeaderRenderer = {
    */
   channelId: string,
   /**
+   * not defined if channel doesn't exists
+   * 
    * `hololive English`
    */
-  title: string,
+  title?: string,
   avatar: {
     thumbnails: {
       /**
@@ -61,7 +63,10 @@ export type C4TabbedHeaderRenderer = {
    * not defined if channel doesn't have any badge
    */
   badges?: MetadataBadgeRenderer[],
-  subscribeButton: {
+  /**
+   * not defined if channel doesn't exists
+   */
+  subscribeButton?: {
     /**
      * not defined if not sub-able (like Topic channel)
      */
@@ -87,7 +92,10 @@ export type C4TabbedHeaderRenderer = {
       text: string,
     }],
   },
-  videosCountText: {
+  /**
+   * not defined if channel doesn't exists
+   */
+  videosCountText?: {
     runs: [
       {
         /**
@@ -98,10 +106,12 @@ export type C4TabbedHeaderRenderer = {
       {
         text: " videos"
       }
-    ]
+    ] | [{ text: 'No videos' }],
   },
   /**
    * contains part of description of channel
+   * 
+   * not defined if channel doesn't exists
    */
-  tagline: {}
+  tagline?: {},
 };

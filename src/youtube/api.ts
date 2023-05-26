@@ -86,7 +86,13 @@ export class YoutubeApi {
       if (!continuationToken)
         break;
       list = await this.request(innertubeApiKey, { continuation: continuationToken })
-        .then(res => res.onResponseReceivedActions[0].appendContinuationItemsAction.continuationItems);
+        .then(res => {
+          if ('onResponseReceivedActions' in res)
+            return res.onResponseReceivedActions[0].appendContinuationItemsAction.continuationItems;
+          if ('onResponseReceivedEndpoints' in res)
+            return res.onResponseReceivedEndpoints[0].appendContinuationItemsAction.continuationItems;
+          throw new Error(`Unable to extract continuation result`);
+        });
     }
   }
 

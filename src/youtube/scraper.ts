@@ -39,6 +39,25 @@ export class YoutubeScraper {
     });
   }
 
+  async scrapeChannelCommunityTab(channelId: string) {
+    const {
+      innertubeApiKey,
+      ytInitialData,
+    } = await this.youtube.scrapeYoutubePage(`https://www.youtube.com/channel/${channelId}/community`);
+    const initialPosts = getChannelTab(ytInitialData, 'Community')
+      .tabRenderer.content!.sectionListRenderer
+      .contents[0].itemSectionRenderer.contents;
+    for await (
+      const { backstagePostThreadRenderer: { post: { backstagePostRenderer: { postId } } } }
+      of this.youtube.requestAll(innertubeApiKey, initialPosts)
+    ) {
+      await this.model.handleCommunityPostUpdate({
+        id: postId,
+        channelId,
+      });
+    }
+  }
+
   async scrapeChannelFeatured(channelId: string) {
     const {
       ytInitialData,

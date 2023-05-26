@@ -59,6 +59,8 @@ const info = [
   ['AkaiHaato/_videos/rRneIzh5C54', '/watch?v=rRneIzh5C54'],
 
   ['fuurayuri/about', '/channel/UCUC1EIq0MtF-kctHPtQzIjQ/about'],
+
+  ['AsahinaAkane/community', '/channel/UCe_p3YEuYJb8Np0Ip9dk-FQ/community'],
 ];
 
 (async () => {

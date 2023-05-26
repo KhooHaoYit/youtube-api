@@ -18,6 +18,17 @@ generator nestgraphql {
   graphqlScalars_BigInt_specifier = "graphql-scalars"
 }
 
+model CommunityPost {
+  id String @id
+
+  channelId String?
+  channel   Channel? @relation(fields: [channelId], references: [id])
+
+  i_createdAt DateTime  @default(now())
+  i_updatedAt DateTime  @updatedAt
+  i_fetchedAt DateTime?
+}
+
 model Playlist {
   id String @id @unique
 
@@ -99,8 +110,9 @@ model Channel {
   // amountShown
   links            Json?
 
-  videos    Video[]
-  playlists Playlist[]
+  videos         Video[]
+  playlists      Playlist[]
+  communityPosts CommunityPost[]
 
   i_createdAt DateTime  @default(now())
   i_updatedAt DateTime  @updatedAt

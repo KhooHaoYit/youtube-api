@@ -101,6 +101,7 @@ export class AppController {
     await this.scraper.scrapeChannelChannels(channelId);
     await this.scraper.scrapeChannelFeatured(channelId);
     await this.scraper.scrapeChannelPlaylists(channelId);
+    await this.scraper.scrapeChannelCommunityTab(channelId);
     const { playlists } = await this.prisma.channel.findUniqueOrThrow({
       where: { id: channelId },
       select: {
@@ -179,6 +180,28 @@ export class AppController {
     @Body() body: Record<string, string>,
   ) {
     return await this.scraper.scrapeChannelMembership(id, body);
+  }
+
+  @Get('channel/:channelId/communityPosts')
+  async getCommunityPosts(
+    @Param('channelId') channelId: string,
+  ) {
+    return await this.prisma.channel.findUnique({
+      where: { id: channelId },
+      select: {
+        communityPosts: {
+          select: { id: true },
+        },
+      },
+    }).then(channel => stringify(channel?.communityPosts.map(post => post.id) || null));
+  }
+
+  @Post('channel/:channelId/communityPosts/fetch')
+  async fetchCommunityPosts(
+    @Param('channelId') channelId: string,
+  ) {
+    await this.scraper.scrapeChannelCommunityTab(channelId);
+    return await this.getCommunityPosts(channelId);
   }
 
 }

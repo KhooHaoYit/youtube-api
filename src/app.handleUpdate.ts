@@ -191,6 +191,31 @@ export class AppHandleUpdate {
     });
   }
 
+  async handleCommunityPostUpdate(
+    data: {
+      id: string,
+      channelId?: string,
+    },
+    fetchedAt = new Date,
+  ) {
+    const fields = {
+      ...data,
+      channelId: undefined,
+      channel: !data.channelId ? undefined : {
+        connectOrCreate: {
+          create: { id: data.channelId },
+          where: { id: data.channelId },
+        },
+      },
+      i_fetchedAt: fetchedAt,
+    };
+    await prismaUpsertRetry(this.prisma.communityPost, {
+      where: { id: data.id },
+      create: fields,
+      update: fields,
+    });
+  }
+
 }
 
 export type Link = [title: string, iconUrl: string | null, url: string | null];

@@ -365,12 +365,41 @@ export type TabHome = {
   },
 };
 
+export type TabCommunity = {
+  title: 'Community',
+  "content"?: {
+    "sectionListRenderer": {
+      "contents": {
+        "itemSectionRenderer": {
+          "contents": ({
+            "backstagePostThreadRenderer": {
+              "post": {
+                "backstagePostRenderer": {
+                  /**
+                   * `UgkxhAa2sIpkMoXClnOvVklOPuG8cSYcSf2z`
+                   */
+                  "postId": string,
+                },
+              },
+            },
+          } | {
+            continuationItemRenderer: ContinuationItemRenderer,
+          })[],
+        },
+      }[],
+    },
+  },
+};
+
 export type Channel = {
   /**
    * defined only when requesting /channel/CHANNEL_ID
    */
   header?: { c4TabbedHeaderRenderer: C4TabbedHeaderRenderer },
-  contents: {
+  /**
+   * not defined when channel doesn't exists
+   */
+  contents?: {
     twoColumnBrowseResultsRenderer: {
       tabs: (
         {
@@ -380,11 +409,11 @@ export type Channel = {
             | 'Live'
             | 'Podcasts'
             | 'Releases'
-            | 'Community'
           } | TabHome
           | TabChannels
           | TabPlaylists
-          | TabAbout,
+          | TabAbout
+          | TabCommunity,
         } | {
           /**
            * search within channel
