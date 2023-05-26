@@ -62,6 +62,7 @@ const info = [
 
   ['AsahinaAkane/community', '/channel/UCe_p3YEuYJb8Np0Ip9dk-FQ/community'],
   ['AmrzsMonstar/community', '/channel/UCULLc5b5rzDNp9K-rtF8W5w/community'],
+  ['ManoAloe/community', '/channel/UCgZuwn-O7Szh9cAgHqJ6vjw/community'],
 ];
 
 (async () => {

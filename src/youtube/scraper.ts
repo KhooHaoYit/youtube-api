@@ -5,7 +5,7 @@ import {
 import { AppHandleUpdate, Link } from './../app.handleUpdate';
 import { parseSubscriberCount } from './../app.utils';
 import { YoutubeApi } from './api';
-import { Channel } from './types/export/channel';
+import { Channel, getCommunityPosts } from './types/export/channel';
 import { extractErrorMessage, getChannelTab } from './helper';
 import { Visibility } from '@prisma/client';
 
@@ -44,9 +44,10 @@ export class YoutubeScraper {
       innertubeApiKey,
       ytInitialData,
     } = await this.youtube.scrapeYoutubePage(`https://www.youtube.com/channel/${channelId}/community`);
-    const initialPosts = getChannelTab(ytInitialData, 'Community')
-      .tabRenderer.content!.sectionListRenderer
-      .contents[0].itemSectionRenderer.contents;
+    const initialPosts = getCommunityPosts(
+      getChannelTab(ytInitialData, 'Community')
+        .tabRenderer,
+    );
     for await (
       const { backstagePostThreadRenderer: { post } }
       of this.youtube.requestAll(innertubeApiKey, initialPosts)

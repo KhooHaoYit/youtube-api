@@ -22,6 +22,7 @@ import { Data as fuurayuri_featured } from '../data/fuurayuri/featured';
 import { Data as fuurayuri_about } from '../data/fuurayuri/about';
 import { Data as AsahinaAkane_community } from '../data/AsahinaAkane/community';
 import { Data as AmrzsMonstar_community } from '../data/AmrzsMonstar/community';
+import { Data as ManoAloe_community } from '../data/ManoAloe/community';
 
 import { Channel } from '../export/channel';
 
@@ -51,3 +52,4 @@ import { Channel } from '../export/channel';
 <fuurayuri_about>{} satisfies Channel;
 <AsahinaAkane_community>{} satisfies Channel;
 <AmrzsMonstar_community>{} satisfies Channel;
+<ManoAloe_community>{} satisfies Channel;

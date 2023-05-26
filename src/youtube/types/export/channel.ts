@@ -368,8 +368,8 @@ export type TabHome = {
 export type TabCommunity = {
   title: 'Community',
   "content"?: {
-    "sectionListRenderer": {
-      "contents": {
+    "sectionListRenderer": ({
+      "contents": [{
         "itemSectionRenderer": {
           "contents": ({
             "backstagePostThreadRenderer": {
@@ -388,12 +388,25 @@ export type TabCommunity = {
             },
           } | {
             continuationItemRenderer: ContinuationItemRenderer,
+          } | {
+            /**
+             * defined when channel doesn't have any post
+             */
+            messageRenderer: {},
           })[],
         },
-      }[],
-    },
+      }],
+    }),
   },
 };
+
+export function getCommunityPosts(tab: TabCommunity) {
+  const posts = tab.content!.sectionListRenderer.contents[0]
+    .itemSectionRenderer.contents;
+  if ('messageRenderer' in posts[0])
+    return [];
+  return posts as Exclude<typeof posts[0], { messageRenderer: any }>[];
+}
 
 export type Channel = {
   /**
