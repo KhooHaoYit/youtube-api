@@ -29,7 +29,10 @@ export type ChannelAboutFullMetadataRenderer = {
       "simpleText": string,
     },
   }[],
-  "viewCountText": {
+  /**
+   * not defined when channel doesn't have views
+   */
+  "viewCountText"?: {
     /**
      * `814,941,335 views`
      */

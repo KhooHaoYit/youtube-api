@@ -65,18 +65,26 @@ export type TabPlaylists = {
     sectionListRenderer: {
       contents: {
         itemSectionRenderer: {
-          contents: {
+          contents: ({
             gridRenderer?: {
               items: { gridPlaylistRenderer: GridPlaylistRenderer }[],
             },
             /**
-             * defined when showing multiple channel categories
+             * defined when showing multiple playlists categories
              */
             shelfRenderer?: {},
-          }[],
+          } | {
+            /**
+             * defined when channel doesn't have any playlists
+             */
+            messageRenderer: {}
+          })[],
         },
       }[],
-      subMenu: {
+      /**
+       * not defined when channel doesn't have any playlists
+       */
+      subMenu?: {
         channelSubMenuRenderer: {
           contentTypeSubMenuItems: {
             endpoint: {
@@ -92,6 +100,26 @@ export type TabPlaylists = {
     },
   },
 };
+
+export function getPlaylists(tab: TabPlaylists) {
+  const a = tab.content!.sectionListRenderer.contents[0].itemSectionRenderer.contents;
+  if ('messageRenderer' in a[0])
+    return {
+      playlists: [],
+      subMenu: [],
+    };
+  const b = a as Exclude<typeof a[0], { messageRenderer: unknown }>[];
+  return {
+    playlists: b[0].gridRenderer
+      ? b[0].gridRenderer.items
+      : [],
+    subMenu: tab.content!.sectionListRenderer.subMenu
+      ?.channelSubMenuRenderer.contentTypeSubMenuItems
+      .filter((_, index, arr) => arr.length === 1 || index !== 0 ? true : false)
+      .map((item) => [item.title, item.endpoint.browseEndpoint] as const)
+      ?? [],
+  };
+}
 
 export type TabAbout = {
   title: 'About',

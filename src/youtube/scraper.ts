@@ -5,7 +5,7 @@ import {
 import { AppHandleUpdate, Link } from './../app.handleUpdate';
 import { parseSubscriberCount } from './../app.utils';
 import { YoutubeApi } from './api';
-import { Channel, getCommunityPosts } from './types/export/channel';
+import { Channel, getCommunityPosts, getPlaylists } from './types/export/channel';
 import { extractErrorMessage, getChannelTab } from './helper';
 import { Visibility } from '@prisma/client';
 
@@ -204,20 +204,21 @@ export class YoutubeScraper {
     } = await this.youtube.scrapeYoutubePage(`https://www.youtube.com/channel/${channelId}/playlists?view=58`);
     if (ytInitialData.header)
       await this.model.handleC4TabbedHeaderRendererUpdate(ytInitialData.header.c4TabbedHeaderRenderer);
-    const categories = getChannelTab(ytInitialData, 'Playlists')
-      .tabRenderer.content!.sectionListRenderer
-      .subMenu.channelSubMenuRenderer.contentTypeSubMenuItems
-      .filter((_, index, arr) => arr.length === 1 || index !== 0 ? true : false)
-      .map((item) => [item.title, item.endpoint.browseEndpoint] as const);
+    const categories = getPlaylists(
+      getChannelTab(ytInitialData, 'Playlists')
+        .tabRenderer,
+    ).subMenu;
 
     const playlistsDisplay: [string, string[]][] = [];
     for (const [title, { browseId, params }] of categories) {
       const initialItems = await this.youtube.request(innertubeApiKey, {
         browseId: browseId,
         params: params,
-      }).then((res: Channel) => getChannelTab(res, 'Playlists')
-        .tabRenderer.content!.sectionListRenderer.contents[0]
-        .itemSectionRenderer.contents[0].gridRenderer!.items
+      }).then((res: Channel) =>
+        getPlaylists(
+          getChannelTab(res, 'Playlists')
+            .tabRenderer,
+        ).playlists,
       );
       const list: string[] = [];
       for await (
@@ -250,10 +251,10 @@ export class YoutubeScraper {
       .tabRenderer.content!.sectionListRenderer.contents[0]
       .itemSectionRenderer.contents[0].channelAboutFullMetadataRenderer;
 
-    const viewCount = metadata.viewCountText.simpleText.split(' ').at(0)?.replace(/,/g, '');
+    const viewCount = metadata.viewCountText?.simpleText.split(' ').at(0)?.replace(/,/g, '');
     await this.model.handleChannelUpdate({
       id: metadata.channelId,
-      viewCount: viewCount ? BigInt(viewCount) : undefined,
+      viewCount: viewCount ? BigInt(viewCount) : 0n,
       description: metadata.description?.simpleText || null,
       avatarUrl: metadata.avatar.thumbnails.at(0)?.url,
       handle: metadata.canonicalChannelUrl.split('/').at(-1),
