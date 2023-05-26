@@ -327,8 +327,8 @@ export class YoutubeScraper {
           handle: data.navigationEndpoint.browseEndpoint.canonicalBaseUrl,
           name: data.title.simpleText,
           verified: verifiedBadgeIndex === undefined ? undefined : verifiedBadgeIndex !== -1,
-          // what if no sub??
-          subscriberCount: parseSubscriberCount(data.subscriberCountText.simpleText.split(' ')[0]),
+          subscriberCount: data.subscriberCountText
+            && parseSubscriberCount(data.subscriberCountText.simpleText.split(' ')[0]),
         });
       }
       channels.push([title, list]);

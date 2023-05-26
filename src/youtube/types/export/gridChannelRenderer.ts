@@ -8,7 +8,12 @@ export type GridChannelRenderer = {
      */
     thumbnails: { url: string }[],
   },
-  subscriberCountText: {
+  /**
+   * not defined when channel hid sub button
+   * 
+   * https://youtube.com/channel/UCRMpIxnySp7Fy5SbZ8dBv2w
+   */
+  subscriberCountText?: {
     /**
      * `778K subscribers`
      */
