@@ -112,7 +112,12 @@ export class AppController {
     });
     for (const { id } of playlists)
       await this.service.updatePlaylist(id);
-    await this.service.updatePlaylist(channelId.replace('UC', 'UU'));
+    await this.service.updatePlaylist(channelId.replace('UC', 'UU'))
+      .catch(err => { // Doesn't exists when channel doesn't have any video
+        if (err.message === 'API-Error: The playlist does not exist.')
+          return;
+        throw err;
+      });
     await this.service.updatePlaylist(channelId.replace('UC', 'UUMO'))
       .catch(err => {
         if (err.message === 'API-Error: The playlist does not exist.')
