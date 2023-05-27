@@ -67,6 +67,7 @@ const info = [
   ['ManoAloe/about', '/channel/UCgZuwn-O7Szh9cAgHqJ6vjw/about'],
   ['ManoAloe/playlists', '/channel/UCgZuwn-O7Szh9cAgHqJ6vjw/playlists'],
   ['KMNZ/channels', '/channel/UC68J5pWEshmwhDH45qnpIsg/channels'],
+  ['UruhaRushia/featured', '/channel/UCl_gCybOJRIgOXw6Qb4qJzQ/featured'],
 ];
 
 (async () => {

@@ -153,6 +153,15 @@ export type TabHome = {
       "contents": (
         {
           "itemSectionRenderer": {
+            "contents": [{
+              /**
+               * defined when channel doesn't have any featured content
+               */
+              messageRenderer: {}
+            }]
+          }
+        } | {
+          "itemSectionRenderer": {
             "contents": {
               recognitionShelfRenderer: {},
             }[],

@@ -69,60 +69,65 @@ export class YoutubeScraper {
     if (!ytInitialData.header)
       return;
     await this.model.handleC4TabbedHeaderRendererUpdate(ytInitialData.header.c4TabbedHeaderRenderer);
-    const featuredDisplay = getChannelTab(ytInitialData, 'Home')
-      .tabRenderer.content!.sectionListRenderer
-      .contents.map<null | [string] | [string, string | string[]]>(content => {
-        const item = content.itemSectionRenderer.contents[0];
-        if ('channelFeaturedContentRenderer' in item)
-          return [
-            'live',
-            item.channelFeaturedContentRenderer.items
-              .map(item => item.videoRenderer.videoId),
-          ];
-        if ('channelVideoPlayerRenderer' in item)
-          return [
-            'featured',
-            item.channelVideoPlayerRenderer.videoId,
-          ];
-        if ('recognitionShelfRenderer' in item)
-          return ['membersRecognition'];
-        if (
-          'shelfRenderer' in item
-          && item.shelfRenderer.endpoint.commandMetadata.webCommandMetadata
-            .url.includes('/playlist?')
-        ) return [
-          'playlist',
-          item.shelfRenderer.endpoint.browseEndpoint.browseId
-            .replace(/^VL/, '')
-        ];
-        if (
-          'shelfRenderer' in item
-          && item.shelfRenderer.endpoint.commandMetadata.webCommandMetadata
-            .url.includes('/playlists?')
-        ) return [
-          'playlists',
-          item.shelfRenderer.title.runs[0].text,
-        ];
-        if (
-          'shelfRenderer' in item
-          && item.shelfRenderer.endpoint.commandMetadata.webCommandMetadata
-            .url.includes('/channels?')
-        ) return [
-          'channels',
-          item.shelfRenderer.title.runs[0].text,
-        ];
-        if (
-          'shelfRenderer' in item
-          && item.shelfRenderer.endpoint.commandMetadata.webCommandMetadata
-            .url.includes('/videos?')
-        ) return [
-          'videos',
-          item.shelfRenderer.title.runs[0].text,
-        ];
-        if ('reelShelfRenderer' in item)
-          return ['shorts'];
-        return null;
+    const list = getChannelTab(ytInitialData, 'Home')
+      .tabRenderer.content!.sectionListRenderer.contents;
+    if ('messageRenderer' in list[0].itemSectionRenderer.contents[0])
+      return void await this.model.handleChannelUpdate({
+        id: ytInitialData.header.c4TabbedHeaderRenderer.channelId,
+        featuredDisplay: [],
       });
+    const featuredDisplay = list.map<null | [string] | [string, string | string[]]>(content => {
+      const item = content.itemSectionRenderer.contents[0];
+      if ('channelFeaturedContentRenderer' in item)
+        return [
+          'live',
+          item.channelFeaturedContentRenderer.items
+            .map(item => item.videoRenderer.videoId),
+        ];
+      if ('channelVideoPlayerRenderer' in item)
+        return [
+          'featured',
+          item.channelVideoPlayerRenderer.videoId,
+        ];
+      if ('recognitionShelfRenderer' in item)
+        return ['membersRecognition'];
+      if (
+        'shelfRenderer' in item
+        && item.shelfRenderer.endpoint.commandMetadata.webCommandMetadata
+          .url.includes('/playlist?')
+      ) return [
+        'playlist',
+        item.shelfRenderer.endpoint.browseEndpoint.browseId
+          .replace(/^VL/, '')
+      ];
+      if (
+        'shelfRenderer' in item
+        && item.shelfRenderer.endpoint.commandMetadata.webCommandMetadata
+          .url.includes('/playlists?')
+      ) return [
+        'playlists',
+        item.shelfRenderer.title.runs[0].text,
+      ];
+      if (
+        'shelfRenderer' in item
+        && item.shelfRenderer.endpoint.commandMetadata.webCommandMetadata
+          .url.includes('/channels?')
+      ) return [
+        'channels',
+        item.shelfRenderer.title.runs[0].text,
+      ];
+      if (
+        'shelfRenderer' in item
+        && item.shelfRenderer.endpoint.commandMetadata.webCommandMetadata
+          .url.includes('/videos?')
+      ) return [
+        'videos',
+        item.shelfRenderer.title.runs[0].text,
+      ];
+      if ('reelShelfRenderer' in item)
+        return ['shorts'];
+      return null;
+    });
     await this.model.handleChannelUpdate({
       id: ytInitialData.header.c4TabbedHeaderRenderer.channelId,
       featuredDisplay,
