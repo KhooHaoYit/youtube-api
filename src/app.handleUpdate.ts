@@ -60,20 +60,6 @@ export class AppHandleUpdate {
       subscriberCount: parseSubscriberCount(data.subscriberCountText?.simpleText.split(' ').at(0)),
       verified: verifiedBadgeIndex === undefined ? undefined : verifiedBadgeIndex !== -1,
       haveMembershipFeature: 'sponsorButton' in data,
-      links: [
-        data.headerLinks?.channelHeaderLinksRenderer.primaryLinks || [],
-        data.headerLinks?.channelHeaderLinksRenderer.secondaryLinks || [],
-      ].flat()
-        .map(link => {
-          const url = new URL(link.navigationEndpoint.urlEndpoint.url);
-          return [
-            link.title.simpleText,
-            link.icon.thumbnails.at(-1)?.url || null,
-            url.hostname === 'www.youtube.com' && url.pathname === '/redirect'
-              ? url.searchParams.get('q')
-              : url.href,
-          ] as Link;
-        }),
     }, fetchedAt);
   }
 

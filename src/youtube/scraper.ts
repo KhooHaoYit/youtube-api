@@ -268,13 +268,19 @@ export class YoutubeScraper {
       name: metadata.title.simpleText,
       joinedAt: metadata.joinedDateText.runs[1].text,
       links: metadata.primaryLinks?.map(link => {
-        const url = new URL(link.navigationEndpoint.urlEndpoint.url);
+        let extractUrl: string;
+        try {
+          const url = new URL(link.navigationEndpoint.urlEndpoint.url);
+          extractUrl = url.hostname === 'www.youtube.com' && url.pathname === '/redirect'
+            ? url.searchParams.get('q')!
+            : url.href;
+        } catch {
+          extractUrl = link.navigationEndpoint.urlEndpoint.url;
+        }
         return [
           link.title.simpleText,
           link.icon.thumbnails.at(-1)?.url || null,
-          url.hostname === 'www.youtube.com' && url.pathname === '/redirect'
-            ? url.searchParams.get('q')
-            : url.href,
+          extractUrl,
         ] as Link;
       }),
     });
