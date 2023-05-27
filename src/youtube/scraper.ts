@@ -230,7 +230,7 @@ export class YoutubeScraper {
           channelId,
           id: playlist.playlistId,
           title: playlist.title.runs[0].text,
-          estimatedCount: +playlist.videoCountShortText.simpleText,
+          estimatedCount: +playlist.videoCountShortText.simpleText.replace(/,/g, ''),
         });
       }
       playlistsDisplay.push([title, list]);

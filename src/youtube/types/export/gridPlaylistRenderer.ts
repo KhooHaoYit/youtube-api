@@ -5,7 +5,7 @@ export type GridPlaylistRenderer = {
   },
   videoCountShortText: {
     /**
-     * `8`
+     * `1,133`
      */
     simpleText: string,
   },
