@@ -34,7 +34,7 @@ export function parseSubscriberCount(text?: string) {
 
 export async function prismaUpsertRetry<
   T extends {
-    upsert: (...args: unknown[]) => Promise<unknown>,
+    upsert: (...args: any[]) => Promise<any>,
   },
 >(model: T, ...args: Parameters<T['upsert']>): Promise<Awaited<ReturnType<T['upsert']>>> {
   while (true) {

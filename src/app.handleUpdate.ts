@@ -102,6 +102,7 @@ export class AppHandleUpdate {
       where: { id: data.id },
       create: fields,
       update: fields,
+      select: { id: true },
     });
   }
   // https://i.ytimg.com/an/otXwY6s8pWmuWd_snKYjhg/featured_channel.jpg
@@ -142,6 +143,7 @@ export class AppHandleUpdate {
       where: { id: data.id },
       create: fields,
       update: fields,
+      select: { id: true },
     });
   }
 
@@ -174,6 +176,7 @@ export class AppHandleUpdate {
       where: { id: data.id },
       create: fields,
       update: fields,
+      select: { id: true },
     });
   }
 
@@ -199,6 +202,7 @@ export class AppHandleUpdate {
       where: { id: data.id },
       create: fields,
       update: fields,
+      select: { id: true },
     });
   }
 

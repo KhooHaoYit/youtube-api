@@ -351,16 +351,3 @@ export class YoutubeScraper {
   }
 
 }
-
-let mutex: Promise<void> = Promise.resolve();
-async function getBasicInfo(
-  ...args: Parameters<typeof _getBasicInfo>
-): ReturnType<typeof _getBasicInfo> {
-  let resolve: (value?: unknown) => void;
-  const newMutex = new Promise<void>(rs => resolve = rs);
-  const oldMutex = mutex;
-  mutex = newMutex;
-  await oldMutex;
-  return await _getBasicInfo(...args)
-    .finally(() => resolve());
-}

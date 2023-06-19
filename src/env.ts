@@ -13,6 +13,10 @@ export const env = createEnv({
       }),
     PORT: z.coerce.number().default(3000),
     HOSTNAME: z.string().default('0.0.0.0'),
+    // Sentry
+    SENTRY_DSN: z.string().optional(),
+    SENTRY_TRACES_SAMPLE_RATE: z.coerce.number().min(0).max(1).default(1),
+    SENTRY_PROFILES_SAMPLE_RATE: z.coerce.number().min(0).max(1).default(1),
   },
   client: {},
   runtimeEnv: process.env,

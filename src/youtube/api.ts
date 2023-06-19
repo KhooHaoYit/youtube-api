@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { request } from 'undici';
 import { Channel } from './types/export/channel';
 import { VideoPlayerResponse } from './types/export/video';
 
@@ -21,12 +20,12 @@ export class YoutubeApi {
     ytInitialData: Channel,
     ytInitialPlayerResponse: VideoPlayerResponse | null,
   }> {
-    const html = await request(url, {
+    const html = await fetch(url, {
       headers: {
         'accept-language': 'en',
         ...options?.headers,
       },
-    }).then(res => res.body.text());
+    }).then(res => res.text());
     const innertubeApiKey = html.match(/(?<=innertubeApiKey":").+?(?=","innertubeApiVersion)/)?.at(0);
     if (!innertubeApiKey)
       throw new Error(`Unable to extract innertubeApiKey`);
@@ -50,7 +49,7 @@ export class YoutubeApi {
       params?: string,
     },
   ) {
-    return await request(`https://www.youtube.com/youtubei/v1/browse?key=${innertubeApiKey}&prettyPrint=false`, {
+    return await fetch(`https://www.youtube.com/youtubei/v1/browse?key=${innertubeApiKey}&prettyPrint=false`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -66,7 +65,7 @@ export class YoutubeApi {
           },
         },
       }),
-    }).then(res => res.body.json());
+    }).then(res => res.json() as any);
   }
 
   async* requestAll<T extends Record<string, any>>(

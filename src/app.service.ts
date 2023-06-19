@@ -172,7 +172,7 @@ let mutex: Promise<void> = Promise.resolve();
 async function getBasicInfo(
   ...args: Parameters<typeof _getBasicInfo>
 ): ReturnType<typeof _getBasicInfo> {
-  let resolve: (value?: unknown) => void;
+  let resolve: (value?: any) => void;
   const newMutex = new Promise<void>(rs => resolve = rs);
   const oldMutex = mutex;
   mutex = newMutex;
