@@ -7,6 +7,10 @@ export type SharedPostRenderer = {
   originalPost: {
     backstagePostRenderer: backstage.BackstagePostRenderer
   }
+  /**
+   * `shared 2 days ago`
+   */
+  publishedTimeText: { runs: Runs }
 };
 
 export function getPostId(post: SharedPostRenderer) {
@@ -19,4 +23,8 @@ export function getSharedPostId(post: SharedPostRenderer) {
 
 export function getContent(post: SharedPostRenderer) {
   return getOriginalText(post.content.runs);
+}
+
+export function getPublishedTime(post: SharedPostRenderer) {
+  return getOriginalText(post.publishedTimeText.runs);
 }

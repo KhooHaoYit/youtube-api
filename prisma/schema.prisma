@@ -21,6 +21,12 @@ generator nestgraphql {
 model CommunityPost {
   id String @id
 
+  content       String?
+  replyCount    Int?
+  likeCount     Int?
+  publishedTime String?
+  extra         Json?
+
   channelId String?
   channel   Channel? @relation(fields: [channelId], references: [id])
 

@@ -62,6 +62,11 @@ export class YoutubeScraper {
       await this.model.handleCommunityPostUpdate({
         id: post.postId,
         channelId,
+        content: post.content,
+        extra: post.extra,
+        likeCount: post.likeCount,
+        replyCount: post.replyCount,
+        publishedTime: post.publishedTime,
       });
     }
   }

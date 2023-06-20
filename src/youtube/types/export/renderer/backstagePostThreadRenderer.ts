@@ -16,11 +16,13 @@ export function getPost({ post }: BackstagePostThreadRenderer) {
       extra: backstage.getExtra(post.backstagePostRenderer),
       likeCount: backstage.getLikeCount(post.backstagePostRenderer),
       replyCount: backstage.getReplyCount(post.backstagePostRenderer),
+      publishedTime: backstage.getPublishedTime(post.backstagePostRenderer),
     };
   if (post.sharedPostRenderer)
     return {
       postId: shared.getPostId(post.sharedPostRenderer),
       content: shared.getContent(post.sharedPostRenderer),
+      publishedTime: shared.getPublishedTime(post.sharedPostRenderer),
       extra: [
         'share',
         shared.getSharedPostId(post.sharedPostRenderer),

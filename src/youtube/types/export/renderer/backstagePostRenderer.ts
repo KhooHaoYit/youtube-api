@@ -1,5 +1,4 @@
 import { BackstageImageRenderer, getImageUrl } from "./backstageImageRenderer";
-import { getUrl } from "../generic/image";
 import { getOriginalText, Runs } from "../generic/runs";
 import { PlaylistRenderer, getPlaylistId } from "./playlistRenderer";
 import { VideoRenderer } from "./videoRenderer";
@@ -73,9 +72,10 @@ export function getReplyCount(post: BackstagePostRenderer) {
 
 export function getPublishedTime(post: BackstagePostRenderer) {
   const text = getOriginalText(post.publishedTimeText.runs);
-  if (/^\d+ seconds ago$/.test(text))
-    return Date.now() - +text.match(/\d+/)![0];
-  throw new Error(`Unable to parse relative date: ${text}`);
+  return text;
+  // if (/^\d+ seconds ago$/.test(text))
+  //   return Date.now() - +text.match(/\d+/)![0];
+  // throw new Error(`Unable to parse relative date: ${text}`);
 }
 
 export function getContent(post: BackstagePostRenderer) {

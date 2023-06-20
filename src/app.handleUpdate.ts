@@ -1,14 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { Visibility } from '@prisma/client';
+import { Prisma, Visibility } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import {
   getBasicInfo as _getBasicInfo,
 } from 'ytdl-core';
 import { prismaUpsertRetry } from './app.utils';
-import { C4TabbedHeaderRenderer, getAvatarUrl, getBannerUrl, getChannelId, getChannelName, getHandle, getSubscriberCount, haveMembershipFeature, isVerified } from './youtube/types/export/renderer/c4TabbedHeaderRenderer';
+import { C4TabbedHeaderRenderer } from './youtube/types/export/renderer/c4TabbedHeaderRenderer';
+import * as c4TabbedHeaderRenderer from './youtube/types/export/renderer/c4TabbedHeaderRenderer';
 import * as playerMicroformatRenderer from './youtube/types/export/renderer/playerMicroformatRenderer';
 import type { PlayerMicroformatRenderer } from './youtube/types/export/renderer/playerMicroformatRenderer';
 import { Link } from './youtube/types/export/renderer/channelAboutFullMetadataRenderer';
+import { getPost } from './youtube/types/export/renderer/backstagePostThreadRenderer';
 
 @Injectable()
 export class AppHandleUpdate {
@@ -50,14 +52,14 @@ export class AppHandleUpdate {
     fetchedAt = new Date,
   ) {
     await this.handleChannelUpdate({
-      id: getChannelId(data),
-      bannerUrl: getBannerUrl(data),
-      avatarUrl: getAvatarUrl(data),
-      name: getChannelName(data),
-      handle: getHandle(data),
-      subscriberCount: getSubscriberCount(data),
-      verified: isVerified(data),
-      haveMembershipFeature: haveMembershipFeature(data),
+      id: c4TabbedHeaderRenderer.getChannelId(data),
+      bannerUrl: c4TabbedHeaderRenderer.getBannerUrl(data),
+      avatarUrl: c4TabbedHeaderRenderer.getAvatarUrl(data),
+      name: c4TabbedHeaderRenderer.getChannelName(data),
+      handle: c4TabbedHeaderRenderer.getHandle(data),
+      subscriberCount: c4TabbedHeaderRenderer.getSubscriberCount(data),
+      verified: c4TabbedHeaderRenderer.isVerified(data),
+      haveMembershipFeature: c4TabbedHeaderRenderer.haveMembershipFeature(data),
     }, fetchedAt);
   }
 
@@ -194,11 +196,19 @@ export class AppHandleUpdate {
     data: {
       id: string,
       channelId?: string,
+      content?: string,
+      extra?: ReturnType<typeof getPost>['extra'],
+      likeCount?: number,
+      replyCount?: number,
+      publishedTime?: string,
     },
     fetchedAt = new Date,
   ) {
     const fields = {
       ...data,
+      extra: data.extra === null
+        ? Prisma.DbNull
+        : data.extra,
       channelId: undefined,
       channel: !data.channelId ? undefined : {
         connectOrCreate: {

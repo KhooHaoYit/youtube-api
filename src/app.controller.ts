@@ -201,6 +201,21 @@ export class AppController {
     }).then(channel => stringify(channel?.communityPosts.map(post => post.id) || null));
   }
 
+  @Get('channel/:channelId/communityPosts/:postId')
+  async getCommunityPost(
+    @Param('channelId') channelId: string,
+    @Param('postId') postId: string,
+  ) {
+    return await this.prisma.channel.findUnique({
+      where: { id: channelId },
+      select: {
+        communityPosts: {
+          where: { id: postId }
+        },
+      },
+    }).then(channel => stringify(channel?.communityPosts.at(0) || null));
+  }
+
   @Post('channel/:channelId/communityPosts/fetch')
   async fetchCommunityPosts(
     @Param('channelId') channelId: string,
