@@ -9,8 +9,7 @@ import { PlayerResponse as ps7 } from '../data/unknown/_videos/wXXKzPqDzYA.json'
 import { PlayerResponse as ps8 } from '../data/UruhaRushia/_videos/__jmEGM8W4E.json';
 import { PlayerResponse as ps9 } from '../data/MapleAlcesiaCh/_videos/XmxZoBLzSSw.json';
 import { PlayerResponse as ps10 } from '../data/unknown/_videos/6qPBafETC7w.json';
-import { VideoPlayerResponse } from '../export/video';
-import { extractErrorMessage } from '../../helper';
+import { VideoPlayerResponse, getErrorMessage } from '../export/video';
 
 const data = [
   ps0,
@@ -27,7 +26,7 @@ const data = [
 ] as VideoPlayerResponse[];
 
 const result = data
-  .map(data => extractErrorMessage(data))
+  .map(data => getErrorMessage(data))
   .map((text, index) => [index, text]);
 
 console.log(result);

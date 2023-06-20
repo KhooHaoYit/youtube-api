@@ -1,0 +1,50 @@
+import { SubscriberCountText } from '../generic/subscriberCountText';
+import * as subscriberCountText from '../generic/subscriberCountText';
+import { getUrl, Image } from '../generic/image';
+import { MetadataBadgeRenderer } from './metadataBadgeRenderer';
+
+export type GridChannelRenderer = {
+  channelId: string,
+  /**
+   * `//yt3.googleusercontent.com/B2tq3IQAFxUe9W3MaMc0V62bmlTWCSoTuCk-Y-Ab8yXkZKdIswQhHABZhz2e4YM1-B_Kxen_7w=s48-c-k-c0x00ffffff-no-rj-mo`
+   */
+  thumbnail: Image,
+  /**
+   * not defined when channel hid sub button
+   * 
+   * https://youtube.com/channel/UCRMpIxnySp7Fy5SbZ8dBv2w
+   */
+  subscriberCountText?: SubscriberCountText,
+  navigationEndpoint: {
+    browseEndpoint: {
+      canonicalBaseUrl: string
+    }
+  },
+  title: {
+    /**
+     * `Miko Ch. さくらみこ`
+     */
+    simpleText: string,
+  },
+  ownerBadges?: MetadataBadgeRenderer[],
+};
+
+export function getChannelId(data: GridChannelRenderer) {
+  return data.channelId;
+}
+
+export function getChannelHandle(data: GridChannelRenderer) {
+  return data.navigationEndpoint.browseEndpoint.canonicalBaseUrl
+    .replace(/^[^@]@*/, '');
+}
+
+export function getChannelAvatarUrl(data: GridChannelRenderer) {
+  return getUrl(data.thumbnail);
+}
+
+export function getSubscriberCount(data: GridChannelRenderer) {
+  const text = data.subscriberCountText;
+  if (!text)
+    return;
+  return subscriberCountText.getSubscriberCount(text);
+}

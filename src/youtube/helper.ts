@@ -6,7 +6,6 @@ import {
   TabHome,
   TabPlaylists,
 } from "./types/export/channel";
-import { VideoPlayerResponse } from "./types/export/video";
 
 export function getChannelTab<T extends 'Home'>(
   data: Channel,
@@ -38,14 +37,3 @@ export function getChannelTab<T extends string>(data: Channel, tabName: T): any 
   return data.contents.twoColumnBrowseResultsRenderer.tabs
     .find(tab => 'tabRenderer' in tab && tab.tabRenderer.title === tabName);
 };
-
-export function extractErrorMessage(data: VideoPlayerResponse) {
-  let output: undefined | string;
-  if (output = data.playabilityStatus.messages?.[0])
-    return output;
-  if (output = data.playabilityStatus.errorScreen?.playerErrorMessageRenderer?.subreason?.simpleText)
-    return output;
-  if (output = data.playabilityStatus.errorScreen?.playerErrorMessageRenderer?.subreason?.runs?.map(run => run.text).join(''))
-    return output;
-  return data.playabilityStatus.reason;
-}

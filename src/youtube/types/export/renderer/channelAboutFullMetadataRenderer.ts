@@ -1,3 +1,7 @@
+import { Image } from "../generic/image";
+import * as image from "../generic/image";
+import { ViewCountText } from "../generic/viewCountText";
+
 export type ChannelAboutFullMetadataRenderer = {
   "description"?: {
     "simpleText": string,
@@ -14,14 +18,12 @@ export type ChannelAboutFullMetadataRenderer = {
         "url": string,
       }
     },
-    "icon": {
-      "thumbnails": [{
-        /**
-         * `https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn:ANd9GcTCl87OfLKVJ9rK8xDL2fO43Nn-qwO3MZqhD6Va_y_Dj4NQN5vi_7wfFsqVPVk5OJarybTLaqbvqdn3Oj1nmlMBa_srPR9cF0lTX47Loj-ftw`
-         */
-        "url": string,
-      }]
-    },
+    /**
+     * `https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn:ANd9GcTCl87OfLKVJ9rK8xDL2fO43Nn-qwO3MZqhD6Va_y_Dj4NQN5vi_7wfFsqVPVk5OJarybTLaqbvqdn3Oj1nmlMBa_srPR9cF0lTX47Loj-ftw`
+     * 
+     * TODO: find if this might be undefined
+     */
+    "icon": Image,
     "title": {
       /**
        * `公式Twitter`
@@ -32,12 +34,7 @@ export type ChannelAboutFullMetadataRenderer = {
   /**
    * not defined when channel doesn't have views
    */
-  "viewCountText"?: {
-    /**
-     * `814,941,335 views`
-     */
-    "simpleText": string,
-  },
+  "viewCountText"?: ViewCountText,
   "joinedDateText": {
     "runs": [
       {
@@ -82,3 +79,23 @@ export type ChannelAboutFullMetadataRenderer = {
    */
   signInForBusinessEmail?: {},
 };
+
+export type Link = [title: string, iconUrl: string | null, url: string | null];
+export function getLinks(data: ChannelAboutFullMetadataRenderer) {
+  return data.primaryLinks?.map(link => {
+    let extractUrl: string;
+    try {
+      const url = new URL(link.navigationEndpoint.urlEndpoint.url);
+      extractUrl = url.hostname === 'www.youtube.com' && url.pathname === '/redirect'
+        ? url.searchParams.get('q')!
+        : url.href;
+    } catch {
+      extractUrl = link.navigationEndpoint.urlEndpoint.url;
+    }
+    return [
+      link.title.simpleText,
+      image.getUrl(link.icon) || null,
+      extractUrl,
+    ] as Link;
+  });
+}

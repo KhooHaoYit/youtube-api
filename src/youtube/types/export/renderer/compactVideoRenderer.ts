@@ -1,3 +1,5 @@
+import { ViewCountText } from "../generic/viewCountText";
+
 export type CompactVideoRenderer = {
   videoId: string,
   title: {
@@ -28,12 +30,7 @@ export type CompactVideoRenderer = {
       }
     ]
   },
-  viewCountText: {
-    /**
-     * `128,372 views`
-     */
-    simpleText: string
-  },
+  viewCountText: ViewCountText,
   lengthText: {
     /**
      * `7:09`

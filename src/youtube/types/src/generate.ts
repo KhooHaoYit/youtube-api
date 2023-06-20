@@ -1,7 +1,6 @@
 
 import { YoutubeApi } from "../../api";
 import { mkdir, stat, writeFile } from "fs/promises";
-import { __dirnameFromImportMeta } from "src/app.utils";
 import { dirname } from "path";
 
 const api = new YoutubeApi;
@@ -68,6 +67,10 @@ const info = [
   ['ManoAloe/playlists', '/channel/UCgZuwn-O7Szh9cAgHqJ6vjw/playlists'],
   ['KMNZ/channels', '/channel/UC68J5pWEshmwhDH45qnpIsg/channels'],
   ['UruhaRushia/featured', '/channel/UCl_gCybOJRIgOXw6Qb4qJzQ/featured'],
+
+  ['AlettaSky/community', '/channel/UC0lSxKAt9osiA29vnk1R4sg/community'],
+  ['AlettaSky/community_0', '/channel/UC0lSxKAt9osiA29vnk1R4sg/community?lb=Ugkxt8KCbEuMva9F2LMEqvaJQu2BX6GUHuk5'],
+  ['GundoMirei/community', '/channel/UCeShTCVgZyq2lsBW9QwIJcw/community?lb=Ugkxic0xZ1SQLUOjyNAkIzWWWz3PWHW02VSE'],
 ];
 
 (async () => {

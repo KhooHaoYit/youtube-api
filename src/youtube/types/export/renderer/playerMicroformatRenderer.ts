@@ -1,17 +1,15 @@
+import { getUrl, Image } from "../generic/image";
+
 export type PlayerMicroformatRenderer = {
   /**
    * might be undefined
    */
   "embed"?: {},
-  thumbnail: {
-    thumbnails: {
-      /**
-       * `https://i.ytimg.com/vi/ontzsSgjsb0/maxresdefault.jpg`
-       * `https://i.ytimg.com/vi/ZZ5tP2hWo0M/maxres2.jpg?sqp=-oaymwEoCIAKENAF8quKqQMcGADwAQH4AZQDgALQBYoCDAgAEAEYZSBlKGUwDw==\u0026rs=AOn4CLB2G4-ahbPww0dNYWyaEPWNFH4RIg`
-       */
-      url: string
-    }[],
-  },
+  /**
+   * `https://i.ytimg.com/vi/ontzsSgjsb0/maxresdefault.jpg`
+   * `https://i.ytimg.com/vi/ZZ5tP2hWo0M/maxres2.jpg?sqp=-oaymwEoCIAKENAF8quKqQMcGADwAQH4AZQDgALQBYoCDAgAEAEYZSBlKGUwDw==\u0026rs=AOn4CLB2G4-ahbPww0dNYWyaEPWNFH4RIg`
+   */
+  thumbnail: Image,
   "title": {
     /**
      * `【CORPSE PARTY #1】- they don't know i'm a corpse`
@@ -75,3 +73,14 @@ export type PlayerMicroformatRenderer = {
    */
   "uploadDate": string
 };
+
+export function getVideoId(data: PlayerMicroformatRenderer) {
+  return getUrl(data.thumbnail)
+    .replace(/^[^]+?vi\//, '')
+    .replace(/\/[^]+$/, '');
+}
+
+export function getHandle(data: PlayerMicroformatRenderer) {
+  return data.ownerProfileUrl
+    .replace(/^[^@]*@/, '');
+}

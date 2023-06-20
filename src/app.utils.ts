@@ -8,30 +8,6 @@ export const __filenameFromImportMeta = (
   meta: ImportMeta,
 ) => basename(fileURLToPath(meta.url));
 
-export function parseSubscriberCount(text?: string) {
-  if (!text) return;
-  switch (text[text.length - 1]) {
-    // should log
-    default:
-      return undefined;
-    case 'M':
-      return Math.round(+text.replace('M', '') * 1_000_000);
-    case 'K': // 4.06 * 100
-      return Math.round(+text.replace('K', '') * 1_000);
-    case '0':
-    case '1':
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-    case '6':
-    case '7':
-    case '8':
-    case '9':
-      return +text;
-  }
-}
-
 export async function prismaUpsertRetry<
   T extends {
     upsert: (...args: any[]) => Promise<any>,

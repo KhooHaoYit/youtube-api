@@ -2,12 +2,18 @@ import { Injectable } from '@nestjs/common';
 import {
   getBasicInfo as _getBasicInfo,
 } from 'ytdl-core';
-import { AppHandleUpdate, Link } from './../app.handleUpdate';
-import { parseSubscriberCount } from './../app.utils';
+import { AppHandleUpdate } from './../app.handleUpdate';
 import { YoutubeApi } from './api';
 import { Channel, getCommunityPosts, getPlaylists } from './types/export/channel';
-import { extractErrorMessage, getChannelTab } from './helper';
+import { getChannelTab } from './helper';
 import { Visibility } from '@prisma/client';
+import { getVideoIds } from './types/export/renderer/channelFeaturedContentRenderer';
+import { getVideoId } from './types/export/renderer/channelVideoPlayerRenderer';
+import { getPost } from './types/export/renderer/backstagePostThreadRenderer';
+import { getChannelAvatarUrl, getChannelHandle, getChannelId, getSubscriberCount } from './types/export/renderer/gridChannelRenderer';
+import { getAmountOfVideos, getPlaylistId, getPlaylistTitle } from './types/export/renderer/gridPlaylistRenderer';
+import { getErrorMessage } from './types/export/video';
+import { getLinks } from './types/export/renderer/channelAboutFullMetadataRenderer';
 
 @Injectable()
 export class YoutubeScraper {
@@ -25,7 +31,7 @@ export class YoutubeScraper {
       await this.model.handlePlayerMicroformatRenderer(
         ytInitialPlayerResponse!.microformat.playerMicroformatRenderer,
       );
-    const errorMessage = extractErrorMessage(ytInitialPlayerResponse!);
+    const errorMessage = getErrorMessage(ytInitialPlayerResponse!);
     if (
       errorMessage
       && ytInitialPlayerResponse!.playabilityStatus.errorScreen
@@ -49,14 +55,12 @@ export class YoutubeScraper {
         .tabRenderer,
     );
     for await (
-      const { backstagePostThreadRenderer: { post } }
+      const { backstagePostThreadRenderer }
       of this.youtube.requestAll(innertubeApiKey, initialPosts)
     ) {
-      const postId = 'backstagePostRenderer' in post
-        ? post.backstagePostRenderer.postId
-        : post.sharedPostRenderer.postId;
+      const post = getPost(backstagePostThreadRenderer!);
       await this.model.handleCommunityPostUpdate({
-        id: postId,
+        id: post.postId,
         channelId,
       });
     }
@@ -78,55 +82,46 @@ export class YoutubeScraper {
       });
     const featuredDisplay = list.map<null | [string] | [string, string | string[]]>(content => {
       const item = content.itemSectionRenderer.contents[0];
-      if ('channelFeaturedContentRenderer' in item)
+      if (item.channelFeaturedContentRenderer)
         return [
           'live',
-          item.channelFeaturedContentRenderer.items
-            .map(item => item.videoRenderer.videoId),
+          getVideoIds(item.channelFeaturedContentRenderer),
         ];
-      if ('channelVideoPlayerRenderer' in item)
+      if (item.channelVideoPlayerRenderer)
         return [
           'featured',
-          item.channelVideoPlayerRenderer.videoId,
+          getVideoId(item.channelVideoPlayerRenderer),
         ];
       if ('recognitionShelfRenderer' in item)
         return ['membersRecognition'];
-      if (
-        'shelfRenderer' in item
-        && item.shelfRenderer.endpoint.commandMetadata.webCommandMetadata
-          .url.includes('/playlist?')
+      if (item.shelfRenderer?.endpoint.commandMetadata.webCommandMetadata
+        .url.includes('/playlist?')
       ) return [
         'playlist',
         item.shelfRenderer.endpoint.browseEndpoint.browseId
-          .replace(/^VL/, '')
+          .replace(/^VL/, '') // View List??
       ];
-      if (
-        'shelfRenderer' in item
-        && item.shelfRenderer.endpoint.commandMetadata.webCommandMetadata
-          .url.includes('/playlists?')
+      if (item.shelfRenderer?.endpoint.commandMetadata.webCommandMetadata
+        .url.includes('/playlists?')
       ) return [
         'playlists',
         item.shelfRenderer.title.runs[0].text,
       ];
-      if (
-        'shelfRenderer' in item
-        && item.shelfRenderer.endpoint.commandMetadata.webCommandMetadata
-          .url.includes('/channels?')
+      if (item.shelfRenderer?.endpoint.commandMetadata.webCommandMetadata
+        .url.includes('/channels?')
       ) return [
         'channels',
         item.shelfRenderer.title.runs[0].text,
       ];
-      if (
-        'shelfRenderer' in item
-        && item.shelfRenderer.endpoint.commandMetadata.webCommandMetadata
-          .url.includes('/videos?')
+      if (item.shelfRenderer?.endpoint.commandMetadata.webCommandMetadata
+        .url.includes('/videos?')
       ) return [
         'videos',
         item.shelfRenderer.title.runs[0].text,
       ];
-      if ('reelShelfRenderer' in item)
+      if (item.reelShelfRenderer)
         return ['shorts'];
-      return null;
+      throw new Error(`Unknown featured display`);
     });
     await this.model.handleChannelUpdate({
       id: ytInitialData.header.c4TabbedHeaderRenderer.channelId,
@@ -233,9 +228,9 @@ export class YoutubeScraper {
         list.push(playlist.playlistId);
         this.model.handlePlaylistUpdate({
           channelId,
-          id: playlist.playlistId,
-          title: playlist.title.runs[0].text,
-          estimatedCount: +playlist.videoCountShortText.simpleText.replace(/,/g, ''),
+          id: getPlaylistId(playlist),
+          title: getPlaylistTitle(playlist),
+          estimatedCount: getAmountOfVideos(playlist),
         });
       }
       playlistsDisplay.push([title, list]);
@@ -267,22 +262,7 @@ export class YoutubeScraper {
       location: metadata.country?.simpleText || null,
       name: metadata.title.simpleText,
       joinedAt: metadata.joinedDateText.runs[1].text,
-      links: metadata.primaryLinks?.map(link => {
-        let extractUrl: string;
-        try {
-          const url = new URL(link.navigationEndpoint.urlEndpoint.url);
-          extractUrl = url.hostname === 'www.youtube.com' && url.pathname === '/redirect'
-            ? url.searchParams.get('q')!
-            : url.href;
-        } catch {
-          extractUrl = link.navigationEndpoint.urlEndpoint.url;
-        }
-        return [
-          link.title.simpleText,
-          link.icon.thumbnails.at(-1)?.url || null,
-          extractUrl,
-        ] as Link;
-      }),
+      links: getLinks(metadata),
     });
   }
 
@@ -326,20 +306,20 @@ export class YoutubeScraper {
       });
       const list: string[] = [];
       for await (
-        const { gridChannelRenderer: data }
+        const { gridChannelRenderer }
         of this.youtube.requestAll(innertubeApiKey, initialItems)
       ) {
+        const data = gridChannelRenderer!;
         list.push(data.channelId);
         const verifiedBadgeIndex = data.ownerBadges
           ?.findIndex(badge => badge.metadataBadgeRenderer.icon.iconType === 'CHECK_CIRCLE_THICK');
         this.model.handleChannelUpdate({
-          id: data.channelId,
-          avatarUrl: data.thumbnail.thumbnails.at(-1)?.url,
-          handle: data.navigationEndpoint.browseEndpoint.canonicalBaseUrl,
+          id: getChannelId(data),
+          avatarUrl: getChannelAvatarUrl(data),
+          handle: getChannelHandle(data),
           name: data.title.simpleText,
           verified: verifiedBadgeIndex === undefined ? undefined : verifiedBadgeIndex !== -1,
-          subscriberCount: data.subscriberCountText
-            && parseSubscriberCount(data.subscriberCountText.simpleText.split(' ')[0]),
+          subscriberCount: getSubscriberCount(data),
         });
       }
       channels.push([title, list]);

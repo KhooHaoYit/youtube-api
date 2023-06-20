@@ -4,7 +4,7 @@ import {
   getBasicInfo as _getBasicInfo,
 } from 'ytdl-core';
 import * as ytpl from 'ytpl';
-import { AppHandleUpdate, Link } from './app.handleUpdate';
+import { AppHandleUpdate } from './app.handleUpdate';
 
 @Injectable()
 export class AppService {

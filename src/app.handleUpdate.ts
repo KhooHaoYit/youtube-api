@@ -4,9 +4,11 @@ import { PrismaService } from 'nestjs-prisma';
 import {
   getBasicInfo as _getBasicInfo,
 } from 'ytdl-core';
-import { parseSubscriberCount, prismaUpsertRetry } from './app.utils';
-import { C4TabbedHeaderRenderer } from './youtube/types/export/c4TabbedHeaderRenderer';
-import { PlayerMicroformatRenderer } from './youtube/types/export/playerMicroformatRenderer';
+import { prismaUpsertRetry } from './app.utils';
+import { C4TabbedHeaderRenderer, getAvatarUrl, getBannerUrl, getChannelId, getChannelName, getHandle, getSubscriberCount, haveMembershipFeature, isVerified } from './youtube/types/export/renderer/c4TabbedHeaderRenderer';
+import * as playerMicroformatRenderer from './youtube/types/export/renderer/playerMicroformatRenderer';
+import type { PlayerMicroformatRenderer } from './youtube/types/export/renderer/playerMicroformatRenderer';
+import { Link } from './youtube/types/export/renderer/channelAboutFullMetadataRenderer';
 
 @Injectable()
 export class AppHandleUpdate {
@@ -22,12 +24,10 @@ export class AppHandleUpdate {
     await this.handleChannelUpdate({
       id: data.externalChannelId,
       name: data.ownerChannelName,
-      handle: data.ownerProfileUrl.split('/').at(-1),
+      handle: playerMicroformatRenderer.getHandle(data),
     }, fetchedAt);
     await this.handleVideoUpdate({
-      id: data.thumbnail.thumbnails.at(0)!.url
-        .replace(/^[^]+?vi\//, '')
-        .replace(/\/[^]+$/, ''),
+      id: playerMicroformatRenderer.getVideoId(data),
       category: data.category,
       viewCount: data.viewCount ? +data.viewCount : undefined,
       description: data.description?.simpleText || '',
@@ -49,17 +49,15 @@ export class AppHandleUpdate {
     data: C4TabbedHeaderRenderer,
     fetchedAt = new Date,
   ) {
-    const verifiedBadgeIndex = data.badges
-      ?.findIndex(badge => badge.metadataBadgeRenderer.icon.iconType === 'CHECK_CIRCLE_THICK');
     await this.handleChannelUpdate({
-      id: data.channelId,
-      bannerUrl: data.banner?.thumbnails.at(0)?.url,
-      avatarUrl: data.avatar.thumbnails.at(0)?.url,
-      name: data.title,
-      handle: data.channelHandleText?.runs.at(0)?.text,
-      subscriberCount: parseSubscriberCount(data.subscriberCountText?.simpleText.split(' ').at(0)),
-      verified: verifiedBadgeIndex === undefined ? undefined : verifiedBadgeIndex !== -1,
-      haveMembershipFeature: 'sponsorButton' in data,
+      id: getChannelId(data),
+      bannerUrl: getBannerUrl(data),
+      avatarUrl: getAvatarUrl(data),
+      name: getChannelName(data),
+      handle: getHandle(data),
+      subscriberCount: getSubscriberCount(data),
+      verified: isVerified(data),
+      haveMembershipFeature: haveMembershipFeature(data),
     }, fetchedAt);
   }
 
@@ -86,6 +84,10 @@ export class AppHandleUpdate {
     },
     fetchedAt = new Date,
   ) {
+    const newData = await removeSame(this.prisma.channel, data);
+    if (!newData)
+      return;
+    data = newData;
     const fields = {
       ...data,
       handle: data.handle
@@ -128,6 +130,10 @@ export class AppHandleUpdate {
     },
     fetchedAt = new Date,
   ) {
+    const newData = await removeSame(this.prisma.video, data);
+    if (!newData)
+      return;
+    data = newData;
     const fields = {
       ...data,
       channelId: undefined,
@@ -161,6 +167,10 @@ export class AppHandleUpdate {
     },
     fetchedAt = new Date,
   ) {
+    const newData = await removeSame(this.prisma.playlist, data);
+    if (!newData)
+      return;
+    data = newData;
     const fields = {
       ...data,
       channelId: undefined,
@@ -208,4 +218,75 @@ export class AppHandleUpdate {
 
 }
 
-export type Link = [title: string, iconUrl: string | null, url: string | null];
+// prewrite
+async function removeSame(modal: any, data: any) {
+  const dbData = await modal.findUnique({
+    where: { id: data.id },
+    select: {
+      id: undefined,
+      ...Object.fromEntries(Object.entries(data).map(entry => {
+        entry[1] = entry[1] === undefined ? false : true;
+        return entry;
+      })),
+    },
+  });
+  if (!dbData)
+    return data;
+  data = structuredClone(data);
+  for (const key in data) {
+    if (key === 'id')
+      continue;
+    const value = data[key as keyof typeof data];
+    const dbValue = dbData[key as keyof typeof dbData];
+    if (value !== dbValue) {
+      if (typeof value !== 'object')
+        continue;
+      if (JSON.stringify(value) !== JSON.stringify(dbValue))
+        continue;
+    }
+    delete data[key as keyof typeof data];
+  }
+  if (Object.keys(data).length === 1)
+    return null;
+  return data;
+}
+
+// const cache = new Map<string, Record<string, any>>();
+// const func = async (modal: any, data: any) => {
+//   const output = {} as Record<string, Promise<any>>;
+//   const currentCache = cache.get(data.id) ?? cache.set(data.id, {}) as any;
+
+//   const fetchFromDb = {} as Record<string, any>;
+//   for (const key in data) {
+//     let resolve;
+//     const promise = new Promise(rs => resolve = rs)
+//       .finally(async () => {
+//         await new Promise(rs => setTimeout(rs, 60_000));
+//         delete currentCache[key];
+//         if (Object.keys(currentCache).length)
+//           return;
+//         cache.delete(data.id);
+//       });
+//     output[key]
+//       = currentCache[key]
+//       = promise;
+//     fetchFromDb[key] = resolve;
+//   }
+//   const result = await modal.findUnique({
+//     where: { id: data.id },
+//     select: Object.fromEntries(
+//       Object.keys(fetchFromDb)
+//         .map(k => [k, true])
+//     ),
+//   });
+//   if (!result)
+//     return null;
+//   for (const key in result)
+//     fetchFromDb[key](result[key]);
+
+//   const entries = await Promise.all(
+//     Object.entries(output)
+//       .map(async ([k, v]) => [k, await v])
+//   );
+//   return Object.fromEntries(entries);
+// }

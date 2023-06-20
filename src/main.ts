@@ -20,6 +20,7 @@ async function bootstrap() {
   if (env.SENTRY_DSN) {
     init({
       dsn: env.SENTRY_DSN,
+      environment: env.SENTRY_ENVIRONMENT,
       integrations: [
         new Integrations.Http({ tracing: true }),
         new Integrations.Express({

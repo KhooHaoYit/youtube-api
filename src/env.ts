@@ -15,6 +15,7 @@ export const env = createEnv({
     HOSTNAME: z.string().default('0.0.0.0'),
     // Sentry
     SENTRY_DSN: z.string().optional(),
+    SENTRY_ENVIRONMENT: z.enum(['local', 'production']).default('local'),
     SENTRY_TRACES_SAMPLE_RATE: z.coerce.number().min(0).max(1).default(1),
     SENTRY_PROFILES_SAMPLE_RATE: z.coerce.number().min(0).max(1).default(1),
   },

@@ -1,4 +1,4 @@
-import { PlayerMicroformatRenderer } from './playerMicroformatRenderer';
+import { PlayerMicroformatRenderer } from './renderer/playerMicroformatRenderer';
 
 export type VideoPlayerResponse = {
   playabilityStatus: {
@@ -34,11 +34,22 @@ export type VideoPlayerResponse = {
   },
 };
 
-import { CompactRadioRenderer } from './compactRadioRenderer';
-import { CompactVideoRenderer } from './compactVideoRenderer';
-import { ContinuationItemRenderer } from './continuationItemRenderer';
-import { EndScreenPlaylistRenderer } from './endScreenPlaylistRenderer';
-import { EndScreenVideoRenderer } from './endScreenVideoRenderer';
+export function getErrorMessage(data: VideoPlayerResponse) {
+  let output: undefined | string;
+  if (output = data.playabilityStatus.messages?.[0])
+    return output;
+  if (output = data.playabilityStatus.errorScreen?.playerErrorMessageRenderer?.subreason?.simpleText)
+    return output;
+  if (output = data.playabilityStatus.errorScreen?.playerErrorMessageRenderer?.subreason?.runs?.map(run => run.text).join(''))
+    return output;
+  return data.playabilityStatus.reason;
+}
+
+import { CompactRadioRenderer } from './renderer/compactRadioRenderer';
+import { CompactVideoRenderer } from './renderer/compactVideoRenderer';
+import { ContinuationItemRenderer } from './renderer/continuationItemRenderer';
+import { EndScreenPlaylistRenderer } from './renderer/endScreenPlaylistRenderer';
+import { EndScreenVideoRenderer } from './renderer/endScreenVideoRenderer';
 
 export type Video = {
   // "contents": {

@@ -11,7 +11,7 @@ import { Data as suisei_about } from '../data/HoshimachiSuisei/about';
 import { Data as suisei_releases } from '../data/HoshimachiSuisei/releases';
 import { Data as suiseiTopic } from '../data/HoshimachiSuisei-Topic/about';
 
-import { C4TabbedHeaderRenderer } from '../export/c4TabbedHeaderRenderer';
+import { C4TabbedHeaderRenderer } from '../export/renderer/c4TabbedHeaderRenderer';
 
 
 
