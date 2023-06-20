@@ -18,6 +18,8 @@ export const env = createEnv({
     SENTRY_ENVIRONMENT: z.enum(['local', 'production']).default('local'),
     SENTRY_TRACES_SAMPLE_RATE: z.coerce.number().min(0).max(1).default(1),
     SENTRY_PROFILES_SAMPLE_RATE: z.coerce.number().min(0).max(1).default(1),
+    // Development only
+    YOUTUBE_COOKIE: z.string().optional(),
   },
   client: {},
   runtimeEnv: process.env,

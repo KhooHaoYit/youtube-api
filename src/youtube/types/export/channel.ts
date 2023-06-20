@@ -13,6 +13,9 @@ import { SectionListRenderer } from './renderer/sectionListRenderer';
 import { GridRenderer } from './renderer/gridRenderer';
 import { VideoSecondaryInfoRenderer } from './renderer/videoSecondaryInfoRenderer';
 import { VideoPrimaryInfoRenderer } from './renderer/videoPrimaryInfoRenderer';
+import { VideoRenderer } from './renderer/videoRenderer';
+import { SponsorshipsExpandablePerksRenderer } from './renderer/sponsorshipsExpandablePerksRenderer';
+import { SponsorshipsAlertRenderer } from './renderer/sponsorshipsAlertRenderer';
 
 export type TabChannels = {
   title: 'Channels',
@@ -269,8 +272,8 @@ export type TabHome = {
 export type TabCommunity = {
   title: 'Community',
   "content"?: {
-    "sectionListRenderer": SectionListRenderer<{
-      "itemSectionRenderer": ItemSectionRenderer<{
+    sectionListRenderer: SectionListRenderer<{
+      itemSectionRenderer: ItemSectionRenderer<{
         messageRenderer?: {}
         backstagePostThreadRenderer?: BackstagePostThreadRenderer,
         continuationItemRenderer?: ContinuationItemRenderer,
@@ -285,6 +288,21 @@ export function getCommunityPosts(tab: TabCommunity) {
   if ('messageRenderer' in posts[0])
     return [];
   return posts as Exclude<typeof posts[0], { messageRenderer: any }>[];
+}
+
+export type TabMembership = {
+  title: 'Membership',
+  "content"?: {
+    sectionListRenderer: SectionListRenderer<{
+      sponsorshipsExpandablePerksRenderer?: SponsorshipsExpandablePerksRenderer
+      itemSectionRenderer?: ItemSectionRenderer<{
+        sponsorshipsAlertRenderer?: SponsorshipsAlertRenderer
+        backstagePostThreadRenderer?: BackstagePostThreadRenderer
+        videoRenderer?: VideoRenderer
+        continuationItemRenderer?: ContinuationItemRenderer
+      }>
+    }>,
+  },
 }
 
 export type Channel = {
@@ -309,12 +327,12 @@ export type Channel = {
           | TabChannels
           | TabPlaylists
           | TabAbout
-          | TabCommunity,
+          | TabCommunity
+          | TabMembership,
         } | {
-          /**
-           * search within channel
-           */
-          expandableTabRenderer: {}
+          expandableTabRenderer: {
+            "title": "Search",
+          }
         }
       )[],
     },

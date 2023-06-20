@@ -13,12 +13,17 @@ export type VideoRenderer = {
   },
   /**
    * contains partial description
+   * 
+   * might not be visible (like in membership tab)
    */
-  "descriptionSnippet": {},
+  "descriptionSnippet"?: {},
   "longBylineText": {
     "runs": Runs,
   },
-  "viewCountText": ViewCountText,
+  /**
+   * might not be visible (like in membership tab)
+   */
+  "viewCountText"?: ViewCountText,
   "channelThumbnailSupportedRenderers": {
     "channelThumbnailWithLinkRenderer": {
       "thumbnail": Image

@@ -48,7 +48,7 @@ export type C4TabbedHeaderRenderer = {
     /**
      * not defined if not sub-able (like Topic channel)
      */
-    buttonRenderer?: {}
+    subscribeButtonRenderer?: {}
   },
   /**
    * not defined if not sub-able (like Topic channel)

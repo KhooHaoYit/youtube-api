@@ -2,6 +2,7 @@
 import { YoutubeApi } from "../../api";
 import { mkdir, stat, writeFile } from "fs/promises";
 import { dirname } from "path";
+import { env } from "../../../../src/env";
 
 const api = new YoutubeApi;
 const info = [
@@ -71,10 +72,12 @@ const info = [
   ['AlettaSky/community', '/channel/UC0lSxKAt9osiA29vnk1R4sg/community'],
   ['AlettaSky/community_0', '/channel/UC0lSxKAt9osiA29vnk1R4sg/community?lb=Ugkxt8KCbEuMva9F2LMEqvaJQu2BX6GUHuk5'],
   ['GundoMirei/community', '/channel/UCeShTCVgZyq2lsBW9QwIJcw/community?lb=Ugkxic0xZ1SQLUOjyNAkIzWWWz3PWHW02VSE'],
+
+  ['GundoMirei/membership', '/channel/UCeShTCVgZyq2lsBW9QwIJcw/membership', true]
 ];
 
 (async () => {
-  for (const [filename, urlPath] of info) {
+  for (const [filename, urlPath, withCookie] of info) {
     const path = `${__dirname}/../data/${filename}.ts`;
 
     if (
@@ -84,10 +87,19 @@ const info = [
     ) continue;
     await mkdir(dirname(path), { recursive: true });
 
+    if (withCookie && !env.YOUTUBE_COOKIE) {
+      console.warn(`Cookie not defined, skipping`);
+      continue;
+    }
+
     const {
       ytInitialData,
       ytInitialPlayerResponse,
-    } = await api.scrapeYoutubePage(`https://www.youtube.com${urlPath}`);
+    } = await api.scrapeYoutubePage(`https://www.youtube.com${urlPath}`, {
+      headers: {
+        cookie: env.YOUTUBE_COOKIE,
+      },
+    });
     await writeFile(
       path,
       `

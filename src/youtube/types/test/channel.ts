@@ -27,6 +27,7 @@ import { Data as ManoAloe_about } from '../data/ManoAloe/about';
 import { Data as ManoAloe_playlists } from '../data/ManoAloe/playlists';
 import { Data as KMNZ_channels } from '../data/KMNZ/channels';
 import { Data as UruhaRushia_featured } from '../data/UruhaRushia/featured';
+import { Data as GundoMirei_membership } from '../data/GundoMirei/membership';
 
 import { Channel } from '../export/channel';
 
@@ -61,3 +62,4 @@ import { Channel } from '../export/channel';
 <ManoAloe_playlists>{} satisfies Channel;
 <KMNZ_channels>{} satisfies Channel;
 <UruhaRushia_featured>{} satisfies Channel;
+<GundoMirei_membership>{} satisfies Channel;

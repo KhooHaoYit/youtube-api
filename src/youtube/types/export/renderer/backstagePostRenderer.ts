@@ -5,6 +5,7 @@ import { VideoRenderer } from "./videoRenderer";
 import { StringOfDigitsAndComma } from "../generic/stringOfDigitsAndComma";
 import { PostMultiImageRenderer, getAllImageUrls } from "./postMultiImageRenderer";
 import { PollRenderer, getPollInfo } from "./pollRenderer";
+import { SponsorsOnlyBadgeRenderer } from "./sponsorsOnlyBadgeRenderer";
 
 export type BackstagePostRenderer = {
   postId: string,
@@ -53,6 +54,9 @@ export type BackstagePostRenderer = {
   },
   "publishedTimeText": {
     "runs": Runs
+  }
+  sponsorsOnlyBadge?: {
+    sponsorsOnlyBadgeRenderer: SponsorsOnlyBadgeRenderer
   }
 };
 
