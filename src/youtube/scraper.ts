@@ -14,6 +14,7 @@ import { getChannelAvatarUrl, getChannelHandle, getChannelId, getSubscriberCount
 import { getAmountOfVideos, getPlaylistId, getPlaylistTitle } from './types/export/renderer/gridPlaylistRenderer';
 import { getErrorMessage } from './types/export/video';
 import { getLinks } from './types/export/renderer/channelAboutFullMetadataRenderer';
+import { getViewCount } from './types/export/renderer/channelAboutFullMetadataRenderer';
 
 @Injectable()
 export class YoutubeScraper {
@@ -256,7 +257,7 @@ export class YoutubeScraper {
       .tabRenderer.content!.sectionListRenderer.contents[0]
       .itemSectionRenderer.contents[0].channelAboutFullMetadataRenderer;
 
-    const viewCount = metadata.viewCountText?.simpleText.split(' ').at(0)?.replace(/,/g, '');
+    const viewCount = getViewCount(metadata);
     await this.model.handleChannelUpdate({
       id: metadata.channelId,
       viewCount: viewCount ? BigInt(viewCount) : 0n,

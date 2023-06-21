@@ -7,7 +7,7 @@ export type VideoPrimaryInfoRenderer = {
      */
     runs: Runs,
   },
-  viewCount: {
+  viewCount?: {
     videoViewCountRenderer: {
       viewCount: {
         /**
@@ -23,9 +23,10 @@ export type VideoPrimaryInfoRenderer = {
         buttonRenderer?: {}
         segmentedLikeDislikeButtonRenderer?: {
           likeButton: {
-            toggleButtonRenderer: {
+            buttonRenderer?: {}
+            toggleButtonRenderer?: {
               defaultText: {
-                accessibility: {
+                accessibility?: {
                   accessibilityData: {
                     /**
                      * `5,139 likes`
@@ -33,6 +34,7 @@ export type VideoPrimaryInfoRenderer = {
                     label: string
                   }
                 },
+                [key: string]: unknown
               },
             }
           }

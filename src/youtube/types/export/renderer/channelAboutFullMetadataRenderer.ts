@@ -1,6 +1,7 @@
 import { Image } from "../generic/image";
 import * as image from "../generic/image";
 import { ViewCountText } from "../generic/viewCountText";
+import * as viewCountText from "../generic/viewCountText";
 
 export type ChannelAboutFullMetadataRenderer = {
   "description"?: {
@@ -79,6 +80,12 @@ export type ChannelAboutFullMetadataRenderer = {
    */
   signInForBusinessEmail?: {},
 };
+
+export function getViewCount(data: ChannelAboutFullMetadataRenderer) {
+  if (!data.viewCountText)
+    return;
+  return viewCountText.getViewCount(data.viewCountText);
+}
 
 export type Link = [title: string, iconUrl: string | null, url: string | null];
 export function getLinks(data: ChannelAboutFullMetadataRenderer) {

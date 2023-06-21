@@ -29,7 +29,7 @@ export type VideoSecondaryInfoRenderer = {
         }
       },
       subscriberCountText: SubscriberCountText,
-      membershipButton: {}
+      membershipButton?: {}
     }
   },
   attributedDescription: {

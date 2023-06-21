@@ -35,5 +35,5 @@ export function getChannelTab<T extends string>(data: Channel, tabName: T): any 
   if (!data.contents || !('twoColumnBrowseResultsRenderer' in data.contents))
     throw new Error(`Unable to extract channel tabs`);
   return data.contents.twoColumnBrowseResultsRenderer.tabs
-    .find(tab => 'tabRenderer' in tab && tab.tabRenderer.title === tabName);
+    .find(tab => 'tabRenderer' in tab && tab.tabRenderer?.title === tabName);
 };

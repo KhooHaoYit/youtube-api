@@ -17,14 +17,20 @@ export type VideoRenderer = {
    * might not be visible (like in membership tab)
    */
   "descriptionSnippet"?: {},
-  "longBylineText": {
+  /**
+   * not defined on videos tab
+   */
+  "longBylineText"?: {
     "runs": Runs,
   },
   /**
    * might not be visible (like in membership tab)
    */
   "viewCountText"?: ViewCountText,
-  "channelThumbnailSupportedRenderers": {
+  /**
+   * not defined on videos tab
+   */
+  "channelThumbnailSupportedRenderers"?: {
     "channelThumbnailWithLinkRenderer": {
       "thumbnail": Image
       "navigationEndpoint": {
@@ -44,7 +50,10 @@ export type VideoRenderer = {
 };
 
 export function getChannelName(data: VideoRenderer) {
-  return getOriginalText(data.longBylineText.runs);
+  const runs = data.longBylineText?.runs;
+  if (!runs)
+    return;
+  return getOriginalText(runs);
 }
 
 export function getVideoId(data: VideoRenderer) {

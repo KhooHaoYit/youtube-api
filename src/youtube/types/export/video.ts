@@ -1,4 +1,7 @@
 import { PlayerMicroformatRenderer } from './renderer/playerMicroformatRenderer';
+import { PlayerErrorMessageRenderer } from './renderer/playerErrorMessageRenderer';
+import * as  playerErrorMessageRenderer from './renderer/playerErrorMessageRenderer';
+import { PlayerLegacyDesktopYpcOfferRenderer } from './renderer/playerLegacyDesktopYpcOfferRenderer';
 
 export type VideoPlayerResponse = {
   playabilityStatus: {
@@ -12,18 +15,8 @@ export type VideoPlayerResponse = {
       /**
        * defined when video is membership only while not having membership
        */
-      playerLegacyDesktopYpcOfferRenderer?: {
-        offerId: "sponsors_only_video",
-      },
-      playerErrorMessageRenderer?: {
-        subreason?: {
-          simpleText?: string,
-          runs?: [{ text: string }],
-        },
-        reason: {
-          simpleText: string,
-        },
-      },
+      playerLegacyDesktopYpcOfferRenderer?: PlayerLegacyDesktopYpcOfferRenderer,
+      playerErrorMessageRenderer?: PlayerErrorMessageRenderer,
     },
   },
   /**
@@ -35,14 +28,10 @@ export type VideoPlayerResponse = {
 };
 
 export function getErrorMessage(data: VideoPlayerResponse) {
-  let output: undefined | string;
-  if (output = data.playabilityStatus.messages?.[0])
-    return output;
-  if (output = data.playabilityStatus.errorScreen?.playerErrorMessageRenderer?.subreason?.simpleText)
-    return output;
-  if (output = data.playabilityStatus.errorScreen?.playerErrorMessageRenderer?.subreason?.runs?.map(run => run.text).join(''))
-    return output;
-  return data.playabilityStatus.reason;
+  const error = data.playabilityStatus.errorScreen?.playerErrorMessageRenderer;
+  if (error)
+    return playerErrorMessageRenderer.getErrorMessage(error);
+  return;
 }
 
 import { CompactRadioRenderer } from './renderer/compactRadioRenderer';
@@ -50,21 +39,44 @@ import { CompactVideoRenderer } from './renderer/compactVideoRenderer';
 import { ContinuationItemRenderer } from './renderer/continuationItemRenderer';
 import { EndScreenPlaylistRenderer } from './renderer/endScreenPlaylistRenderer';
 import { EndScreenVideoRenderer } from './renderer/endScreenVideoRenderer';
+import { CompactPlaylistRenderer } from './renderer/compactPlaylistRenderer';
+import { RelatedChipCloudRenderer } from './renderer/relatedChipCloudRenderer';
+import { ItemSectionRenderer } from './renderer/itemSectionRenderer';
+import { VideoPrimaryInfoRenderer } from './renderer/videoPrimaryInfoRenderer';
+import { VideoSecondaryInfoRenderer } from './renderer/videoSecondaryInfoRenderer';
 
 export type Video = {
-  // "contents": {
-  //   "twoColumnWatchNextResults": {
-  //     "secondaryResults": {
-  //       "secondaryResults": {
-  //         "results": (
-  //           { compactVideoRenderer: CompactVideoRenderer }
-  //           | { compactRadioRenderer: CompactRadioRenderer }
-  //           | { continuationItemRenderer: ContinuationItemRenderer }
-  //         )[],
-  //       }
-  //     },
-  //   }
-  // },
+  "contents": {
+    "twoColumnWatchNextResults": {
+      results: {
+        results: {
+          contents?: {
+            videoPrimaryInfoRenderer?: VideoPrimaryInfoRenderer
+            videoSecondaryInfoRenderer?: VideoSecondaryInfoRenderer
+            itemSectionRenderer?: ItemSectionRenderer<{
+              messageRenderer?: {}
+              commentsEntryPointHeaderRenderer?: {}
+              backgroundPromoRenderer?: {}
+              continuationItemRenderer?: {}
+            }>
+          }[]
+          [key: string]: unknown
+        }
+      }
+      secondaryResults?: {
+        secondaryResults: {
+          results: {
+            compactPlaylistRenderer?: CompactPlaylistRenderer
+            compactVideoRenderer?: CompactVideoRenderer
+            // compactRadioRenderer?: CompactRadioRenderer
+            relatedChipCloudRenderer?: RelatedChipCloudRenderer
+            itemSectionRenderer?: ItemSectionRenderer<{}>
+            continuationItemRenderer?: ContinuationItemRenderer
+          }[],
+        }
+      },
+    }
+  },
   // "playerOverlays": {
   //   "playerOverlayRenderer": {
   //     "endScreen": {

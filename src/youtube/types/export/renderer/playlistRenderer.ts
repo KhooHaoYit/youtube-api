@@ -15,7 +15,10 @@ export type PlaylistRenderer = {
    * `76`
    */
   "videoCount": string,
-  "longBylineText": {
+  /**
+   * not defined in podcast tab
+   */
+  "longBylineText"?: {
     /**
      * `[
      *   {
@@ -37,5 +40,5 @@ export function getPlaylistId(data: PlaylistRenderer) {
 }
 
 export function getPlaylistOwnerId(data: PlaylistRenderer) {
-  return data.longBylineText.runs[0].navigationEndpoint?.browseEndpoint?.browseId!;
+  return data.longBylineText?.runs[0].navigationEndpoint?.browseEndpoint?.browseId;
 }
