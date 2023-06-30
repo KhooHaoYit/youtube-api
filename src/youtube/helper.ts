@@ -1,39 +1,37 @@
-import {
-  Channel,
-  TabAbout,
-  TabChannels,
-  TabCommunity,
-  TabHome,
-  TabPlaylists,
-} from "./types/export/channel";
+import { Channel as ChannelPage } from "./types/export/url/channel";
+import { Community } from "./types/export/url/channelTab/community";
+import { Playlists } from "./types/export/url/channelTab/playlists";
+import { About } from "./types/export/url/channelTab/about";
+import { Home } from "./types/export/url/channelTab/home";
+import { Channels } from "./types/export/url/channelTab/channels";
 
 export function getChannelTab<T extends 'Home'>(
-  data: Channel,
+  data: ChannelPage,
   tabName: T,
-): { tabRenderer: TabHome };
+): { tabRenderer: Home };
 export function getChannelTab<T extends 'About'>(
-  data: Channel,
+  data: ChannelPage,
   tabName: T,
-): { tabRenderer: TabAbout };
+): { tabRenderer: About };
 export function getChannelTab<T extends 'Playlists'>(
-  data: Channel,
+  data: ChannelPage,
   tabName: T,
-): { tabRenderer: TabPlaylists };
+): { tabRenderer: Playlists };
 export function getChannelTab<T extends 'Channels'>(
-  data: Channel,
+  data: ChannelPage,
   tabName: T,
-): { tabRenderer: TabChannels };
+): { tabRenderer: Channels };
 export function getChannelTab<T extends 'Community'>(
-  data: Channel,
+  data: ChannelPage,
   tabName: T,
-): { tabRenderer: TabCommunity };
+): { tabRenderer: Community };
 export function getChannelTab<T extends 'Membership'>(
-  data: Channel,
+  data: ChannelPage,
   tabName: T,
 ): { tabRenderer: any } | undefined;
-export function getChannelTab<T extends string>(data: Channel, tabName: T): any {
-  if (!data.contents || !('twoColumnBrowseResultsRenderer' in data.contents))
+export function getChannelTab<T extends string>(data: ChannelPage, tabName: T): any {
+  if (!data.ytInitialData?.contents?.twoColumnBrowseResultsRenderer)
     throw new Error(`Unable to extract channel tabs`);
-  return data.contents.twoColumnBrowseResultsRenderer.tabs
+  return data.ytInitialData.contents.twoColumnBrowseResultsRenderer.tabs
     .find(tab => 'tabRenderer' in tab && tab.tabRenderer?.title === tabName);
 };

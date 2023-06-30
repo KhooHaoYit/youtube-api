@@ -1,9 +1,33 @@
-import { PlayerMicroformatRenderer } from './renderer/playerMicroformatRenderer';
-import { PlayerErrorMessageRenderer } from './renderer/playerErrorMessageRenderer';
-import * as  playerErrorMessageRenderer from './renderer/playerErrorMessageRenderer';
-import { PlayerLegacyDesktopYpcOfferRenderer } from './renderer/playerLegacyDesktopYpcOfferRenderer';
+import { PlayerMicroformatRenderer } from '../renderer/playerMicroformatRenderer';
+import { PlayerErrorMessageRenderer } from '../renderer/playerErrorMessageRenderer';
+import * as playerErrorMessageRenderer from '../renderer/playerErrorMessageRenderer';
+import { PlayerLegacyDesktopYpcOfferRenderer } from '../renderer/playerLegacyDesktopYpcOfferRenderer';
+import { CompactVideoRenderer } from '../renderer/compactVideoRenderer';
+import { ContinuationItemRenderer } from '../renderer/continuationItemRenderer';
+import { CompactPlaylistRenderer } from '../renderer/compactPlaylistRenderer';
+import { RelatedChipCloudRenderer } from '../renderer/relatedChipCloudRenderer';
+import { ItemSectionRenderer } from '../renderer/itemSectionRenderer';
+import { VideoPrimaryInfoRenderer } from '../renderer/videoPrimaryInfoRenderer';
+import { VideoSecondaryInfoRenderer } from '../renderer/videoSecondaryInfoRenderer';
+import { LiveChatRenderer } from '../renderer/liveChatRenderer';
+import { ConversationBarRenderer } from '../renderer/conversationBarRenderer';
 
-export type VideoPlayerResponse = {
+export type Watch = {
+  innertubeApiKey: string,
+  ytInitialData: YtInitialData,
+  ytInitialPlayerResponse: YtInitialPlayerResponse
+}
+
+export function getErrorMessage(data: Watch) {
+  const error = data.ytInitialPlayerResponse.playabilityStatus.errorScreen?.playerErrorMessageRenderer;
+  if (error)
+    return playerErrorMessageRenderer.getErrorMessage(error);
+  return;
+}
+
+
+
+type YtInitialPlayerResponse = {
   playabilityStatus: {
     status: string,
     messages?: [string],
@@ -27,27 +51,9 @@ export type VideoPlayerResponse = {
   },
 };
 
-export function getErrorMessage(data: VideoPlayerResponse) {
-  const error = data.playabilityStatus.errorScreen?.playerErrorMessageRenderer;
-  if (error)
-    return playerErrorMessageRenderer.getErrorMessage(error);
-  return;
-}
-
-import { CompactRadioRenderer } from './renderer/compactRadioRenderer';
-import { CompactVideoRenderer } from './renderer/compactVideoRenderer';
-import { ContinuationItemRenderer } from './renderer/continuationItemRenderer';
-import { EndScreenPlaylistRenderer } from './renderer/endScreenPlaylistRenderer';
-import { EndScreenVideoRenderer } from './renderer/endScreenVideoRenderer';
-import { CompactPlaylistRenderer } from './renderer/compactPlaylistRenderer';
-import { RelatedChipCloudRenderer } from './renderer/relatedChipCloudRenderer';
-import { ItemSectionRenderer } from './renderer/itemSectionRenderer';
-import { VideoPrimaryInfoRenderer } from './renderer/videoPrimaryInfoRenderer';
-import { VideoSecondaryInfoRenderer } from './renderer/videoSecondaryInfoRenderer';
-
-export type Video = {
-  "contents": {
-    "twoColumnWatchNextResults": {
+type YtInitialData = {
+  contents: {
+    twoColumnWatchNextResults: {
       results: {
         results: {
           contents?: {
@@ -75,6 +81,13 @@ export type Video = {
           }[],
         }
       },
+      conversationBar?: {
+        /**
+         * defined when live chat was turned off/not available
+         */
+        conversationBarRenderer?: ConversationBarRenderer
+        liveChatRenderer?: LiveChatRenderer
+      }
     }
   },
   // "playerOverlays": {

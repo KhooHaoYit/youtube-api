@@ -44,8 +44,9 @@ const addSchema = (data: Record<string, any>, key: string) => {
   const {
     innertubeApiKey,
     ytInitialData,
-  } = await api.scrapeYoutubePage('https://www.youtube.com/channel/UCkIimWZ9gBJRamKF0rmPU8w/community');
-
+  } = await api.scrape('/channel/UCkIimWZ9gBJRamKF0rmPU8w/community');
+  if (!innertubeApiKey)
+    throw new Error(`Channel does not exists`);
   for await (
     const item
     of api.requestAll(innertubeApiKey, (<any>ytInitialData).contents.twoColumnBrowseResultsRenderer.tabs

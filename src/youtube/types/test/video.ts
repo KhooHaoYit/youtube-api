@@ -30,25 +30,31 @@ import {
   Data as haachamachama_video_rRneIzh5C54_data,
   PlayerResponse as haachamachama_video_rRneIzh5C54_player,
 } from '../data/AkaiHaato/_videos/rRneIzh5C54';
+import {
+  Data as i_IgTPXlxAY_d,
+  PlayerResponse as i_IgTPXlxAY_p,
+} from '../data/AkaiHaato/_videos/i_IgTPXlxAY';
+import { Watch } from '../export/url/watch';
 
-import { Video, VideoPlayerResponse } from '../export/video';
+type YtInitialData = Watch['ytInitialData'];
+type YtInitialPlayerResponse = Watch['ytInitialPlayerResponse'];
 
+<haachamachama__video>{} satisfies YtInitialData;
+<MapleAlcesiaCh__video>{} satisfies YtInitialData;
+<UruhaRushia__video>{} satisfies YtInitialData;
+<unknown_video_M71AXLRXj2Y_data>{} satisfies YtInitialData;
+<unknown_video___data>{} satisfies YtInitialData;
+<unknown_video_XkdYV5a1Lc8_data>{} satisfies YtInitialData;
+<unknown_video_2hpzVbErUc4_data>{} satisfies YtInitialData;
+<haachamachama_video_rRneIzh5C54_data>{} satisfies YtInitialData;
+<i_IgTPXlxAY_d>{} satisfies YtInitialData;
 
-
-<haachamachama__video>{} satisfies Video;
-<MapleAlcesiaCh__video>{} satisfies Video;
-<UruhaRushia__video>{} satisfies Video;
-<unknown_video_M71AXLRXj2Y_data>{} satisfies Video;
-<unknown_video___data>{} satisfies Video;
-<unknown_video_XkdYV5a1Lc8_data>{} satisfies Video;
-<unknown_video_2hpzVbErUc4_data>{} satisfies Video;
-<haachamachama_video_rRneIzh5C54_data>{} satisfies Video;
-
-<haachamachama_video_reponse>{} satisfies VideoPlayerResponse;
-<MapleAlcesiaCh_video_response>{} satisfies VideoPlayerResponse;
-<UruhaRushia_video_response>{} satisfies VideoPlayerResponse;
-<unknown_video_M71AXLRXj2Y_player>{} satisfies VideoPlayerResponse;
-<unknown_video___player>{} satisfies VideoPlayerResponse;
-<unknown_video_XkdYV5a1Lc8_player>{} satisfies VideoPlayerResponse;
-<unknown_video_2hpzVbErUc4_player>{} satisfies VideoPlayerResponse;
-<haachamachama_video_rRneIzh5C54_player>{} satisfies VideoPlayerResponse;
+<haachamachama_video_reponse>{} satisfies YtInitialPlayerResponse;
+<MapleAlcesiaCh_video_response>{} satisfies YtInitialPlayerResponse;
+<UruhaRushia_video_response>{} satisfies YtInitialPlayerResponse;
+<unknown_video_M71AXLRXj2Y_player>{} satisfies YtInitialPlayerResponse;
+<unknown_video___player>{} satisfies YtInitialPlayerResponse;
+<unknown_video_XkdYV5a1Lc8_player>{} satisfies YtInitialPlayerResponse;
+<unknown_video_2hpzVbErUc4_player>{} satisfies YtInitialPlayerResponse;
+<haachamachama_video_rRneIzh5C54_player>{} satisfies YtInitialPlayerResponse;
+<i_IgTPXlxAY_p>{} satisfies YtInitialPlayerResponse;

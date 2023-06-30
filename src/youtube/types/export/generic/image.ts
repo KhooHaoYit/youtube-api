@@ -6,11 +6,11 @@ export type Image = {
     ...unknown[]
   ]
   accessibility?: {
-    "accessibilityData": {
+    accessibilityData: {
       /**
        * `あーね`
        */
-      "label": string
+      label: string
     }
   }
 };

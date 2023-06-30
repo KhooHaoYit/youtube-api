@@ -16,7 +16,7 @@ export async function generateCommunityPost(postId: string) {
   const {
     ytInitialData,
     ytInitialPlayerResponse,
-  } = await api.scrapeYoutubePage(`https://www.youtube.com/post/${postId}`);
+  } = await api.scrape(`/post/${postId}`);
   await writeFile(
     path,
     `
@@ -45,7 +45,7 @@ export async function generateChannelTab(channelId: string, tabName: string) {
   const {
     ytInitialData,
     ytInitialPlayerResponse,
-  } = await api.scrapeYoutubePage(`https://www.youtube.com/channel/${channelId}/${tabName}`);
+  } = await api.scrape(`/channel/${channelId}/${tabName}`);
   await writeFile(
     path,
     `

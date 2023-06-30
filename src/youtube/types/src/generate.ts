@@ -71,10 +71,15 @@ const info = [
 
   ['AlettaSky/community', '/channel/UC0lSxKAt9osiA29vnk1R4sg/community'],
   ['AlettaSky/community_0', '/channel/UC0lSxKAt9osiA29vnk1R4sg/community?lb=Ugkxt8KCbEuMva9F2LMEqvaJQu2BX6GUHuk5'],
-  ['GundoMirei/community', '/channel/UCeShTCVgZyq2lsBW9QwIJcw/community?lb=Ugkxic0xZ1SQLUOjyNAkIzWWWz3PWHW02VSE'],
+  ['GundoMirei/community_0', '/channel/UCeShTCVgZyq2lsBW9QwIJcw/community?lb=Ugkxic0xZ1SQLUOjyNAkIzWWWz3PWHW02VSE'],
 
   ['GundoMirei/membership', '/channel/UCeShTCVgZyq2lsBW9QwIJcw/membership', true],
-];
+  ['AkaiHaato/_videos/i_IgTPXlxAY', '/watch?v=i_IgTPXlxAY'],
+  ['AkaiHaato/_liveChat/gyL4nq53AHc', '/live_chat_replay?continuation=op2w0wRsGl5DaWtxSndvWVZVTXhRMlpZUWw5clVuTXpReTE2WVdWVVJ6TnZSM2xuRWd0bmVVdzBibkUxTTBGSVl4b1Q2cWpkdVFFTkNndG5lVXcwYm5FMU0wRklZeUFCTUFBJTNEQAFyBggEGAIgAHgB'],
+  ['AkaiHaato/community_0', '/channel/UC1CfXB_kRs3C-zaeTG3oGyg/community?lb=UgkxoALefnA2CTQPj1rS5dpV4zprms7bgzJC'],
+  ['AkaiHaato/community', '/channel/UC1CfXB_kRs3C-zaeTG3oGyg/community'],
+  ['ZenGunawan-MAHA5/community_0', '/channel/UCUummegUoc-w7EDdk8Ps7BQ/community?lb=UgkxiaO75P76Wun77hvjvojVh2q-kVc5dD40'],
+] as const;
 
 (async () => {
   for (const [filename, urlPath, withCookie] of info) {
@@ -95,7 +100,7 @@ const info = [
     const {
       ytInitialData,
       ytInitialPlayerResponse,
-    } = await api.scrapeYoutubePage(`https://www.youtube.com${urlPath}`, {
+    } = await api.scrape(urlPath, {
       headers: {
         cookie: env.YOUTUBE_COOKIE,
       },

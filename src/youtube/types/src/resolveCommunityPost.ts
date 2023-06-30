@@ -4,7 +4,7 @@ import { Data as c2 } from '../../types/data/AmrzsMonstar/community.json';
 import { Data as c3 } from '../../types/data/ManoAloe/community.json';
 import { Data as c4 } from '../../types/data/AlettaSky/community.json';
 import { Data as c5 } from '../../types/data/AlettaSky/community_0.json';
-import { Data as c6 } from '../../types/data/GundoMirei/community.json';
+import { Data as c6 } from '../../types/data/GundoMirei/community_0.json';
 
 import { start } from "repl";
 import { getPost } from '../export/renderer/backstagePostThreadRenderer';

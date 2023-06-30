@@ -10,7 +10,7 @@ import { SponsorsOnlyBadgeRenderer } from "./sponsorsOnlyBadgeRenderer";
 export type BackstagePostRenderer = {
   postId: string,
   contentText: {
-    runs: Runs,
+    runs?: Runs,
   },
   authorEndpoint: {
     browseEndpoint: {
@@ -83,7 +83,10 @@ export function getPublishedTime(post: BackstagePostRenderer) {
 }
 
 export function getContent(post: BackstagePostRenderer) {
-  return getOriginalText(post.contentText.runs);
+  const runs = post.contentText.runs;
+  if (!runs)
+    return '';
+  return getOriginalText(runs);
 }
 
 type Extra =

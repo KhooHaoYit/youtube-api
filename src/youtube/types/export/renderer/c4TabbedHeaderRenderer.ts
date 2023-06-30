@@ -67,17 +67,12 @@ export type C4TabbedHeaderRenderer = {
    * not defined if channel doesn't exists
    */
   videosCountText?: {
-    runs: [
-      {
-        /**
-         * `77`
-         */
-        text: string
-      },
-      {
-        text: " videos"
-      }
-    ] | [{ text: 'No videos' }],
+    /**
+     * `77 videos`
+     * 
+     * `No videos`
+     */
+    runs: Runs
   },
   /**
    * contains part of description of channel
