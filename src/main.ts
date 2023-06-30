@@ -23,6 +23,7 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
+  NotFoundException,
 } from '@nestjs/common';
 
 async function bootstrap() {
@@ -38,10 +39,14 @@ async function bootstrap() {
           app: expressApp,
         }),
         new ProfilingIntegration(),
+        new Integrations.LocalVariables({
+          captureAllExceptions: true,
+        }),
         ...autoDiscoverNodePerformanceMonitoringIntegrations(),
       ],
       tracesSampleRate: env.SENTRY_TRACES_SAMPLE_RATE,
       profilesSampleRate: env.SENTRY_PROFILES_SAMPLE_RATE,
+      includeLocalVariables: true,
     });
     expressApp.use(Handlers.requestHandler());
     expressApp.use(Handlers.tracingHandler());
@@ -71,7 +76,9 @@ class SentryExceptionFilter implements ExceptionFilter {
   ) { }
 
   catch(exception: HttpException, host: ArgumentsHost) {
-    const eventId = captureException(exception);
+    const eventId = exception instanceof NotFoundException
+      ? null
+      : captureException(exception);
 
     const { httpAdapter } = this.httpAdapterHost;
 

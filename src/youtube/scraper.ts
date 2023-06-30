@@ -50,7 +50,7 @@ export class YoutubeScraper {
     if (!page.innertubeApiKey)
       throw new Error(`innertubeApiKey not defined`);
     const initialPosts = getCommunityPosts(
-      getChannelTab(page, 'Community')
+      getChannelTab(page.ytInitialData!, 'Community')
         .tabRenderer,
     );
     for await (
@@ -78,7 +78,7 @@ export class YoutubeScraper {
     await this.model.handleChannelUpdate({
       id: page.ytInitialData.header.c4TabbedHeaderRenderer.channelId,
       featuredDisplay: getFeaturedDisplay(
-        getChannelTab(page, 'Home').tabRenderer
+        getChannelTab(page.ytInitialData!, 'Home').tabRenderer
       ),
     });
     // for (const b of a) {
@@ -121,7 +121,7 @@ export class YoutubeScraper {
       headers,
     });
     return {
-      badges: <[months: number, url: string][]>getChannelTab(page, 'Membership')
+      badges: <[months: number, url: string][]>getChannelTab(page.ytInitialData!, 'Membership')
         ?.tabRenderer.content.sectionListRenderer.contents
         .find((content: any) => 'sponsorshipsExpandablePerksRenderer' in content)
         .sponsorshipsExpandablePerksRenderer.expandableItems[0]
@@ -131,7 +131,7 @@ export class YoutubeScraper {
             .map((run: any) => run.text).join('').match(/\d+/)?.[0] || 0),
           badge.sponsorshipsLoyaltyBadgeRenderer.icon.thumbnails[0].url.replace(/=[^]*$/, '=s0'),
         ]),
-      emojis: <[name: string, url: string][]>getChannelTab(page, 'Membership')
+      emojis: <[name: string, url: string][]>getChannelTab(page.ytInitialData!, 'Membership')
         ?.tabRenderer.content.sectionListRenderer.contents
         .find((content: any) => 'sponsorshipsExpandablePerksRenderer' in content)
         .sponsorshipsExpandablePerksRenderer.expandableItems[1]
@@ -156,7 +156,7 @@ export class YoutubeScraper {
     if (!page.innertubeApiKey)
       throw new Error(`innertubeApiKey not defined`);
     const categories = getPlaylists(
-      getChannelTab(page, 'Playlists')
+      getChannelTab(page.ytInitialData!, 'Playlists')
         .tabRenderer,
     ).subMenu;
 
@@ -165,9 +165,9 @@ export class YoutubeScraper {
       const initialItems = await this.youtube.request(page.innertubeApiKey, {
         browseId: browseId,
         params: params,
-      }).then((res: Channel) =>
+      }).then((res: Channel['ytInitialData']) =>
         getPlaylists(
-          getChannelTab(res, 'Playlists')
+          getChannelTab(res!, 'Playlists')
             .tabRenderer,
         ).playlists,
       );
@@ -196,7 +196,7 @@ export class YoutubeScraper {
     const page = await this.youtube.scrape(`/channel/${channelId}/about`);
     if (page.ytInitialData?.header)
       await this.model.handleC4TabbedHeaderRendererUpdate(page.ytInitialData.header.c4TabbedHeaderRenderer);
-    const metadata = getChannelTab(page, 'About')
+    const metadata = getChannelTab(page.ytInitialData!, 'About')
       .tabRenderer.content!.sectionListRenderer.contents[0]
       .itemSectionRenderer.contents[0].channelAboutFullMetadataRenderer;
 
@@ -224,7 +224,7 @@ export class YoutubeScraper {
       throw new Error(`innertubeApiKey not defined`);
     if (page.ytInitialData?.header)
       await this.model.handleC4TabbedHeaderRendererUpdate(page.ytInitialData.header.c4TabbedHeaderRenderer);
-    const subMenu = getChannelTab(page, 'Channels')
+    const subMenu = getChannelTab(page.ytInitialData!, 'Channels')
       .tabRenderer.content!.sectionListRenderer.subMenu;
     if (!subMenu)
       return await this.model.handleChannelUpdate({
@@ -240,8 +240,8 @@ export class YoutubeScraper {
       const initialItems = await this.youtube.request(page.innertubeApiKey, {
         browseId: browseId,
         params: params,
-      }).then((res: Channel) => {
-        const tab = getChannelTab(res, 'Channels');
+      }).then((res: Channel['ytInitialData']) => {
+        const tab = getChannelTab(res!, 'Channels');
         if (
           categories.length !== 1 &&
           tab.tabRenderer.content!.sectionListRenderer.subMenu

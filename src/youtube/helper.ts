@@ -1,4 +1,4 @@
-import { Channel as ChannelPage } from "./types/export/url/channel";
+import { YtInitialData as ChannelPage } from "./types/export/url/channel";
 import { Community } from "./types/export/url/channelTab/community";
 import { Playlists } from "./types/export/url/channelTab/playlists";
 import { About } from "./types/export/url/channelTab/about";
@@ -30,8 +30,8 @@ export function getChannelTab<T extends 'Membership'>(
   tabName: T,
 ): { tabRenderer: any } | undefined;
 export function getChannelTab<T extends string>(data: ChannelPage, tabName: T): any {
-  if (!data.ytInitialData?.contents?.twoColumnBrowseResultsRenderer)
+  if (!data.contents?.twoColumnBrowseResultsRenderer)
     throw new Error(`Unable to extract channel tabs`);
-  return data.ytInitialData.contents.twoColumnBrowseResultsRenderer.tabs
+  return data.contents.twoColumnBrowseResultsRenderer.tabs
     .find(tab => 'tabRenderer' in tab && tab.tabRenderer?.title === tabName);
 };
