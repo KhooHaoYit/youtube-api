@@ -7,7 +7,7 @@ import { YoutubeApi } from './api';
 import { getChannelTab } from './helper';
 import { Visibility } from '@prisma/client';
 import { getPost } from './types/export/renderer/backstagePostThreadRenderer';
-import { getChannelAvatarUrl, getChannelHandle, getChannelId, getSubscriberCount } from './types/export/renderer/gridChannelRenderer';
+import * as gridChannelRenderer from './types/export/renderer/gridChannelRenderer';
 import { getAmountOfVideos, getPlaylistId, getPlaylistTitle } from './types/export/renderer/gridPlaylistRenderer';
 import { getLinks } from './types/export/renderer/channelAboutFullMetadataRenderer';
 import { getViewCount } from './types/export/renderer/channelAboutFullMetadataRenderer';
@@ -16,6 +16,8 @@ import { Channel } from './types/export/url/channel';
 import { getCommunityPosts } from './types/export/url/channelTab/community';
 import { getErrorMessage } from './types/export/url/watch';
 import { getFeaturedDisplay } from './types/export/url/channelTab/home';
+import { getPlaylist, hasPlaylist, listAllVideos } from './types/export/url/playlist';
+import { getChannelId } from './types/export/renderer/playlistVideoRenderer';
 
 @Injectable()
 export class YoutubeScraper {
@@ -42,6 +44,34 @@ export class YoutubeScraper {
         ? Visibility.private
         : undefined,
       removedReason: errorMessage,
+    });
+  }
+
+  async scrapePlaylist(playlistId: string) {
+    const page = await this.youtube.scrape(`/playlist?list=${playlistId}`);
+    if (!hasPlaylist(page))
+      return;
+    if (!page.innertubeApiKey)
+      throw new Error(`innertubeApiKey not defined`);
+    const videoIds: string[] = [];
+    for await (const video of listAllVideos(page, page.innertubeApiKey)) {
+      videoIds.push(video.videoId);
+      await this.model.handleVideoUpdate({
+        id: video.videoId,
+        channelId: getChannelId(video),
+      });
+    }
+    const playlist = getPlaylist(page);
+    await this.model.handlePlaylistUpdate({
+      id: playlist.id,
+      channelId: playlist.channelId,
+      description: playlist.description,
+      estimatedCount: playlist.videoCount,
+      lastUpdated: playlist.lastUpdated,
+      title: playlist.title,
+      view: playlist.viewCount,
+      visibility: playlist.visibility,
+      videoIds,
     });
   }
 
@@ -254,20 +284,20 @@ export class YoutubeScraper {
       });
       const list: string[] = [];
       for await (
-        const { gridChannelRenderer }
+        const { gridChannelRenderer: renderer }
         of this.youtube.requestAll(page.innertubeApiKey, initialItems)
       ) {
-        const data = gridChannelRenderer!;
+        const data = renderer!;
         list.push(data.channelId);
         const verifiedBadgeIndex = data.ownerBadges
           ?.findIndex(badge => badge.metadataBadgeRenderer.icon.iconType === 'CHECK_CIRCLE_THICK');
         this.model.handleChannelUpdate({
-          id: getChannelId(data),
-          avatarUrl: getChannelAvatarUrl(data),
-          handle: getChannelHandle(data),
+          id: gridChannelRenderer.getChannelId(data),
+          avatarUrl: gridChannelRenderer.getChannelAvatarUrl(data),
+          handle: gridChannelRenderer.getChannelHandle(data),
           name: data.title.simpleText,
           verified: verifiedBadgeIndex === undefined ? undefined : verifiedBadgeIndex !== -1,
-          subscriberCount: getSubscriberCount(data),
+          subscriberCount: gridChannelRenderer.getSubscriberCount(data),
         });
       }
       channels.push([title, list]);

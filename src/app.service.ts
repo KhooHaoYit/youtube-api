@@ -3,7 +3,6 @@ import { Visibility } from '@prisma/client';
 import {
   getBasicInfo as _getBasicInfo,
 } from 'ytdl-core';
-import * as ytpl from 'ytpl';
 import { AppHandleUpdate } from './app.handleUpdate';
 
 @Injectable()
@@ -125,44 +124,6 @@ export class AppService {
         handle: result.videoDetails.author.user,
         avatarUrl: result.videoDetails.author.thumbnails?.at(0)?.url,
       }),
-    ]);
-  }
-
-  async updatePlaylist(playlistId: string) {
-    const playlist = await ytpl(playlistId, { limit: Infinity });
-    await Promise.all([
-      this.model.handlePlaylistUpdate({
-        id: playlist.id,
-        channelId: playlist.author.channelID,
-        description: playlist.description || undefined,
-        estimatedCount: playlist.estimatedItemCount,
-        lastUpdated: playlist.lastUpdated,
-        title: playlist.title,
-        videoIds: playlist.items.map(item => item.id),
-        view: playlist.views,
-        visibility: playlist.visibility,
-      }),
-      this.model.handleChannelUpdate({
-        id: playlist.author.channelID,
-        name: playlist.author.name,
-        avatarUrl: playlist.author.bestAvatar.url || undefined,
-        handle: playlist.author.url.split('/').at(-1),
-      }),
-      ...playlist.items.map(video => [
-        this.model.handleVideoUpdate({
-          id: video.id,
-          // true === isLivestream, false === notLiveStream || wasLive
-          isLivestream: video.isLive || undefined,
-          duration: video.durationSec || undefined,
-          channelId: video.author.channelID,
-          title: video.title,
-        }),
-        this.model.handleChannelUpdate({
-          id: video.author.channelID,
-          handle: video.author.url.split('/').at(-1),
-          name: video.author.name,
-        }),
-      ]).flat(),
     ]);
   }
 

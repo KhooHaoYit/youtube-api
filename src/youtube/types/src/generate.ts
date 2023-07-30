@@ -6,16 +6,10 @@ import { env } from "../../../../src/env";
 
 const api = new YoutubeApi;
 const info = [
-  // have membership // no banner
   ['AkaiHaato/about', '/channel/UC1CfXB_kRs3C-zaeTG3oGyg/about'],
-  // have membership // is verified
   ['hololive/about', '/channel/UCJFZiqLMntJufDCHc6bQixg/about'],
-  // have membership // is artist
   ['HoshimachiSuisei/about', '/channel/UC5CwaMl1eIgY8h02uZw7u8A/about'],
-  // not sub-able
   ['HoshimachiSuisei-Topic/about', '/channel/UCrzT1p8gn0hQTBeMA6e2YiA/about'],
-
-
   ['hololive/videos', '/channel/UCJFZiqLMntJufDCHc6bQixg/videos'],
   ['hololive/shorts', '/channel/UCJFZiqLMntJufDCHc6bQixg/shorts'],
   ['hololive/streams', '/channel/UCJFZiqLMntJufDCHc6bQixg/streams'],
@@ -26,26 +20,18 @@ const info = [
   ['hololive/channels/subscriptions', '/channel/UCJFZiqLMntJufDCHc6bQixg/channels?view=56&shelf_id=0'],
   ['hololive/channels/custom-12', '/channel/UCJFZiqLMntJufDCHc6bQixg/channels?view=49&shelf_id=12'],
   ['hololive/about', '/channel/UCJFZiqLMntJufDCHc6bQixg/about'],
-
   ['HoshimachiSuisei/releases', '/channel/UC5CwaMl1eIgY8h02uZw7u8A/releases'],
-
   ['AkaiHaato/playlists', '/channel/UC1CfXB_kRs3C-zaeTG3oGyg/playlists'],
-
   ['AkaiHaato/_videos/KpCH4mbj_pk', '/watch?v=KpCH4mbj_pk'],
-
   ['manae_nme/about', '/channel/UCAPdxmEjYxUdQMf_JaQRl1Q/about'],
-
   ['Anko_Kisaki/channels', '/channel/UChXm-xAYPfygrbyLo2yCASQ/channels'],
   ['manae_nme/channels', '/channel/UCAPdxmEjYxUdQMf_JaQRl1Q/channels'],
-
   ['manae_nme/featured', '/channel/UCAPdxmEjYxUdQMf_JaQRl1Q/featured'],
   ['AkaiHaato/featured', '/channel/UC1CfXB_kRs3C-zaeTG3oGyg/featured'],
   ['AlettaSky/featured', '/channel/UC0lSxKAt9osiA29vnk1R4sg/featured'],
   ['MiryuKotofuji/featured', '/channel/UC58Ng5nTN3aiVveus4DEEDg/featured'],
   ['fuurayuri/featured', '/channel/UCUC1EIq0MtF-kctHPtQzIjQ/featured'],
-
   ['MapleAlcesiaCh/_videos/XmxZoBLzSSw', '/watch?v=XmxZoBLzSSw'],
-
   ['UruhaRushia/_videos/__jmEGM8W4E', '/watch?v=__jmEGM8W4E'],
   ['unknown/_videos/_', '/watch?v=_'],
   ['unknown/_videos/M71AXLRXj2Y', '/watch?v=M71AXLRXj2Y'],
@@ -57,28 +43,25 @@ const info = [
   ['unknown/_videos/aC7Dh1SMbcQ', '/watch?v=aC7Dh1SMbcQ'],
   ['unknown/_videos/6qPBafETC7w', '/watch?v=6qPBafETC7w'],
   ['AkaiHaato/_videos/rRneIzh5C54', '/watch?v=rRneIzh5C54'],
-
   ['fuurayuri/about', '/channel/UCUC1EIq0MtF-kctHPtQzIjQ/about'],
-
   ['AsahinaAkane/community', '/channel/UCe_p3YEuYJb8Np0Ip9dk-FQ/community'],
   ['AmrzsMonstar/community', '/channel/UCULLc5b5rzDNp9K-rtF8W5w/community'],
   ['ManoAloe/community', '/channel/UCgZuwn-O7Szh9cAgHqJ6vjw/community'],
-
   ['ManoAloe/about', '/channel/UCgZuwn-O7Szh9cAgHqJ6vjw/about'],
   ['ManoAloe/playlists', '/channel/UCgZuwn-O7Szh9cAgHqJ6vjw/playlists'],
   ['KMNZ/channels', '/channel/UC68J5pWEshmwhDH45qnpIsg/channels'],
   ['UruhaRushia/featured', '/channel/UCl_gCybOJRIgOXw6Qb4qJzQ/featured'],
-
   ['AlettaSky/community', '/channel/UC0lSxKAt9osiA29vnk1R4sg/community'],
   ['AlettaSky/community_0', '/channel/UC0lSxKAt9osiA29vnk1R4sg/community?lb=Ugkxt8KCbEuMva9F2LMEqvaJQu2BX6GUHuk5'],
   ['GundoMirei/community_0', '/channel/UCeShTCVgZyq2lsBW9QwIJcw/community?lb=Ugkxic0xZ1SQLUOjyNAkIzWWWz3PWHW02VSE'],
-
   ['GundoMirei/membership', '/channel/UCeShTCVgZyq2lsBW9QwIJcw/membership', true],
   ['AkaiHaato/_videos/i_IgTPXlxAY', '/watch?v=i_IgTPXlxAY'],
   ['AkaiHaato/_liveChat/gyL4nq53AHc', '/live_chat_replay?continuation=op2w0wRsGl5DaWtxSndvWVZVTXhRMlpZUWw5clVuTXpReTE2WVdWVVJ6TnZSM2xuRWd0bmVVdzBibkUxTTBGSVl4b1Q2cWpkdVFFTkNndG5lVXcwYm5FMU0wRklZeUFCTUFBJTNEQAFyBggEGAIgAHgB'],
   ['AkaiHaato/community_0', '/channel/UC1CfXB_kRs3C-zaeTG3oGyg/community?lb=UgkxoALefnA2CTQPj1rS5dpV4zprms7bgzJC'],
   ['AkaiHaato/community', '/channel/UC1CfXB_kRs3C-zaeTG3oGyg/community'],
   ['ZenGunawan-MAHA5/community_0', '/channel/UCUummegUoc-w7EDdk8Ps7BQ/community?lb=UgkxiaO75P76Wun77hvjvojVh2q-kVc5dD40'],
+  ['playlist/UU1CfXB_kRs3C-zaeTG3oGyg', '/playlist?list=UU1CfXB_kRs3C-zaeTG3oGyg'],
+  ['playlist/UUMO1CfXB_kRs3C-zaeTG3oGyg', '/playlist?list=UUMO1CfXB_kRs3C-zaeTG3oGyg'],
 ] as const;
 
 (async () => {

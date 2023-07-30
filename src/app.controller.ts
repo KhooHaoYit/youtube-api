@@ -19,7 +19,7 @@ export class AppController {
     private scraper: YoutubeScraper,
   ) { }
 
-  @Get('video/:id')
+  @Get('/video/:id')
   async getVideo(@Param('id') id: string) {
     return await this.prisma.video.findUnique({
       where: { id },
@@ -27,7 +27,7 @@ export class AppController {
     }).then(stringify);
   }
 
-  @Post('video/:id/select')
+  @Post('/video/:id/select')
   async getVideoWithSelect(
     @Param('id') id: string,
     @Body() select: any,
@@ -38,7 +38,7 @@ export class AppController {
     }).then(stringify);
   }
 
-  @Get('video/:id/exists')
+  @Get('/video/:id/exists')
   async hasVideo(@Param('id') id: string) {
     const result = await this.prisma.video.findUnique({
       where: { id },
@@ -47,14 +47,14 @@ export class AppController {
     return !!result;
   }
 
-  @Post('video/:id/fetch')
+  @Post('/video/:id/fetch')
   async fetchVideo(@Param('id') id: string) {
     await this.service.updateVideo(id);
     // await this.scraper.scrapeVideo(id);
     return await this.getVideo(id);
   }
 
-  @Get('playlist/:id')
+  @Get('/playlist/:id')
   async getPlaylist(@Param('id') id: string) {
     return await this.prisma.playlist.findUnique({
       where: { id },
@@ -64,13 +64,14 @@ export class AppController {
     }).then(res => stringify(res));
   }
 
-  @Post('playlist/:id/fetch')
+  @Post('/playlist/:id/fetch')
   async fetchPlaylist(@Param('id') id: string) {
-    await this.service.updatePlaylist(id);
+    await this.scraper.scrapePlaylist(id);
+    // await this.service.updatePlaylist(id);
     return await this.getPlaylist(id);
   }
 
-  @Get('channel/:id/playlists')
+  @Get('/channel/:id/playlists')
   async getChannelPlaylists(@Param('id') id: string) {
     return await this.prisma.channel.findUnique({
       where: { id },
@@ -78,20 +79,20 @@ export class AppController {
     }).then(channel => stringify(channel?.playlists || null));
   }
 
-  @Post('channel/:id/playlists/fetch')
+  @Post('/channel/:id/playlists/fetch')
   async fetchChannelPlaylists(@Param('id') id: string) {
     await this.scraper.scrapeChannelPlaylists(id);
     return await this.getChannelPlaylists(id);
   }
 
-  @Get('channel/:id')
+  @Get('/channel/:id')
   async getChannel(@Param('id') id: string) {
     return await this.prisma.channel.findUnique({
       where: { id },
     }).then(channel => stringify(channel || null));
   }
 
-  @Post('channel/:id/fetchAll')
+  @Post('/channel/:id/fetchAll')
   async fetchChannelAll(
     @Param('id') channelId: string,
     @Query('includeVideo') _includeVideo?: string
@@ -111,19 +112,9 @@ export class AppController {
       },
     });
     for (const { id } of playlists)
-      await this.service.updatePlaylist(id);
-    await this.service.updatePlaylist(channelId.replace('UC', 'UU'))
-      .catch(err => { // Doesn't exists when channel doesn't have any video
-        if (err.message === 'API-Error: The playlist does not exist.')
-          return;
-        throw err;
-      });
-    await this.service.updatePlaylist(channelId.replace('UC', 'UUMO'))
-      .catch(err => {
-        if (err.message === 'API-Error: The playlist does not exist.')
-          return;
-        throw err;
-      });
+      await this.scraper.scrapePlaylist(id);
+    await this.scraper.scrapePlaylist(channelId.replace('UC', 'UU'));
+    await this.scraper.scrapePlaylist(channelId.replace('UC', 'UUMO'));
     if (includeVideo)
       for (
         const videoId
@@ -139,7 +130,7 @@ export class AppController {
     return await this.getChannel(channelId);
   }
 
-  @Get('channel/:id/videos')
+  @Get('/channel/:id/videos')
   async getChannelVideos(@Param('id') channelId: string) {
     return await this.prisma.channel.findUnique({
       where: { id: channelId },
@@ -151,13 +142,13 @@ export class AppController {
     }).then(channel => stringify(channel?.videos.map(video => video.id) || null));
   }
 
-  @Post('channel/:id/about/fetch')
+  @Post('/channel/:id/about/fetch')
   async fetchChannelAbout(@Param('id') id: string) {
     await this.scraper.scrapeChannelAbout(id);
     return await this.getChannel(id);
   }
 
-  @Get('channel/:id/channels')
+  @Get('/channel/:id/channels')
   async getChannelChannels(@Param('id') id: string) {
     return await this.prisma.channel.findUnique({
       where: { id },
@@ -167,19 +158,19 @@ export class AppController {
     }).then(channel => stringify(channel?.channels || null));
   }
 
-  @Post('channel/:id/channels/fetch')
+  @Post('/channel/:id/channels/fetch')
   async fetchChannelChannels(@Param('id') id: string) {
     await this.scraper.scrapeChannelChannels(id);
     return await this.getChannelChannels(id);
   }
 
-  @Post('channel/:id/featured/fetch')
+  @Post('/channel/:id/featured/fetch')
   async fetchChannelFeatured(@Param('id') id: string) {
     await this.scraper.scrapeChannelFeatured(id);
     return await this.getChannel(id);
   }
 
-  @Post('channel/:id/fetchMembershipInfo')
+  @Post('/channel/:id/fetchMembershipInfo')
   async fetchMembershipInfo(
     @Param('id') id: string,
     @Body() body: Record<string, string>,
@@ -187,7 +178,7 @@ export class AppController {
     return await this.scraper.scrapeChannelMembership(id, body);
   }
 
-  @Get('channel/:channelId/communityPosts')
+  @Get('/channel/:channelId/communityPosts')
   async getCommunityPosts(
     @Param('channelId') channelId: string,
   ) {
@@ -201,8 +192,8 @@ export class AppController {
     }).then(channel => stringify(channel?.communityPosts.map(post => post.id) || null));
   }
 
-  @Get('channel/:channelId/communityPosts/:postId')
-  async getCommunityPost(
+  @Get('/channel/:channelId/communityPosts/:postId')
+  async getCommunityPostByChannelId(
     @Param('channelId') channelId: string,
     @Param('postId') postId: string,
   ) {
@@ -216,12 +207,21 @@ export class AppController {
     }).then(channel => stringify(channel?.communityPosts.at(0) || null));
   }
 
-  @Post('channel/:channelId/communityPosts/fetch')
+  @Post('/channel/:channelId/communityPosts/fetch')
   async fetchCommunityPosts(
     @Param('channelId') channelId: string,
   ) {
     await this.scraper.scrapeChannelCommunityTab(channelId);
     return await this.getCommunityPosts(channelId);
+  }
+
+  @Post('/communityPosts/:postId')
+  async getCommunityPost(
+    @Param('postId') postId: string,
+  ) {
+    return await this.prisma.communityPost.findUnique({
+      where: { id: postId },
+    }).then(post => stringify(post || null));
   }
 
 }

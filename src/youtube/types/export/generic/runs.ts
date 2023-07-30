@@ -43,3 +43,10 @@ export function getOriginalText(runs: Runs) {
     throw new Error(`Unable to get original text`);
   }).join('');
 }
+
+export function getBrowseId(runs: Runs) {
+  const browseId = runs[0].navigationEndpoint?.browseEndpoint?.browseId;
+  if (!browseId)
+    throw new Error(`browseId is not defined`);
+  return browseId;
+}

@@ -89,7 +89,9 @@ export function getViewCount(data: ChannelAboutFullMetadataRenderer) {
 
 export type Link = [title: string, iconUrl: string | null, url: string | null];
 export function getLinks(data: ChannelAboutFullMetadataRenderer) {
-  return data.primaryLinks?.map(link => {
+  if (!data.primaryLinks)
+    return [];
+  return data.primaryLinks.map(link => {
     let extractUrl: string;
     try {
       const url = new URL(link.navigationEndpoint.urlEndpoint.url);

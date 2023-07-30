@@ -95,9 +95,6 @@ dependencies:
   ytdl-core:
     specifier: ^4.11.4
     version: 4.11.4
-  ytpl:
-    specifier: ^2.3.0
-    version: 2.3.0
   zod:
     specifier: ^3.21.4
     version: 3.21.4
@@ -7353,13 +7350,6 @@ packages:
       m3u8stream: 0.8.6
       miniget: 4.2.2
       sax: 1.2.4
-    dev: false
-
-  /ytpl@2.3.0:
-    resolution: {integrity: sha512-Cfw2rxq3PFK6qgWr2Z8gsRefVahEzbn9XEuiJldqdXHE6GhO7kTfEvbZKdfXing1SmgW635uJ/UL2g8r0fvu2Q==}
-    engines: {node: '>=8'}
-    dependencies:
-      miniget: 4.2.2
     dev: false
 
   /zip-stream@4.1.0:

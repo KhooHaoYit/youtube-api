@@ -3,6 +3,7 @@ import { LiveChatReplay } from './types/export/url/liveChatReplay';
 import { Watch } from './types/export/url/watch';
 import { Channel } from './types/export/url/channel';
 import { Post } from './types/export/url/post';
+import { Playlist } from './types/export/url/playlist';
 
 type ScrapeMap = [
   [
@@ -20,6 +21,10 @@ type ScrapeMap = [
   [
     `/post/${string}`,
     Post,
+  ],
+  [
+    `/playlist?list=${string}`,
+    Playlist,
   ],
 ];
 
