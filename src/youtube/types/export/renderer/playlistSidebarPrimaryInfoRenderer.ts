@@ -24,7 +24,7 @@ export type PlaylistSidebarPrimaryInfoRenderer = {
     }
   ]
   description?: {
-    simpleText: string
+    simpleText?: string
   }
 };
 

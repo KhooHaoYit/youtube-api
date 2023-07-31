@@ -19,7 +19,7 @@ export type PlaylistHeaderRenderer = {
     /**
      * `Videos available to members of this channel. Automatically updated.`
      */
-    simpleText: string
+    simpleText?: string
   }
   viewCountText: {
     /**

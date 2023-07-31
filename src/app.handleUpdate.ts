@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, Visibility } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
-import {
-  getBasicInfo as _getBasicInfo,
-} from 'ytdl-core';
 import { prismaUpsertRetry } from './app.utils';
 import { C4TabbedHeaderRenderer } from './youtube/types/export/renderer/c4TabbedHeaderRenderer';
 import * as c4TabbedHeaderRenderer from './youtube/types/export/renderer/c4TabbedHeaderRenderer';

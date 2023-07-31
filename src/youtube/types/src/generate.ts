@@ -62,6 +62,7 @@ const info = [
   ['ZenGunawan-MAHA5/community_0', '/channel/UCUummegUoc-w7EDdk8Ps7BQ/community?lb=UgkxiaO75P76Wun77hvjvojVh2q-kVc5dD40'],
   ['playlist/UU1CfXB_kRs3C-zaeTG3oGyg', '/playlist?list=UU1CfXB_kRs3C-zaeTG3oGyg'],
   ['playlist/UUMO1CfXB_kRs3C-zaeTG3oGyg', '/playlist?list=UUMO1CfXB_kRs3C-zaeTG3oGyg'],
+  ['playlist/PLDTMegfCY6_7IUWrkNo6WnCxOJuN0w2oi', '/playlist?list=PLDTMegfCY6_7IUWrkNo6WnCxOJuN0w2oi'],
 ] as const;
 
 (async () => {

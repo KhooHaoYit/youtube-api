@@ -1,7 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import {
-  getBasicInfo as _getBasicInfo,
-} from 'ytdl-core';
 import { AppHandleUpdate } from './../app.handleUpdate';
 import { YoutubeApi } from './api';
 import { getChannelTab } from './helper';
@@ -54,11 +51,15 @@ export class YoutubeScraper {
     if (!page.innertubeApiKey)
       throw new Error(`innertubeApiKey not defined`);
     const videoIds: string[] = [];
-    for await (const video of listAllVideos(page, page.innertubeApiKey)) {
-      videoIds.push(video.videoId);
+    for await (const { video, shorts } of listAllVideos(page, page.innertubeApiKey)) {
+      videoIds.push((video ?? shorts!).videoId);
+      if (shorts) {
+        await this.scrapeVideo(shorts.videoId);
+        continue;
+      }
       await this.model.handleVideoUpdate({
-        id: video.videoId,
-        channelId: getChannelId(video),
+        id: video!.videoId,
+        channelId: getChannelId(video!),
       });
     }
     const playlist = getPlaylist(page);
