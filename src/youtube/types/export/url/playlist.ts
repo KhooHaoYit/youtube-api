@@ -22,7 +22,8 @@ export type Playlist = {
 
 
 type YtInitialData = {
-  contents: {
+  [key: string]: unknown
+  contents?: {
     twoColumnBrowseResultsRenderer: {
       tabs: [{
         tabRenderer: {
@@ -44,7 +45,7 @@ type YtInitialData = {
       }]
     }
   }
-  sidebar: {
+  sidebar?: {
     playlistSidebarRenderer: {
       items: {
         playlistSidebarPrimaryInfoRenderer?: PlaylistSidebarPrimaryInfoRenderer
@@ -52,7 +53,7 @@ type YtInitialData = {
       }[]
     }
   }
-  header: {
+  header?: {
     playlistHeaderRenderer: PlaylistHeaderRenderer
   }
 };
@@ -60,12 +61,12 @@ type YtInitialData = {
 
 
 export function hasPlaylist(data: Playlist) {
-  return !!data.ytInitialData?.contents.twoColumnBrowseResultsRenderer
+  return !!data.ytInitialData?.contents?.twoColumnBrowseResultsRenderer
     .tabs[0].tabRenderer.content.sectionListRenderer;
 }
 
 export function getPlaylist(data: Playlist) {
-  const header = data.ytInitialData?.header.playlistHeaderRenderer;
+  const header = data.ytInitialData?.header?.playlistHeaderRenderer;
   if (!header)
     throw new Error(`Header is not defined`);
   return {
@@ -85,7 +86,7 @@ export async function* listAllVideos(data: Playlist, innertubeApiKey: string)
     video?: PlaylistVideoRenderer
     shorts?: ReelItemRenderer
   }> {
-  const section = data.ytInitialData?.contents.twoColumnBrowseResultsRenderer
+  const section = data.ytInitialData?.contents?.twoColumnBrowseResultsRenderer
     .tabs[0].tabRenderer.content.sectionListRenderer;
   if (!section)
     throw new Error(`Section is not defined`);

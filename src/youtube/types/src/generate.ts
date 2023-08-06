@@ -63,6 +63,7 @@ const info = [
   ['playlist/UU1CfXB_kRs3C-zaeTG3oGyg', '/playlist?list=UU1CfXB_kRs3C-zaeTG3oGyg'],
   ['playlist/UUMO1CfXB_kRs3C-zaeTG3oGyg', '/playlist?list=UUMO1CfXB_kRs3C-zaeTG3oGyg'],
   ['playlist/PLDTMegfCY6_7IUWrkNo6WnCxOJuN0w2oi', '/playlist?list=PLDTMegfCY6_7IUWrkNo6WnCxOJuN0w2oi'],
+  ['playlist/UUMOH23b7S9nGz85-Rz5aypqDw', '/playlist?list=UUMOH23b7S9nGz85-Rz5aypqDw'],
 ] as const;
 
 (async () => {
