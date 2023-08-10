@@ -23,6 +23,7 @@ export type PlaylistHeaderRenderer = {
   }
   viewCountText: {
     /**
+     * `No views`
      * `294,862 views`
      */
     simpleText: string
@@ -62,7 +63,10 @@ export function getVideoCount(data: PlaylistHeaderRenderer) {
 }
 
 export function getViewCount(data: PlaylistHeaderRenderer) {
-  return +data.viewCountText.simpleText
+  const text = data.viewCountText.simpleText;
+  if (text === 'No views')
+    return 0;
+  return +text
     .split(' ')[0]
     .replace(/,/g, '');
 }

@@ -9,7 +9,7 @@ export const env = createEnv({
       .transform(text => {
         if (!text)
           return;
-        return text.split(';').map(entry => entry.replace(/,[^]*$/, ''));
+        return text.split('\n').map(entry => entry.replace(/,[^]*$/, ''));
       }),
     PORT: z.coerce.number().default(3000),
     HOSTNAME: z.string().default('0.0.0.0'),

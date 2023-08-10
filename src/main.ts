@@ -78,7 +78,7 @@ class SentryExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const eventId = exception instanceof NotFoundException
       ? null
-      : captureException(exception);
+      : (console.error(exception), captureException(exception));
 
     const { httpAdapter } = this.httpAdapterHost;
 
