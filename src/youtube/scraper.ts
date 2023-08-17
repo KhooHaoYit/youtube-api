@@ -15,6 +15,7 @@ import { getErrorMessage } from './types/export/url/watch';
 import { getFeaturedDisplay } from './types/export/url/channelTab/home';
 import { getPlaylist, hasPlaylist, listAllVideos } from './types/export/url/playlist';
 import { getChannelId } from './types/export/renderer/playlistVideoRenderer';
+import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
 export class YoutubeScraper {
@@ -22,6 +23,7 @@ export class YoutubeScraper {
   constructor(
     private youtube: YoutubeApi,
     private model: AppHandleUpdate,
+    private prisma: PrismaService,
   ) { }
 
   async scrapeVideo(videoId: string) {
@@ -89,6 +91,14 @@ export class YoutubeScraper {
       of this.youtube.requestAll(page.innertubeApiKey, initialPosts)
     ) {
       const post = getPost(backstagePostThreadRenderer!);
+      if (post.extra?.[0] === 'share' && post.extra[1] === null) {
+        const originalPostId = await this.prisma.communityPost.findUnique({
+          where: { id: post.postId },
+          select: { extra: true },
+        }).then(res => (<typeof post.extra>res?.extra)?.[1]);
+        if (originalPostId)
+          post.extra[1] = originalPostId;
+      }
       await this.model.handleCommunityPostUpdate({
         id: post.postId,
         channelId,

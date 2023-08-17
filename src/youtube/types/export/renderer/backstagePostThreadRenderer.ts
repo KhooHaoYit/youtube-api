@@ -26,7 +26,7 @@ export function getPost({ post }: BackstagePostThreadRenderer) {
       extra: [
         'share',
         shared.getSharedPostId(post.sharedPostRenderer),
-      ] as ['share', string],
+      ] satisfies ['share', string | null],
     };
   throw new Error(`Unknown post`);
 }

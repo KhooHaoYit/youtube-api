@@ -4,7 +4,10 @@ import { getOriginalText, Runs } from "../generic/runs";
 export type SharedPostRenderer = {
   postId: string,
   content: { runs: Runs }
-  originalPost: {
+  /**
+   * not defined if post is deleted
+   */
+  originalPost?: {
     backstagePostRenderer: backstage.BackstagePostRenderer
   }
   /**
@@ -18,7 +21,10 @@ export function getPostId(post: SharedPostRenderer) {
 }
 
 export function getSharedPostId(post: SharedPostRenderer) {
-  return backstage.getPostId(post.originalPost.backstagePostRenderer);
+  const originalPost = post.originalPost?.backstagePostRenderer;
+  if (!originalPost)
+    return null;
+  return backstage.getPostId(originalPost);
 }
 
 export function getContent(post: SharedPostRenderer) {
