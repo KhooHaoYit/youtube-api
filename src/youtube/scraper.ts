@@ -181,7 +181,8 @@ export class YoutubeScraper {
           image.thumbnails[0].url.replace(/=[^]*$/, '=s0'),
         ]),
       banner: page.ytInitialData!.header!.c4TabbedHeaderRenderer
-        .banner!.thumbnails[0].url.replace(/=[^]*$/, '=s0'),
+        .banner?.thumbnails[0].url.replace(/=[^]*$/, '=s0')
+        ?? null,
       avatar: page.ytInitialData!.header!.c4TabbedHeaderRenderer
         .avatar.thumbnails[0].url.replace(/=[^]*$/, '=s0'),
     };
