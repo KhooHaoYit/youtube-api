@@ -31,6 +31,7 @@ type YtInitialData = {
             sectionListRenderer: SectionListRenderer<{
               content: {
                 itemSectionRenderer: ItemSectionRenderer<{
+                  messageRenderer?: {}
                   playlistVideoListRenderer?: PlaylistVideoListRenderer
                   richGridRenderer?: RichGridRenderer<{
                     richItemRenderer: RichItemRenderer<{

@@ -65,7 +65,9 @@ const info = [
   ['playlist/PLDTMegfCY6_7IUWrkNo6WnCxOJuN0w2oi', '/playlist?list=PLDTMegfCY6_7IUWrkNo6WnCxOJuN0w2oi'],
   ['playlist/UUMOH23b7S9nGz85-Rz5aypqDw', '/playlist?list=UUMOH23b7S9nGz85-Rz5aypqDw'],
   ['playlist/UUxGJqZ547ZWRCsj6WgSFKMw', '/playlist?list=UUxGJqZ547ZWRCsj6WgSFKMw'],
-  ['communityPosts/UgkxFmvGs68TdUANAV5l8KJMpkHu7AVmHrY5', '/channel/UCw56U6EserukZtulDKpjYtA/community?lb=UgkxFmvGs68TdUANAV5l8KJMpkHu7AVmHrY5']
+  ['communityPosts/UgkxFmvGs68TdUANAV5l8KJMpkHu7AVmHrY5', '/channel/UCw56U6EserukZtulDKpjYtA/community?lb=UgkxFmvGs68TdUANAV5l8KJMpkHu7AVmHrY5'],
+  ['playlist/PLtSdwJFIMTkuO7pJo8wbxnWpC9FHO7XaO', '/playlist?list=PLtSdwJFIMTkuO7pJo8wbxnWpC9FHO7XaO'],
+  ['communityPosts/Ugkx62Gy0RdjAmYnYvxPYRo5itoILMuuG5MX', '/channel/UCDRWSO281bIHYVi-OV3iFYA/community?lb=Ugkx62Gy0RdjAmYnYvxPYRo5itoILMuuG5MX'],
 ] as const;
 
 (async () => {

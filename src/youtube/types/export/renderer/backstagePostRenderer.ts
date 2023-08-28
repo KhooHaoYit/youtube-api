@@ -6,6 +6,7 @@ import { StringOfDigitsAndComma } from "../generic/stringOfDigitsAndComma";
 import { PostMultiImageRenderer, getAllImageUrls } from "./postMultiImageRenderer";
 import { PollRenderer, getPollInfo } from "./pollRenderer";
 import { SponsorsOnlyBadgeRenderer } from "./sponsorsOnlyBadgeRenderer";
+import { QuizRenderer, getQuizInfo } from "./quizRenderer";
 
 export type BackstagePostRenderer = {
   postId: string,
@@ -23,6 +24,7 @@ export type BackstagePostRenderer = {
     backstageImageRenderer?: BackstageImageRenderer
     videoRenderer?: VideoRenderer,
     playlistRenderer?: PlaylistRenderer,
+    quizRenderer?: QuizRenderer
   }
   "actionButtons": {
     "commentActionButtonsRenderer": {
@@ -90,16 +92,12 @@ export function getContent(post: BackstagePostRenderer) {
 }
 
 type Extra =
-  null
+  | null
   | ['image', string[]]
   | ['video', string]
   | ['playlist', string]
-  | ['poll',
-    {
-      choices: { text: string, imageUrl?: string }[],
-      totalVotes: number,
-    }
-  ];
+  | ['poll', ReturnType<typeof getPollInfo>]
+  | ['quiz', ReturnType<typeof getQuizInfo>];
 export function getExtra(post: BackstagePostRenderer): Extra {
   const extra = post.backstageAttachment;
   if (!extra)
@@ -114,6 +112,8 @@ export function getExtra(post: BackstagePostRenderer): Extra {
     return ['playlist', getPlaylistId(extra.playlistRenderer)];
   if (extra?.pollRenderer)
     return ['poll', getPollInfo(extra.pollRenderer)];
+  if (extra?.quizRenderer)
+    return ['quiz', getQuizInfo(extra.quizRenderer)];
   throw new Error(`Unknown extra`);
 }
 

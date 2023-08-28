@@ -2,7 +2,10 @@ import { Runs } from "../generic/runs";
 import * as runs from "../generic/runs";
 
 export type PlaylistSidebarPrimaryInfoRenderer = {
-  title: { runs: Runs }
+  title: {
+    simpleText?: string
+    runs?: Runs
+  }
   stats: [
     {
       /**
@@ -29,7 +32,8 @@ export type PlaylistSidebarPrimaryInfoRenderer = {
 };
 
 export function getTitle(data: PlaylistSidebarPrimaryInfoRenderer) {
-  return runs.getOriginalText(data.title.runs);
+  return data.title.simpleText
+    ?? runs.getOriginalText(data.title.runs!);
 }
 
 export function getDescription(data: PlaylistSidebarPrimaryInfoRenderer) {
