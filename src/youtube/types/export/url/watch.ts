@@ -11,6 +11,7 @@ import { VideoPrimaryInfoRenderer } from '../renderer/videoPrimaryInfoRenderer';
 import { VideoSecondaryInfoRenderer } from '../renderer/videoSecondaryInfoRenderer';
 import { LiveChatRenderer } from '../renderer/liveChatRenderer';
 import { ConversationBarRenderer } from '../renderer/conversationBarRenderer';
+import { CompactRadioRenderer } from '../renderer/compactRadioRenderer';
 
 export type Watch = {
   innertubeApiKey: string,
@@ -74,7 +75,7 @@ type YtInitialData = {
           results: {
             compactPlaylistRenderer?: CompactPlaylistRenderer
             compactVideoRenderer?: CompactVideoRenderer
-            // compactRadioRenderer?: CompactRadioRenderer
+            compactRadioRenderer?: CompactRadioRenderer
             relatedChipCloudRenderer?: RelatedChipCloudRenderer
             itemSectionRenderer?: ItemSectionRenderer<{}>
             continuationItemRenderer?: ContinuationItemRenderer

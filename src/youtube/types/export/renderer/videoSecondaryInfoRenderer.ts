@@ -32,7 +32,10 @@ export type VideoSecondaryInfoRenderer = {
       membershipButton?: {}
     }
   },
-  attributedDescription: {
+  /**
+   * not defined on age restricted video (??)
+   */
+  attributedDescription?: {
     /**
      * description (need to find ways to fix link back - KpCH4mbj_pk twitter link cut off)
      */

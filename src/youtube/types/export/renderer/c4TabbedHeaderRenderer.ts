@@ -4,7 +4,6 @@ import { getOriginalText, Runs } from '../generic/runs';
 import { MetadataBadgeRenderer } from './metadataBadgeRenderer';
 import { SubscriberCountText } from '../generic/subscriberCountText';
 import * as subscriberCountText from '../generic/subscriberCountText';
-import { ChannelHeaderLinksRenderer } from './channelHeaderLinksRenderer';
 
 export type C4TabbedHeaderRenderer = {
   /**
@@ -30,9 +29,7 @@ export type C4TabbedHeaderRenderer = {
   /**
    * not defined if channel didn't display links in channel banner
    */
-  headerLinks?: {
-    channelHeaderLinksRenderer: ChannelHeaderLinksRenderer
-  },
+  headerLinks?: {},
   /**
    * not defined if channel doesn't have membership
    */
@@ -48,7 +45,7 @@ export type C4TabbedHeaderRenderer = {
     /**
      * not defined if not sub-able (like Topic channel)
      */
-    subscribeButtonRenderer?: {}
+    buttonRenderer?: {}
   },
   /**
    * not defined if not sub-able (like Topic channel)

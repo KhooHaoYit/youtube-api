@@ -10,7 +10,8 @@ export type PlayerErrorMessageRenderer = {
    * simple error message, more details would be provided on subreason
    */
   reason: {
-    simpleText: string,
+    simpleText?: string,
+    runs?: Runs,
   },
 };
 
@@ -19,5 +20,7 @@ export function getErrorMessage(data: PlayerErrorMessageRenderer) {
     return data.subreason.simpleText;
   if (data.subreason?.runs)
     return runs.getOriginalText(data.subreason.runs);
-  return data.reason.simpleText;
+  if (data.reason.simpleText)
+    return data.reason.simpleText;
+  return runs.getOriginalText(data.reason.runs!);
 }
