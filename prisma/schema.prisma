@@ -33,6 +33,8 @@ model CommunityPost {
   i_createdAt DateTime  @default(now())
   i_updatedAt DateTime  @updatedAt
   i_fetchedAt DateTime?
+
+  @@index([channelId])
 }
 
 model Playlist {
