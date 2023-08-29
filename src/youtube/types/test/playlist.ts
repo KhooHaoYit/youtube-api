@@ -10,7 +10,6 @@ import { Playlist } from '../export/url/playlist';
 <p0>{} satisfies Playlist['ytInitialData'];
 <p1>{} satisfies Playlist['ytInitialData'];
 <p2>{} satisfies Playlist['ytInitialData'];
-<p2>{} satisfies Playlist['ytInitialData'];
 <p3>{} satisfies Playlist['ytInitialData'];
 <p4>{} satisfies Playlist['ytInitialData'];
 <p5>{} satisfies Playlist['ytInitialData'];
