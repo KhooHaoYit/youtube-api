@@ -30,9 +30,8 @@ model CommunityPost {
   channelId String?
   channel   Channel? @relation(fields: [channelId], references: [id])
 
-  i_createdAt DateTime  @default(now())
-  i_updatedAt DateTime  @updatedAt
-  i_fetchedAt DateTime?
+  i_createdAt DateTime @default(now())
+  i_updatedAt DateTime @updatedAt
 
   @@index([channelId])
 }
@@ -52,9 +51,8 @@ model Playlist {
   channelId String?
   channel   Channel? @relation(fields: [channelId], references: [id])
 
-  i_createdAt DateTime  @default(now())
-  i_updatedAt DateTime  @updatedAt
-  i_fetchedAt DateTime?
+  i_createdAt DateTime @default(now())
+  i_updatedAt DateTime @updatedAt
 }
 
 model Video {
@@ -81,9 +79,8 @@ model Video {
   channelId String?
   channel   Channel? @relation(fields: [channelId], references: [id])
 
-  i_createdAt DateTime  @default(now())
-  i_updatedAt DateTime  @updatedAt
-  i_fetchedAt DateTime?
+  i_createdAt DateTime @default(now())
+  i_updatedAt DateTime @updatedAt
 
   @@index([channelId])
 }
@@ -124,7 +121,6 @@ model Channel {
   playlists      Playlist[]
   communityPosts CommunityPost[]
 
-  i_createdAt DateTime  @default(now())
-  i_updatedAt DateTime  @updatedAt
-  i_fetchedAt DateTime?
+  i_createdAt DateTime @default(now())
+  i_updatedAt DateTime @updatedAt
 }

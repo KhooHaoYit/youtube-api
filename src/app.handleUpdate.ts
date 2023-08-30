@@ -97,7 +97,6 @@ export class AppHandleUpdate {
       bannerUrl: data.bannerUrl
         ?.replace(/=[^]*$/, '=s0')
         .replace(/^\/\//, 'https://'),
-      i_fetchedAt: fetchedAt,
     };
     await prismaUpsertRetry(this.prisma.channel, {
       where: { id: data.id },
@@ -142,7 +141,6 @@ export class AppHandleUpdate {
           where: { id: data.channelId },
         },
       },
-      i_fetchedAt: fetchedAt,
     };
     await prismaUpsertRetry(this.prisma.video, {
       where: { id: data.id },
@@ -179,7 +177,6 @@ export class AppHandleUpdate {
           where: { id: data.channelId },
         },
       },
-      i_fetchedAt: fetchedAt,
     };
     await prismaUpsertRetry(this.prisma.playlist, {
       where: { id: data.id },
@@ -213,7 +210,6 @@ export class AppHandleUpdate {
           where: { id: data.channelId },
         },
       },
-      i_fetchedAt: fetchedAt,
     };
     await prismaUpsertRetry(this.prisma.communityPost, {
       where: { id: data.id },
