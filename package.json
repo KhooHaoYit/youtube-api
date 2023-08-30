@@ -21,7 +21,7 @@
     "yt:generate": "ts-node -r dotenv/config src/youtube/types/src/generate.ts"
   },
   "dependencies": {
-    "@apollo/server": "^4.7.0",
+    "@apollo/server": "^4.9.3",
     "@apollo/subgraph": "^2.4.2",
     "@nestjs/apollo": "^11.0.5",
     "@nestjs/common": "^9.4.0",
