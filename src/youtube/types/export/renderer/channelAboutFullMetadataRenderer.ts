@@ -82,6 +82,6 @@ export function getLinks(data: ChannelAboutFullMetadataRenderer) {
   return data.links.map(link => [
     link.channelExternalLinkViewModel.title.content,
     null,
-    link.channelExternalLinkViewModel.link.content,
+    'https://' + link.channelExternalLinkViewModel.link.content,
   ] as Link);
 }
