@@ -10,28 +10,16 @@ export type ChannelAboutFullMetadataRenderer = {
   /**
    * not defined if user didn't set any links
    */
-  "primaryLinks"?: {
-    "navigationEndpoint": {
-      "urlEndpoint": {
-        /**
-         * `https://www.youtube.com/redirect?event=channel_description&redir_token=QUFFLUhqbTFwRnFOMC01UXNQek4yUER6OXpIT2Q3LWt6Z3xBQ3Jtc0tuNnA3Y0tWTTgzeXc1aVlXUmZvWXdlZjZGZWVvQVVSWU90MEliYVhLazE3ZWlWOW96QzdIVHB3c2p1VmptMnJXT2t3R3VseG5IQThPTW5mQnRsc0tyZzhMMS1FV2VJZnJWUUNOUXVYTVM1TjNmYk1qdw&q=https%3A%2F%2Ftwitter.com%2Fhololivetv`
-         */
-        "url": string,
+  links?: {
+    channelExternalLinkViewModel: {
+      title: {
+        content: string
       }
-    },
-    /**
-     * `https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn:ANd9GcTCl87OfLKVJ9rK8xDL2fO43Nn-qwO3MZqhD6Va_y_Dj4NQN5vi_7wfFsqVPVk5OJarybTLaqbvqdn3Oj1nmlMBa_srPR9cF0lTX47Loj-ftw`
-     * 
-     * TODO: find if this might be undefined
-     */
-    "icon": Image,
-    "title": {
-      /**
-       * `公式Twitter`
-       */
-      "simpleText": string,
-    },
-  }[],
+      link: {
+        content: string
+      }
+    }
+  }[]
   /**
    * not defined when channel doesn't have views
    */
@@ -89,22 +77,11 @@ export function getViewCount(data: ChannelAboutFullMetadataRenderer) {
 
 export type Link = [title: string, iconUrl: string | null, url: string | null];
 export function getLinks(data: ChannelAboutFullMetadataRenderer) {
-  if (!data.primaryLinks)
+  if (!data.links)
     return [];
-  return data.primaryLinks.map(link => {
-    let extractUrl: string;
-    try {
-      const url = new URL(link.navigationEndpoint.urlEndpoint.url);
-      extractUrl = url.hostname === 'www.youtube.com' && url.pathname === '/redirect'
-        ? url.searchParams.get('q')!
-        : url.href;
-    } catch {
-      extractUrl = link.navigationEndpoint.urlEndpoint.url;
-    }
-    return [
-      link.title.simpleText,
-      image.getUrl(link.icon) || null,
-      extractUrl,
-    ] as Link;
-  });
+  return data.links.map(link => [
+    link.channelExternalLinkViewModel.title.content,
+    null,
+    link.channelExternalLinkViewModel.link.content,
+  ] as Link);
 }

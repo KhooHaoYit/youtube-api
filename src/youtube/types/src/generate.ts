@@ -68,6 +68,8 @@ const info = [
   ['communityPosts/UgkxFmvGs68TdUANAV5l8KJMpkHu7AVmHrY5', '/channel/UCw56U6EserukZtulDKpjYtA/community?lb=UgkxFmvGs68TdUANAV5l8KJMpkHu7AVmHrY5'],
   ['playlist/PLtSdwJFIMTkuO7pJo8wbxnWpC9FHO7XaO', '/playlist?list=PLtSdwJFIMTkuO7pJo8wbxnWpC9FHO7XaO'],
   ['communityPosts/Ugkx62Gy0RdjAmYnYvxPYRo5itoILMuuG5MX', '/channel/UCDRWSO281bIHYVi-OV3iFYA/community?lb=Ugkx62Gy0RdjAmYnYvxPYRo5itoILMuuG5MX'],
+  ['channels/UCRbsmnDTHD9-4pEIuG7zYRw/about', '/channel/UCRbsmnDTHD9-4pEIuG7zYRw/about'],
+  ['channels/UCc2MFmkMC_tHND7TDHrRDkg/about', '/channel/UCc2MFmkMC_tHND7TDHrRDkg/about'],
 ] as const;
 
 (async () => {

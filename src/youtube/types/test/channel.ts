@@ -28,6 +28,8 @@ import { Data as ManoAloe_playlists } from '../data/ManoAloe/playlists';
 import { Data as KMNZ_channels } from '../data/KMNZ/channels';
 import { Data as UruhaRushia_featured } from '../data/UruhaRushia/featured';
 import { Data as GundoMirei_membership } from '../data/GundoMirei/membership';
+import { Data as c0 } from '../data/channels/UCRbsmnDTHD9-4pEIuG7zYRw/about';
+import { Data as c1 } from '../data/channels/UCc2MFmkMC_tHND7TDHrRDkg/about';
 import { Channel } from '../export/url/channel';
 
 type ChannelPage = Channel['ytInitialData'];
@@ -62,3 +64,5 @@ type ChannelPage = Channel['ytInitialData'];
 <KMNZ_channels>{} satisfies ChannelPage;
 <UruhaRushia_featured>{} satisfies ChannelPage;
 <GundoMirei_membership>{} satisfies ChannelPage;
+<c0>{} satisfies ChannelPage;
+<c1>{} satisfies ChannelPage;
