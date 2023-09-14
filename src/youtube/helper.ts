@@ -4,6 +4,7 @@ import { Playlists } from "./types/export/url/channelTab/playlists";
 import { About } from "./types/export/url/channelTab/about";
 import { Home } from "./types/export/url/channelTab/home";
 import { Channels } from "./types/export/url/channelTab/channels";
+import { Releases } from "./types/export/url/channelTab/releases";
 
 export function getChannelTab<T extends 'Home'>(
   data: ChannelPage,
@@ -25,6 +26,10 @@ export function getChannelTab<T extends 'Community'>(
   data: ChannelPage,
   tabName: T,
 ): { tabRenderer: Community };
+export function getChannelTab<T extends 'Releases'>(
+  data: ChannelPage,
+  tabName: T,
+): { tabRenderer: Releases } | undefined;
 export function getChannelTab<T extends 'Membership'>(
   data: ChannelPage,
   tabName: T,

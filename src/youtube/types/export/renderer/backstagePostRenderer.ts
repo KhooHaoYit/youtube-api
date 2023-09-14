@@ -1,6 +1,6 @@
 import { BackstageImageRenderer, getImageUrl } from "./backstageImageRenderer";
 import { getOriginalText, Runs } from "../generic/runs";
-import { PlaylistRenderer, getPlaylistId } from "./playlistRenderer";
+import { PlaylistRenderer, getPlaylistInfo } from "./playlistRenderer";
 import { VideoRenderer } from "./videoRenderer";
 import { StringOfDigitsAndComma } from "../generic/stringOfDigitsAndComma";
 import { PostMultiImageRenderer, getAllImageUrls } from "./postMultiImageRenderer";
@@ -109,7 +109,7 @@ export function getExtra(post: BackstagePostRenderer): Extra {
   if (extra?.videoRenderer)
     return ['video', extra.videoRenderer.videoId];
   if (extra.playlistRenderer)
-    return ['playlist', getPlaylistId(extra.playlistRenderer)];
+    return ['playlist', getPlaylistInfo(extra.playlistRenderer).id];
   if (extra?.pollRenderer)
     return ['poll', getPollInfo(extra.pollRenderer)];
   if (extra?.quizRenderer)

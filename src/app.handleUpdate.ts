@@ -18,13 +18,12 @@ export class AppHandleUpdate {
 
   async handlePlayerMicroformatRenderer(
     data: PlayerMicroformatRenderer,
-    fetchedAt = new Date,
   ) {
     await this.handleChannelUpdate({
       id: data.externalChannelId,
       name: data.ownerChannelName,
       handle: playerMicroformatRenderer.getHandle(data),
-    }, fetchedAt);
+    });
     await this.handleVideoUpdate({
       id: playerMicroformatRenderer.getVideoId(data),
       category: data.category,
@@ -41,12 +40,11 @@ export class AppHandleUpdate {
       visibility: data.isUnlisted
         ? Visibility.unlisted
         : Visibility.public,
-    }, fetchedAt);
+    });
   }
 
   async handleC4TabbedHeaderRendererUpdate(
     data: C4TabbedHeaderRenderer,
-    fetchedAt = new Date,
   ) {
     await this.handleChannelUpdate({
       id: c4TabbedHeaderRenderer.getChannelId(data),
@@ -57,7 +55,7 @@ export class AppHandleUpdate {
       subscriberCount: c4TabbedHeaderRenderer.getSubscriberCount(data),
       verified: c4TabbedHeaderRenderer.isVerified(data),
       haveMembershipFeature: c4TabbedHeaderRenderer.haveMembershipFeature(data),
-    }, fetchedAt);
+    });
   }
 
   async handleChannelUpdate(
@@ -69,6 +67,7 @@ export class AppHandleUpdate {
       name?: string,
       handle?: string,
       avatarUrl?: string,
+      releases?: string[]
       channels?: [string, string[]][],
       playlistsDisplay?: [string, string[]][],
       featuredDisplay?: (null | [string] | [string, string | string[]])[],
@@ -81,7 +80,6 @@ export class AppHandleUpdate {
       haveMembershipFeature?: boolean,
       haveBusinessEmail?: boolean,
     },
-    fetchedAt = new Date,
   ) {
     const newData = await removeSame(this.prisma.channel, data);
     if (!newData)
@@ -126,7 +124,6 @@ export class AppHandleUpdate {
       isMembershipContent?: boolean,
       isAgeRestricted?: boolean,
     },
-    fetchedAt = new Date,
   ) {
     const newData = await removeSame(this.prisma.video, data);
     if (!newData)
@@ -153,7 +150,7 @@ export class AppHandleUpdate {
   async handlePlaylistUpdate(
     data: {
       id: string,
-      channelId?: string,
+      channelId?: string | null,
       description?: string,
       estimatedCount?: number,
       lastUpdated?: string,
@@ -161,8 +158,9 @@ export class AppHandleUpdate {
       videoIds?: string[],
       view?: number,
       visibility?: string,
+      badges?: string[],
+      extraChannelIds?: [channelName: string, channelId: string][],
     },
-    fetchedAt = new Date,
   ) {
     const newData = await removeSame(this.prisma.playlist, data);
     if (!newData)
@@ -196,7 +194,6 @@ export class AppHandleUpdate {
       replyCount?: number,
       publishedTime?: string,
     },
-    fetchedAt = new Date,
   ) {
     const fields = {
       ...data,

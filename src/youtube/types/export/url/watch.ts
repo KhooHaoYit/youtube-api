@@ -12,6 +12,9 @@ import { VideoSecondaryInfoRenderer } from '../renderer/videoSecondaryInfoRender
 import { LiveChatRenderer } from '../renderer/liveChatRenderer';
 import { ConversationBarRenderer } from '../renderer/conversationBarRenderer';
 import { CompactRadioRenderer } from '../renderer/compactRadioRenderer';
+import { PlaylistPanelVideoRenderer } from '../renderer/playlistPanelVideoRenderer';
+import { Runs } from '../generic/runs';
+import * as runs from '../generic/runs';
 
 export type Watch = {
   innertubeApiKey: string,
@@ -89,6 +92,17 @@ type YtInitialData = {
         conversationBarRenderer?: ConversationBarRenderer
         liveChatRenderer?: LiveChatRenderer
       }
+      playlist?: {
+        playlist: {
+          longBylineText: {
+            simpleText?: string
+            runs?: Runs
+          }
+          contents: {
+            playlistPanelVideoRenderer: PlaylistPanelVideoRenderer
+          }[]
+        }
+      }
     }
   },
   // "playerOverlays": {
@@ -108,3 +122,20 @@ type YtInitialData = {
   //   }
   // },
 };
+
+
+
+export function getPlaylistExtraChannelIds(data: YtInitialData) {
+  const textRuns = data.contents.twoColumnWatchNextResults
+    .playlist?.playlist.longBylineText.runs;
+  if (!textRuns)
+    return;
+  return textRuns
+    .map(run => {
+      const browseId = runs.getBrowseId([run]);
+      if (!browseId)
+        return;
+      return [runs.getOriginalText([run]), browseId];
+    })
+    .filter(browseId => browseId);
+}

@@ -35,10 +35,18 @@ import {
   PlayerResponse as i_IgTPXlxAY_p,
 } from '../data/AkaiHaato/_videos/i_IgTPXlxAY';
 import { Watch } from '../export/url/watch';
+import { Data as vwp0 } from '../data/videoWithPlaylists/OLAK5uy_kEU7UuXIh5K0HCoZoYDVII2OlnjHroh-s';
+import { Data as vwp1 } from '../data/videoWithPlaylists/OLAK5uy_mJMEUZbDpHyJGzH04FmTysJRSx6QoOmAI';
+import { Data as vwp2 } from '../data/videoWithPlaylists/PLwBnYkSZTLgLFk7bb4DChdrRvdWZQSA0Y';
+import { Data as vwp3 } from '../data/videoWithPlaylists/RDEMl96gT7U4I5wV18P5hVQpBg';
 
 type YtInitialData = Watch['ytInitialData'];
 type YtInitialPlayerResponse = Watch['ytInitialPlayerResponse'];
 
+<vwp0>{} satisfies YtInitialData;
+<vwp1>{} satisfies YtInitialData;
+<vwp2>{} satisfies YtInitialData;
+<vwp3>{} satisfies YtInitialData;
 <haachamachama__video>{} satisfies YtInitialData;
 <MapleAlcesiaCh__video>{} satisfies YtInitialData;
 <UruhaRushia__video>{} satisfies YtInitialData;

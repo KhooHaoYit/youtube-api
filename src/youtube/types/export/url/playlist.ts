@@ -1,9 +1,7 @@
-import { ContinuationItemRenderer } from "../renderer/continuationItemRenderer";
 import { ItemSectionRenderer } from "../renderer/itemSectionRenderer";
 import { PlaylistHeaderRenderer } from "../renderer/playlistHeaderRenderer";
 import * as playlistHeaderRenderer from "../renderer/playlistHeaderRenderer";
-import { PlaylistSidebarPrimaryInfoRenderer } from "../renderer/playlistSidebarPrimaryInfoRenderer";
-import { PlaylistSidebarSecondaryInfoRenderer } from "../renderer/playlistSidebarSecondaryInfoRenderer";
+import { PlaylistSidebarRenderer } from "../renderer/playlistSidebarRenderer";
 import { PlaylistVideoListRenderer } from "../renderer/playlistVideoListRenderer";
 import * as playlistVideoListRenderer from "../renderer/playlistVideoListRenderer";
 import { PlaylistVideoRenderer } from "../renderer/playlistVideoRenderer";
@@ -47,12 +45,7 @@ type YtInitialData = {
     }
   }
   sidebar?: {
-    playlistSidebarRenderer: {
-      items: {
-        playlistSidebarPrimaryInfoRenderer?: PlaylistSidebarPrimaryInfoRenderer
-        playlistSidebarSecondaryInfoRenderer?: PlaylistSidebarSecondaryInfoRenderer
-      }[]
-    }
+    playlistSidebarRenderer: PlaylistSidebarRenderer
   }
   header?: {
     playlistHeaderRenderer: PlaylistHeaderRenderer
@@ -70,16 +63,7 @@ export function getPlaylist(data: Playlist) {
   const header = data.ytInitialData?.header?.playlistHeaderRenderer;
   if (!header)
     throw new Error(`Header is not defined`);
-  return {
-    id: playlistHeaderRenderer.getPlaylistId(header),
-    channelId: playlistHeaderRenderer.getChannelId(header),
-    description: playlistHeaderRenderer.getDescription(header),
-    lastUpdated: playlistHeaderRenderer.getLastUpdated(header),
-    title: playlistHeaderRenderer.getTitle(header),
-    videoCount: playlistHeaderRenderer.getVideoCount(header),
-    viewCount: playlistHeaderRenderer.getViewCount(header),
-    visibility: playlistHeaderRenderer.getVisibility(header),
-  };
+  return playlistHeaderRenderer.getPlaylistInfo(header);
 }
 
 export async function* listAllVideos(data: Playlist, innertubeApiKey: string)

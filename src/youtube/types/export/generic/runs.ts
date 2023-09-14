@@ -47,6 +47,6 @@ export function getOriginalText(runs: Runs) {
 export function getBrowseId(runs: Runs) {
   const browseId = runs[0].navigationEndpoint?.browseEndpoint?.browseId;
   if (!browseId)
-    throw new Error(`browseId is not defined`);
+    return;
   return browseId;
 }

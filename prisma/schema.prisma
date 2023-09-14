@@ -46,7 +46,9 @@ model Playlist {
   description    String?
   visibility     String?
 
-  videoIds String[]
+  badges          String[]
+  videoIds        String[]
+  extraChannelIds Json?
 
   channelId String?
   channel   Channel? @relation(fields: [channelId], references: [id])
@@ -111,10 +113,10 @@ model Channel {
   haveBusinessEmail     Boolean?
   haveMembershipFeature Boolean?
 
+  releases         String[]
   featuredDisplay  Json?
   playlistsDisplay Json?
   channels         Json?
-  // amountShown
   links            Json?
 
   videos         Video[]

@@ -1,4 +1,4 @@
-import { PlaylistRenderer } from "../../renderer/playlistRenderer";
+import { PlaylistRenderer, getPlaylistInfo } from "../../renderer/playlistRenderer";
 import { RichGridRenderer } from "../../renderer/richGridRenderer";
 import { RichItemRenderer } from "../../renderer/richItemRenderer";
 
@@ -13,3 +13,7 @@ export type Releases = {
   }
 };
 
+export function getReleases(data: Releases) {
+  return data.content?.richGridRenderer.contents.map(({ richItemRenderer }) =>
+    getPlaylistInfo(richItemRenderer.content.playlistRenderer));
+}

@@ -1,4 +1,5 @@
 import { Runs } from "../generic/runs";
+import * as runs from "../generic/runs";
 
 export type PlaylistRenderer = {
   /**
@@ -19,26 +20,23 @@ export type PlaylistRenderer = {
    * not defined in podcast tab
    */
   "longBylineText"?: {
-    /**
-     * `[
-     *   {
-     *     "navigationEndpoint": {
-     *       "browseEndpoint": {
-     *         "browseId": "UCeShTCVgZyq2lsBW9QwIJcw",
-     *         "canonicalBaseUrl": "/@GundoMirei"
-     *       }
-     *     }
-     *   }
-     * ]`
-     */
     "runs": Runs,
   },
 };
 
-export function getPlaylistId(data: PlaylistRenderer) {
-  return data.playlistId;
-}
-
-export function getPlaylistOwnerId(data: PlaylistRenderer) {
-  return data.longBylineText?.runs[0].navigationEndpoint?.browseEndpoint?.browseId;
+export function getPlaylistInfo(data: PlaylistRenderer) {
+  return {
+    id: data.playlistId,
+    extraChannelIds: data.longBylineText?.runs
+      .map(run => {
+        const browseId = runs.getBrowseId([run]);
+        if (!browseId)
+          return;
+        return [
+          runs.getOriginalText([run]),
+          browseId,
+        ] as [channelName: string, channelId: string];
+      })
+      .filter(Boolean),
+  };
 }

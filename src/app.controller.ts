@@ -102,16 +102,20 @@ export class AppController {
     await this.scraper.scrapeChannelChannels(channelId);
     await this.scraper.scrapeChannelFeatured(channelId);
     await this.scraper.scrapeChannelPlaylists(channelId);
+    await this.scraper.scrapeChannelReleasesTab(channelId);
     await this.scraper.scrapeChannelCommunityTab(channelId);
-    const { playlists } = await this.prisma.channel.findUniqueOrThrow({
+    const { playlists, releases } = await this.prisma.channel.findUniqueOrThrow({
       where: { id: channelId },
       select: {
         playlists: {
           select: { id: true },
         },
+        releases: true,
       },
     });
     for (const { id } of playlists)
+      await this.scraper.scrapePlaylist(id);
+    for (const id of releases)
       await this.scraper.scrapePlaylist(id);
     await this.scraper.scrapePlaylist(channelId.replace('UC', 'UU'));
     await this.scraper.scrapePlaylist(channelId.replace('UC', 'UUMO'));
@@ -167,6 +171,14 @@ export class AppController {
   @Post('/channel/:id/featured/fetch')
   async fetchChannelFeatured(@Param('id') id: string) {
     await this.scraper.scrapeChannelFeatured(id);
+    return await this.getChannel(id);
+  }
+
+  @Post('/channel/:id/fetchReleases')
+  async fetchReleases(
+    @Param('id') id: string,
+  ) {
+    await this.scraper.scrapeChannelReleasesTab(id);
     return await this.getChannel(id);
   }
 

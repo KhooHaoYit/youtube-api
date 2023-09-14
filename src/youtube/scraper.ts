@@ -16,6 +16,7 @@ import { getFeaturedDisplay } from './types/export/url/channelTab/home';
 import { getPlaylist, hasPlaylist, listAllVideos } from './types/export/url/playlist';
 import { getChannelId } from './types/export/renderer/playlistVideoRenderer';
 import { PrismaService } from 'nestjs-prisma';
+import { getReleases } from './types/export/url/channelTab/releases';
 
 @Injectable()
 export class YoutubeScraper {
@@ -74,7 +75,26 @@ export class YoutubeScraper {
       title: playlist.title,
       view: playlist.viewCount,
       visibility: playlist.visibility,
+      badges: playlist.badges,
       videoIds,
+    });
+  }
+
+  async scrapeChannelReleasesTab(channelId: string) {
+    const page = await this.youtube.scrape(`/channel/${channelId}/releases`);
+    const tab = getChannelTab(page.ytInitialData!, 'Releases');
+    if (!tab)
+      return;
+    const releases = getReleases(tab.tabRenderer);
+    if (!releases)
+      return;
+    await Promise.all(releases.map(release => this.model.handlePlaylistUpdate({
+      id: release.id,
+      extraChannelIds: release.extraChannelIds,
+    })));
+    await this.model.handleChannelUpdate({
+      id: channelId,
+      releases: releases.map(release => release.id),
     });
   }
 
