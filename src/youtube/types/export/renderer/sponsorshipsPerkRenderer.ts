@@ -1,6 +1,7 @@
 import { Image } from "../generic/image";
 import * as image from "../generic/image";
 import { Runs } from "../generic/runs";
+import * as runs from "../generic/runs";
 import { SponsorshipsLoyaltyBadgesRenderer } from "./sponsorshipsLoyaltyBadgesRenderer";
 import * as sponsorshipsLoyaltyBadgesRenderer from "./sponsorshipsLoyaltyBadgesRenderer";
 
@@ -18,23 +19,36 @@ export type SponsorshipsPerkRenderer = {
      */
     simpleText: string,
   }
+  fulfillmentInstructions?: {
+    runs: Runs
+  }
   loyaltyBadges?: {
     sponsorshipsLoyaltyBadgesRenderer: SponsorshipsLoyaltyBadgesRenderer
   }
-  /**
-   * emojis
-   */
   images?: Image[]
 };
 
-export function getBadges(data: SponsorshipsPerkRenderer) {
+export function getBadgesInfo(data: SponsorshipsPerkRenderer) {
   const badges = data.loyaltyBadges?.sponsorshipsLoyaltyBadgesRenderer;
   if (!badges)
     return;
   return sponsorshipsLoyaltyBadgesRenderer.getBadgeLevels(badges);
 }
 
-export function getEmojis(data: SponsorshipsPerkRenderer) {
-  return data.images
-    ?.map(img => [image.getName(img), image.getUrl(img)] as [string, string]);
+export function getOfferInfo(data: SponsorshipsPerkRenderer) {
+  return {
+    title: data.title.simpleText
+      ?? runs.getOriginalText(data.title.runs!),
+    description: data.description?.simpleText
+      ?? '',
+    instructions: data.fulfillmentInstructions
+      ? runs.getOriginalText(data.fulfillmentInstructions.runs)
+      : '',
+    images: data.images
+      ?.map(img => [
+        image.getName(img)!,
+        image.getUrl(img),
+      ] satisfies [url: string, label: string])
+      ?? [],
+  };
 }

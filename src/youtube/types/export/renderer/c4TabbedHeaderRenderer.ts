@@ -4,6 +4,8 @@ import { getOriginalText, Runs } from '../generic/runs';
 import { MetadataBadgeRenderer } from './metadataBadgeRenderer';
 import { SubscriberCountText } from '../generic/subscriberCountText';
 import * as subscriberCountText from '../generic/subscriberCountText';
+import { getOffer } from '../endpoints/getOffer';
+import { Credentials } from '../generic/credentials';
 
 export type C4TabbedHeaderRenderer = {
   /**
@@ -33,7 +35,19 @@ export type C4TabbedHeaderRenderer = {
   /**
    * not defined if channel doesn't have membership
    */
-  sponsorButton?: {},
+  sponsorButton?: {
+    buttonRenderer: {
+      /**
+       * not defined if not logged in
+       */
+      serviceEndpoint?: {
+        ypcGetOffersEndpoint: {
+          params: string
+        }
+      }
+      [key: string]: unknown
+    }
+  },
   /**
    * not defined if channel doesn't have any badge
    */
@@ -44,6 +58,12 @@ export type C4TabbedHeaderRenderer = {
   subscribeButton?: {
     /**
      * not defined if not sub-able (like Topic channel)
+     * defined if logged in
+     */
+    subscribeButtonRenderer?: {}
+    /**
+     * not defined if not sub-able (like Topic channel)
+     * not defined if not logged in
      */
     buttonRenderer?: {}
   },
@@ -122,4 +142,11 @@ export function isVerified(data: C4TabbedHeaderRenderer) {
 
 export function haveMembershipFeature(data: C4TabbedHeaderRenderer) {
   return 'sponsorButton' in data;
+}
+
+export async function fetchMembershipOffer(data: C4TabbedHeaderRenderer, credentials: Credentials) {
+  const params = data.sponsorButton?.buttonRenderer.serviceEndpoint?.ypcGetOffersEndpoint.params;
+  if (!params)
+    throw new Error(`Not logged in`);
+  return await getOffer({ itemParams: params }, credentials);
 }

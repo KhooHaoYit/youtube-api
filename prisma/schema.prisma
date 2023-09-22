@@ -118,6 +118,8 @@ model Channel {
   playlistsDisplay Json?
   channels         Json?
   links            Json?
+  membershipOffers Json?
+  membershipBadges Json?
 
   videos         Video[]
   playlists      Playlist[]

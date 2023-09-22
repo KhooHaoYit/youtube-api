@@ -3,9 +3,10 @@ import { YoutubeApi } from "../../api";
 import { mkdir, stat, writeFile } from "fs/promises";
 import { dirname } from "path";
 import { env } from "../../../../src/env";
+import { getOffer } from "../export/endpoints/getOffer";
 
 const api = new YoutubeApi;
-const info = [
+const pages = [
   ['AkaiHaato/about', '/channel/UC1CfXB_kRs3C-zaeTG3oGyg/about'],
   ['hololive/about', '/channel/UCJFZiqLMntJufDCHc6bQixg/about'],
   ['HoshimachiSuisei/about', '/channel/UC5CwaMl1eIgY8h02uZw7u8A/about'],
@@ -76,10 +77,24 @@ const info = [
   ['videoWithPlaylists/OLAK5uy_mJMEUZbDpHyJGzH04FmTysJRSx6QoOmAI', '/watch?v=&list=OLAK5uy_mJMEUZbDpHyJGzH04FmTysJRSx6QoOmAI'],
   ['videoWithPlaylists/PLwBnYkSZTLgLFk7bb4DChdrRvdWZQSA0Y', '/watch?v=&list=PLwBnYkSZTLgLFk7bb4DChdrRvdWZQSA0Y'],
   ['videoWithPlaylists/RDEMl96gT7U4I5wV18P5hVQpBg', '/watch?v=&list=RDEMl96gT7U4I5wV18P5hVQpBg'],
+  ['channels/UC5CwaMl1eIgY8h02uZw7u8A/about', '/channel/UC5CwaMl1eIgY8h02uZw7u8A/about'],
+  ['channels/UC5CwaMl1eIgY8h02uZw7u8A/about-withAuth', '/channel/UC5CwaMl1eIgY8h02uZw7u8A/about', true],
+  ['channels/UCrzT1p8gn0hQTBeMA6e2YiA/about', '/channel/UCrzT1p8gn0hQTBeMA6e2YiA/about'],
+  ['channels/UCrzT1p8gn0hQTBeMA6e2YiA/about-withAuth', '/channel/UCrzT1p8gn0hQTBeMA6e2YiA/about', true],
 ] as const;
 
+const getOffers = [
+  ['.getOffer/noCookie', 'ChwIAxIYVUMxQ2ZYQl9rUnMzQy16YWVURzNvR3lnGAMqBBgBSAE%3D'],
+  ['.getOffer/UC1CfXB_kRs3C-zaeTG3oGyg', 'ChwIAxIYVUMxQ2ZYQl9rUnMzQy16YWVURzNvR3lnGAMqBBgBSAE%3D', true],
+  ['.getOffer/UC5CwaMl1eIgY8h02uZw7u8A', 'ChwIAxIYVUM1Q3dhTWwxZUlnWThoMDJ1Wnc3dThBGAMqBBgBSAE%3D', true],
+  ['.getOffer/UCHsx4Hqa-1ORjQTh9TYDhww', 'ChwIAxIYVUNIc3g0SHFhLTFPUmpRVGg5VFlEaHd3GAMqBBgBSAE%3D', true],
+  ['.getOffer/UC1DCedRgGHBdm81E1llLhOQ', 'ChwIAxIYVUMxRENlZFJnR0hCZG04MUUxbGxMaE9RGAMqBBgBSAE%3D', true],
+  ['.getOffer/UCR6qhsLpn62WVxCBK1dkLow', 'ChwIAxIYVUNSNnFoc0xwbjYyV1Z4Q0JLMWRrTG93GAMqBBgBSAE%3D', true],
+] as const;
+
+// pages
 (async () => {
-  for (const [filename, urlPath, withCookie] of info) {
+  for (const [filename, urlPath, withCookie] of pages) {
     const path = `${__dirname}/../data/${filename}.ts`;
 
     if (
@@ -97,11 +112,16 @@ const info = [
     const {
       ytInitialData,
       ytInitialPlayerResponse,
-    } = await api.scrape(urlPath, {
-      headers: {
-        cookie: env.YOUTUBE_COOKIE,
-      },
-    });
+    } = await api.scrape(
+      urlPath,
+      withCookie
+        ? {
+          headers: {
+            cookie: env.YOUTUBE_COOKIE,
+          },
+        }
+        : {},
+    );
     await writeFile(
       path,
       `
@@ -114,6 +134,50 @@ export type PlayerResponse = ${JSON.stringify(ytInitialPlayerResponse, null, 2)}
       `
 export const Data = ${JSON.stringify(ytInitialData, null, 2)};
 export const PlayerResponse = ${JSON.stringify(ytInitialPlayerResponse, null, 2)};
+`,
+    );
+  }
+})();
+
+// offers
+(async () => {
+  for (const [relativePath, itemParams, withCookie] of getOffers) {
+    const path = `${__dirname}/../data/${relativePath}.ts`;
+
+    if (withCookie && (!env.YOUTUBE_AUTHORIZATION || !env.YOUTUBE_COOKIE)) {
+      console.warn(`Authorization or cookie not defined, skipping`);
+      return;
+    }
+
+    if (
+      await stat(path)
+        .then(() => true)
+        .catch(() => false)
+    ) continue;
+    await mkdir(dirname(path), { recursive: true });
+
+    const result = await getOffer(
+      {
+        itemParams,
+      },
+      withCookie
+        ? {
+          authorization: env.YOUTUBE_AUTHORIZATION,
+          cookie: env.YOUTUBE_COOKIE,
+        }
+        : {},
+    );
+
+    await writeFile(
+      path,
+      `
+export type Data = ${JSON.stringify(result, null, 2)};
+`,
+    );
+    await writeFile(
+      path.replace(/\.ts$/, '.json.ts'),
+      `
+export const Data = ${JSON.stringify(result, null, 2)};
 `,
     );
   }

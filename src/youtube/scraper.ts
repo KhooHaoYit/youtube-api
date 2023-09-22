@@ -17,6 +17,10 @@ import { getPlaylist, hasPlaylist, listAllVideos } from './types/export/url/play
 import { getChannelId } from './types/export/renderer/playlistVideoRenderer';
 import { PrismaService } from 'nestjs-prisma';
 import { getReleases } from './types/export/url/channelTab/releases';
+import { getCurrentPerksInfo } from './types/export/renderer/sponsorshipsExpandablePerksRenderer';
+import { getOffer } from './types/export/endpoints/getOffer';
+import * as ypcTransactionErrorMessageRenderer from './types/export/renderer/ypcTransactionErrorMessageRenderer';
+import { getOfferInfo } from './types/export/renderer/sponsorshipsOfferRenderer';
 
 @Injectable()
 export class YoutubeScraper {
@@ -177,44 +181,11 @@ export class YoutubeScraper {
     // }
   }
 
-  async scrapeChannelMembership(channelId: string, headers?: Record<string, string>) {
-    const page = await this.youtube.scrape(`/channel/${channelId}/membership`, {
-      headers,
-    });
-    return {
-      badges: <[months: number, url: string][]>getChannelTab(page.ytInitialData!, 'Membership')
-        ?.tabRenderer.content.sectionListRenderer.contents
-        .find((content: any) => 'sponsorshipsExpandablePerksRenderer' in content)
-        .sponsorshipsExpandablePerksRenderer.expandableItems[0]
-        .sponsorshipsPerkRenderer.loyaltyBadges.sponsorshipsLoyaltyBadgesRenderer
-        .loyaltyBadges.map((badge: any) => [
-          +(badge.sponsorshipsLoyaltyBadgeRenderer.title.runs
-            .map((run: any) => run.text).join('').match(/\d+/)?.[0] || 0),
-          badge.sponsorshipsLoyaltyBadgeRenderer.icon.thumbnails[0].url.replace(/=[^]*$/, '=s0'),
-        ]),
-      emojis: <[name: string, url: string][]>getChannelTab(page.ytInitialData!, 'Membership')
-        ?.tabRenderer.content.sectionListRenderer.contents
-        .find((content: any) => 'sponsorshipsExpandablePerksRenderer' in content)
-        .sponsorshipsExpandablePerksRenderer.expandableItems[1]
-        .sponsorshipsPerkRenderer.images.map((image: any) => [
-          image.accessibility.accessibilityData.label,
-          image.thumbnails[0].url.replace(/=[^]*$/, '=s0'),
-        ]),
-      banner: page.ytInitialData!.header!.c4TabbedHeaderRenderer
-        .banner?.thumbnails[0].url.replace(/=[^]*$/, '=s0')
-        ?? null,
-      avatar: page.ytInitialData!.header!.c4TabbedHeaderRenderer
-        .avatar.thumbnails[0].url.replace(/=[^]*$/, '=s0'),
-    };
-  }
-
   async scrapeChannelPlaylists(channelId: string) {
     // view === 58 // All playlists (with categories)
     // view === 1 // All playlists created
     // view === 50 // Specific category playlist
     const page = await this.youtube.scrape(`/channel/${channelId}/playlists?view=58`);
-    if (page.ytInitialData?.header)
-      await this.model.handleC4TabbedHeaderRendererUpdate(page.ytInitialData.header.c4TabbedHeaderRenderer);
     if (!page.innertubeApiKey)
       throw new Error(`innertubeApiKey not defined`);
     const categories = getPlaylists(
@@ -224,7 +195,7 @@ export class YoutubeScraper {
 
     const playlistsDisplay: [string, string[]][] = [];
     for (const [title, { browseId, params }] of categories) {
-      const initialItems = await this.youtube.request(page.innertubeApiKey, {
+      const initialItems = await this.youtube.browse(page.innertubeApiKey, {
         browseId: browseId,
         params: params,
       }).then((res: Channel['ytInitialData']) =>
@@ -299,7 +270,7 @@ export class YoutubeScraper {
 
     const channels: [string, string[]][] = [];
     for (const [title, { browseId, params }] of categories) {
-      const initialItems = await this.youtube.request(page.innertubeApiKey, {
+      const initialItems = await this.youtube.browse(page.innertubeApiKey, {
         browseId: browseId,
         params: params,
       }).then((res: Channel['ytInitialData']) => {
@@ -337,6 +308,52 @@ export class YoutubeScraper {
     await this.model.handleChannelUpdate({
       id: channelId,
       channels,
+    });
+  }
+
+  // TODO: estimate total amount of members from emojis, https://support.google.com/youtube/answer/7544492?hl=en#zippy=%2Cupload-custom-emoji%2Cnumber-of-custom-emoji-you-can-upload:~:text=Number%20of%20custom%20emoji%20you%20can%20upload
+  async scrapeMembershipOffers(
+    channelId: string,
+    options?: {
+      headers?: {
+        cookie?: string,
+        authorization?: string,
+      },
+    },
+  ) {
+    const offer = await getOffer({ channelId }, options?.headers!);
+    if (offer.error)
+      if (offer.error.code === 404)
+        return;
+      else throw new Error(offer.error.message)
+    const { popup } = offer.actions![0].openPopupAction;
+    if (popup.ypcTransactionErrorMessageRenderer)
+      throw new Error(ypcTransactionErrorMessageRenderer
+        .getErrorMessage(popup.ypcTransactionErrorMessageRenderer!));
+    await this.model.handleChannelUpdate({
+      id: channelId,
+      membershipOffers: getOfferInfo(popup.sponsorshipsOfferRenderer!),
+    });
+  }
+
+  async scrapeMembershipBadges(
+    channelId: string,
+    options?: {
+      headers?: Record<string, string>
+    },
+  ) {
+    const page = await this.youtube.scrape(`/channel/${channelId}/membership`, {
+      headers: options?.headers,
+    });
+    const perks = getCurrentPerksInfo(
+      getChannelTab(page.ytInitialData!, 'Membership')!
+        .tabRenderer.content!.sectionListRenderer.contents
+        .find(content => content.sponsorshipsExpandablePerksRenderer)!
+        .sponsorshipsExpandablePerksRenderer!
+    );
+    await this.model.handleChannelUpdate({
+      id: channelId,
+      membershipBadges: perks.badges,
     });
   }
 

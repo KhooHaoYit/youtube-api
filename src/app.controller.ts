@@ -182,12 +182,22 @@ export class AppController {
     return await this.getChannel(id);
   }
 
-  @Post('/channel/:id/fetchMembershipInfo')
+  @Post('/channel/:id/fetchMembershipBadges')
   async fetchMembershipInfo(
     @Param('id') id: string,
     @Body() body: Record<string, string>,
   ) {
-    return await this.scraper.scrapeChannelMembership(id, body);
+    await this.scraper.scrapeMembershipBadges(id, { headers: body });
+    return await this.getChannel(id);
+  }
+
+  @Post('/channel/:id/fetchMembershipOffers')
+  async fetchMembershipOffer(
+    @Param('id') id: string,
+    @Body() body: Record<string, string>,
+  ) {
+    await this.scraper.scrapeMembershipOffers(id, { headers: body });
+    return await this.getChannel(id);
   }
 
   @Get('/channel/:channelId/communityPosts')

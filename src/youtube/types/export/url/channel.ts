@@ -1,3 +1,4 @@
+import { ResponseContext } from "../generic/responseContext";
 import { C4TabbedHeaderRenderer } from "../renderer/c4TabbedHeaderRenderer";
 import { VideoPrimaryInfoRenderer } from "../renderer/videoPrimaryInfoRenderer";
 import { VideoSecondaryInfoRenderer } from "../renderer/videoSecondaryInfoRenderer";
@@ -24,6 +25,7 @@ export type Channel = {
 
 
 export type YtInitialData = {
+  responseContext: ResponseContext
   /**
    * defined only when requesting /channel/CHANNEL_ID
    */
@@ -34,7 +36,8 @@ export type YtInitialData = {
   contents?: {
     twoColumnBrowseResultsRenderer?: {
       tabs: {
-        tabRenderer?: Home
+        tabRenderer?:
+        | Home
         | Channels
         | Playlists
         | About

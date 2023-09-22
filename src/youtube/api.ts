@@ -90,7 +90,7 @@ export class YoutubeApi {
     };
   }
 
-  async request(
+  async browse(
     innertubeApiKey: string,
     options: {
       continuation?: string,
@@ -110,7 +110,7 @@ export class YoutubeApi {
         context: {
           client: {
             clientName: 'WEB',
-            clientVersion: "2.20220314.01.00",
+            clientVersion: "2.20230831.09.00",
           },
         },
       }),
@@ -133,7 +133,7 @@ export class YoutubeApi {
       }
       if (!continuationToken)
         break;
-      list = await this.request(innertubeApiKey, { continuation: continuationToken })
+      list = await this.browse(innertubeApiKey, { continuation: continuationToken })
         .then(res => {
           if ('onResponseReceivedActions' in res)
             return res.onResponseReceivedActions[0].appendContinuationItemsAction.continuationItems ?? [];

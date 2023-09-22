@@ -61,24 +61,38 @@ export class AppHandleUpdate {
   async handleChannelUpdate(
     data: {
       // should save total videos in public?? (it might return optional from api)
-      id: string,
-      subscriberCount?: number,
-      viewCount?: bigint,
-      name?: string,
-      handle?: string,
-      avatarUrl?: string,
+      id: string
+      subscriberCount?: number
+      viewCount?: bigint
+      name?: string
+      handle?: string
+      avatarUrl?: string
       releases?: string[]
-      channels?: [string, string[]][],
-      playlistsDisplay?: [string, string[]][],
-      featuredDisplay?: (null | [string] | [string, string | string[]])[],
-      bannerUrl?: string,
-      description?: string | null,
-      location?: string | null,
-      joinedAt?: string,
-      links?: Link[],
-      verified?: boolean,
-      haveMembershipFeature?: boolean,
-      haveBusinessEmail?: boolean,
+      channels?: [string, string[]][]
+      playlistsDisplay?: [string, string[]][]
+      featuredDisplay?: (null | [string] | [string, string | string[]])[]
+      membershipBadges?: [number, string][]
+      membershipOffers?: {
+        tiers: {
+          name: string;
+          rankId: string;
+          offers: {
+            title: string;
+            description: string;
+            instructions: string;
+            images: [string, string][];
+          }[];
+        }[];
+        inlineVideoId: string;
+      }
+      bannerUrl?: string
+      description?: string | null
+      location?: string | null
+      joinedAt?: string
+      links?: Link[]
+      verified?: boolean
+      haveMembershipFeature?: boolean
+      haveBusinessEmail?: boolean
     },
   ) {
     const newData = await removeSame(this.prisma.channel, data);

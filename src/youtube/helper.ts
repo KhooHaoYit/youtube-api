@@ -5,6 +5,7 @@ import { About } from "./types/export/url/channelTab/about";
 import { Home } from "./types/export/url/channelTab/home";
 import { Channels } from "./types/export/url/channelTab/channels";
 import { Releases } from "./types/export/url/channelTab/releases";
+import { Membership } from "./types/export/url/channelTab/membership";
 
 export function getChannelTab<T extends 'Home'>(
   data: ChannelPage,
@@ -33,7 +34,7 @@ export function getChannelTab<T extends 'Releases'>(
 export function getChannelTab<T extends 'Membership'>(
   data: ChannelPage,
   tabName: T,
-): { tabRenderer: any } | undefined;
+): { tabRenderer: Membership } | undefined;
 export function getChannelTab<T extends string>(data: ChannelPage, tabName: T): any {
   if (!data.contents?.twoColumnBrowseResultsRenderer)
     throw new Error(`Unable to extract channel tabs`);

@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { createEnv } from "@t3-oss/env-core";
 import { z } from 'zod';
 
@@ -20,6 +21,7 @@ export const env = createEnv({
     SENTRY_PROFILES_SAMPLE_RATE: z.coerce.number().min(0).max(1).default(1),
     // Development only
     YOUTUBE_COOKIE: z.string().optional(),
+    YOUTUBE_AUTHORIZATION: z.string().optional(),
   },
   client: {},
   runtimeEnv: process.env,

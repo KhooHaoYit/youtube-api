@@ -1,5 +1,5 @@
 import { Image } from "../generic/image";
-import { SponsorshipsPerkRenderer } from "./sponsorshipsPerkRenderer";
+import { SponsorshipsPerkRenderer, getBadgesInfo, getOfferInfo } from "./sponsorshipsPerkRenderer";
 
 export type SponsorshipsExpandablePerksRenderer = {
   /**
@@ -17,4 +17,9 @@ export type SponsorshipsExpandablePerksRenderer = {
   }[]
 };
 
-
+export function getCurrentPerksInfo(data: SponsorshipsExpandablePerksRenderer) {
+  return {
+    badges: getBadgesInfo(data.expandableItems[0].sponsorshipsPerkRenderer),
+    emojis: getOfferInfo(data.expandableItems[1].sponsorshipsPerkRenderer).images,
+  };
+}

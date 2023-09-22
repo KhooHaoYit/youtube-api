@@ -1,4 +1,5 @@
 import { SponsorshipsPerkRenderer } from "./sponsorshipsPerkRenderer";
+import * as sponsorshipsPerkRenderer from "./sponsorshipsPerkRenderer";
 
 export type SponsorshipsPerksRenderer = {
   perks: {
@@ -6,4 +7,6 @@ export type SponsorshipsPerksRenderer = {
   }[]
 };
 
-
+export function getOffersInfo(data: SponsorshipsPerksRenderer) {
+  return data.perks.map(perk => sponsorshipsPerkRenderer.getOfferInfo(perk.sponsorshipsPerkRenderer));
+}

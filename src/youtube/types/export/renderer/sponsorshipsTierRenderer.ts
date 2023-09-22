@@ -1,7 +1,8 @@
 import { Runs } from "../generic/runs";
-import { SponsorshipsPerksRenderer } from "./sponsorshipsPerksRenderer";
+import { SponsorshipsPerksRenderer, getOffersInfo } from "./sponsorshipsPerksRenderer";
 
 export type SponsorshipsTierRenderer = {
+  rankId: string
   /**
    * `通常コース`
    */
@@ -20,3 +21,11 @@ export type SponsorshipsTierRenderer = {
 };
 
 
+
+export function getTierInfo(data: SponsorshipsTierRenderer) {
+  return {
+    name: data.title.simpleText,
+    rankId: data.rankId,
+    offers: getOffersInfo(data.perks.sponsorshipsPerksRenderer),
+  };
+}

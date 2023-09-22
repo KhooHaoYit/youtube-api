@@ -30,6 +30,10 @@ import { Data as UruhaRushia_featured } from '../data/UruhaRushia/featured';
 import { Data as GundoMirei_membership } from '../data/GundoMirei/membership';
 import { Data as c0 } from '../data/channels/UCRbsmnDTHD9-4pEIuG7zYRw/about';
 import { Data as c1 } from '../data/channels/UCc2MFmkMC_tHND7TDHrRDkg/about';
+import { Data as c2 } from '../data/channels/UC5CwaMl1eIgY8h02uZw7u8A/about';
+import { Data as c3 } from '../data/channels/UC5CwaMl1eIgY8h02uZw7u8A/about-withAuth';
+import { Data as c4 } from '../data/channels/UCrzT1p8gn0hQTBeMA6e2YiA/about';
+import { Data as c5 } from '../data/channels/UCrzT1p8gn0hQTBeMA6e2YiA/about-withAuth';
 import { Channel } from '../export/url/channel';
 
 type ChannelPage = Channel['ytInitialData'];
@@ -66,3 +70,7 @@ type ChannelPage = Channel['ytInitialData'];
 <GundoMirei_membership>{} satisfies ChannelPage;
 <c0>{} satisfies ChannelPage;
 <c1>{} satisfies ChannelPage;
+<c2>{} satisfies ChannelPage;
+<c3>{} satisfies ChannelPage;
+<c4>{} satisfies ChannelPage;
+<c5>{} satisfies ChannelPage;
