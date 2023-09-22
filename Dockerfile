@@ -12,9 +12,6 @@ RUN npx prisma generate
 
 COPY . .
 RUN rm -rf src/youtube/types/test \
-  && rm -f src/youtube/types/src/resolveError.ts \
-  && rm -f src/youtube/types/src/resolveCommunityPost.ts \
-  && rm -f src/youtube/types/src/communityPost.ts \
   && npm run build
 
 FROM node:18-alpine AS PRODUCTION_PACKAGE

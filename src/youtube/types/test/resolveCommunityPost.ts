@@ -1,10 +1,10 @@
-import { Data as c0 } from '../../types/data/hololive/community.json';
-import { Data as c1 } from '../../types/data/AsahinaAkane/community.json';
-import { Data as c2 } from '../../types/data/AmrzsMonstar/community.json';
-import { Data as c3 } from '../../types/data/ManoAloe/community.json';
-import { Data as c4 } from '../../types/data/AlettaSky/community.json';
-import { Data as c5 } from '../../types/data/AlettaSky/community_0.json';
-import { Data as c6 } from '../../types/data/GundoMirei/community_0.json';
+import { Data as c0 } from '../data/hololive/community.json';
+import { Data as c1 } from '../data/AsahinaAkane/community.json';
+import { Data as c2 } from '../data/AmrzsMonstar/community.json';
+import { Data as c3 } from '../data/ManoAloe/community.json';
+import { Data as c4 } from '../data/AlettaSky/community.json';
+import { Data as c5 } from '../data/AlettaSky/community_0.json';
+import { Data as c6 } from '../data/GundoMirei/community_0.json';
 
 import { start } from "repl";
 import { getPost } from '../export/renderer/backstagePostThreadRenderer';
