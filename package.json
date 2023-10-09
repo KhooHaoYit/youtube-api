@@ -52,7 +52,7 @@
     "undici": "^5.25.4",
     "webpack": "^5.81.0",
     "ytdl-core": "^4.11.4",
-    "zod": "^3.21.4"
+    "zod": "^3.22.3"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.4.2",
