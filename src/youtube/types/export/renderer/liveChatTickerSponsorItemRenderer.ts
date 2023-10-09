@@ -1,3 +1,5 @@
+import { Text, getOriginalText } from "../generic/text";
+
 export type LiveChatTickerSponsorItemRenderer = {
   id: string,
   authorExternalChannelId: string
@@ -7,9 +9,7 @@ export type LiveChatTickerSponsorItemRenderer = {
       renderer: {}
     }
   }
-  detailText: {
-    simpleText: string
-  }
+  detailText: Text
 };
 
 export function getMessageId(data: LiveChatTickerSponsorItemRenderer) {
@@ -21,5 +21,5 @@ export function getAuthorChannelId(data: LiveChatTickerSponsorItemRenderer) {
 }
 
 export function getAmountOfMembershipGifted(data: LiveChatTickerSponsorItemRenderer) {
-  return +data.detailText.simpleText;
+  return +getOriginalText(data.detailText);
 }

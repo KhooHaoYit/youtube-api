@@ -1,4 +1,4 @@
-import { Runs } from "../generic/runs";
+import { Text, getOriginalText } from "../generic/text";
 import { SponsorshipsPerksRenderer, getOffersInfo } from "./sponsorshipsPerksRenderer";
 
 export type SponsorshipsTierRenderer = {
@@ -6,15 +6,11 @@ export type SponsorshipsTierRenderer = {
   /**
    * `通常コース`
    */
-  title: {
-    simpleText: string
-  }
-  subtitle: {
-    /**
-     * `MYR 10.00/month`
-     */
-    runs: Runs
-  }
+  title: Text
+  /**
+   * `MYR 10.00/month`
+   */
+  subtitle: Text
   perks: {
     sponsorshipsPerksRenderer: SponsorshipsPerksRenderer
   }
@@ -24,7 +20,7 @@ export type SponsorshipsTierRenderer = {
 
 export function getTierInfo(data: SponsorshipsTierRenderer) {
   return {
-    name: data.title.simpleText,
+    name: getOriginalText(data.title),
     rankId: data.rankId,
     offers: getOffersInfo(data.perks.sponsorshipsPerksRenderer),
   };

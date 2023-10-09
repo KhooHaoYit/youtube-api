@@ -1,20 +1,14 @@
 import { Image } from "../generic/image";
-import { Runs } from "../generic/runs";
+import { Text } from "../generic/text";
 
 export type CommentRenderer = {
   commentId: string
-  authorText: {
-    simpleText: string
-  }
+  authorText: Text
   authorThumbnail: Image
-  contentText: {
-    runs: Runs
-  }
+  contentText: Text
   authorEndpoint: {
     browseId: string
   }
-  publishedTimeText: {
-    runs: Runs
-  }
+  publishedTimeText: Text
   // like count could be extracted
 };

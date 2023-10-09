@@ -1,26 +1,15 @@
-import { Runs } from "../generic/runs";
-import * as runs from "../generic/runs";
+import { Text, getOriginalText } from "../generic/text";
 
 export type PlayerErrorMessageRenderer = {
-  subreason?: {
-    simpleText?: string,
-    runs?: Runs,
-  },
+  subreason?: Text,
   /**
    * simple error message, more details would be provided on subreason
    */
-  reason: {
-    simpleText?: string,
-    runs?: Runs,
-  },
+  reason: Text,
 };
 
 export function getErrorMessage(data: PlayerErrorMessageRenderer) {
-  if (data.subreason?.simpleText)
-    return data.subreason.simpleText;
-  if (data.subreason?.runs)
-    return runs.getOriginalText(data.subreason.runs);
-  if (data.reason.simpleText)
-    return data.reason.simpleText;
-  return runs.getOriginalText(data.reason.runs!);
+  if (data.subreason)
+    return getOriginalText(data.subreason);
+  return getOriginalText(data.reason);
 }

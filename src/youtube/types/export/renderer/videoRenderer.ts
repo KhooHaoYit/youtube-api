@@ -1,6 +1,7 @@
-import { Image } from "../generic/image";
-import { getOriginalText, Runs } from "../generic/runs";
+import { Runs } from "../generic/runs";
+import { Text, getOriginalText } from "../generic/text";
 import { ViewCountText } from "../generic/viewCountText";
+import { ChannelThumbnailWithLinkRenderer } from "./channelThumbnailWithLinkRenderer";
 
 export type VideoRenderer = {
   "videoId": string,
@@ -20,9 +21,7 @@ export type VideoRenderer = {
   /**
    * not defined on videos tab
    */
-  "longBylineText"?: {
-    "runs": Runs,
-  },
+  longBylineText?: Text
   /**
    * might not be visible (like in membership tab)
    */
@@ -31,29 +30,14 @@ export type VideoRenderer = {
    * not defined on videos tab
    */
   "channelThumbnailSupportedRenderers"?: {
-    "channelThumbnailWithLinkRenderer": {
-      "thumbnail": Image
-      "navigationEndpoint": {
-        "browseEndpoint": {
-          /**
-           * `UCAPdxmEjYxUdQMf_JaQRl1Q`
-           */
-          "browseId": string,
-          /**
-           * `/@manae_nme`
-           */
-          "canonicalBaseUrl"?: string
-        }
-      },
-    }
+    channelThumbnailWithLinkRenderer: ChannelThumbnailWithLinkRenderer
   },
 };
 
 export function getChannelName(data: VideoRenderer) {
-  const runs = data.longBylineText?.runs;
-  if (!runs)
+  if (!data.longBylineText)
     return;
-  return getOriginalText(runs);
+  return getOriginalText(data.longBylineText);
 }
 
 export function getVideoId(data: VideoRenderer) {

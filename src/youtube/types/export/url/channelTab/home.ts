@@ -1,10 +1,10 @@
-import { Runs } from "../../generic/runs";
-import * as runs from "../../generic/runs";
+import { Text, getOriginalText } from "../../generic/text";
 import { ChannelFeaturedContentRenderer } from "../../renderer/channelFeaturedContentRenderer";
 import * as channelFeaturedContentRenderer from "../../renderer/channelFeaturedContentRenderer";
 import { ChannelVideoPlayerRenderer } from "../../renderer/channelVideoPlayerRenderer";
 import * as channelVideoPlayerRenderer from "../../renderer/channelVideoPlayerRenderer";
 import { ItemSectionRenderer } from "../../renderer/itemSectionRenderer";
+import { MessageRenderer } from "../../renderer/messageRenderer";
 import { RecognitionShelfRenderer } from "../../renderer/recognitionShelfRenderer";
 import { ReelShelfRenderer } from "../../renderer/reelShelfRenderer";
 import { SectionListRenderer } from "../../renderer/sectionListRenderer";
@@ -30,15 +30,13 @@ export type Home = {
           /**
            * defined when channel doesn't have any featured content
            */
-          messageRenderer?: {}
+          messageRenderer?: MessageRenderer
           recognitionShelfRenderer?: RecognitionShelfRenderer
           channelVideoPlayerRenderer?: ChannelVideoPlayerRenderer
           channelFeaturedContentRenderer?: ChannelFeaturedContentRenderer
           reelShelfRenderer?: ReelShelfRenderer,
           shelfRenderer?: {
-            "title": {
-              runs: Runs
-            },
+            title: Text
             "endpoint": {
               "commandMetadata": {
                 "webCommandMetadata": {
@@ -138,7 +136,7 @@ export type Home = {
 };
 
 export function getFeaturedDisplay(data: Home): (
-  ['membersRecognition']
+  | ['membersRecognition']
   | ['shorts']
   | ['live', string[]]
   | ['featured', string]
@@ -176,19 +174,19 @@ export function getFeaturedDisplay(data: Home): (
       .url.includes('/playlists?')
     ) return [
       'playlists',
-      runs.getOriginalText(item.shelfRenderer.title.runs),
+      getOriginalText(item.shelfRenderer.title),
     ];
     if (item.shelfRenderer?.endpoint.commandMetadata.webCommandMetadata
       .url.includes('/channels?')
     ) return [
       'channels',
-      runs.getOriginalText(item.shelfRenderer.title.runs),
+      getOriginalText(item.shelfRenderer.title),
     ];
     if (item.shelfRenderer?.endpoint.commandMetadata.webCommandMetadata
       .url.includes('/videos?')
     ) return [
       'videos',
-      runs.getOriginalText(item.shelfRenderer.title.runs),
+      getOriginalText(item.shelfRenderer.title),
     ];
     if (item.reelShelfRenderer)
       return ['shorts'];

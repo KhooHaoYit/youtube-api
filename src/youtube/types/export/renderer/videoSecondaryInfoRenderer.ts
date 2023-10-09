@@ -1,36 +1,9 @@
 import { SubscriberCountText } from "../generic/subscriberCountText";
+import { VideoOwnerRenderer } from "./videoOwnerRenderer";
 
 export type VideoSecondaryInfoRenderer = {
   owner: {
-    videoOwnerRenderer: {
-      thumbnail: {
-        thumbnails: { url: string }[],
-      },
-      title: {
-        runs: [
-          {
-            /**
-             * `HAACHAMA Ch 赤井はあと`
-             */
-            text: string,
-          }
-        ]
-      },
-      navigationEndpoint: {
-        browseEndpoint: {
-          /**
-           * `UC1CfXB_kRs3C-zaeTG3oGyg`
-           */
-          browseId: string,
-          /**
-           * /@AkaiHaato
-           */
-          canonicalBaseUrl: string,
-        }
-      },
-      subscriberCountText: SubscriberCountText,
-      membershipButton?: {}
-    }
+    videoOwnerRenderer: VideoOwnerRenderer
   },
   /**
    * not defined on age restricted video (??)

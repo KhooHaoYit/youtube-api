@@ -8,6 +8,7 @@ import * as playerMicroformatRenderer from './youtube/types/export/renderer/play
 import type { PlayerMicroformatRenderer } from './youtube/types/export/renderer/playerMicroformatRenderer';
 import { Link } from './youtube/types/export/renderer/channelAboutFullMetadataRenderer';
 import { getPost } from './youtube/types/export/renderer/backstagePostThreadRenderer';
+import { getOriginalText } from './youtube/types/export/generic/text';
 
 @Injectable()
 export class AppHandleUpdate {
@@ -28,12 +29,14 @@ export class AppHandleUpdate {
       id: playerMicroformatRenderer.getVideoId(data),
       category: data.category,
       viewCount: data.viewCount ? +data.viewCount : undefined,
-      description: data.description?.simpleText || '',
+      description: data.description
+        ? getOriginalText(data.description)
+        : '',
       uploadDate: data.uploadDate,
       publishDate: data.publishDate,
       channelId: data.externalChannelId,
       duration: +data.lengthSeconds,
-      title: data.title.simpleText,
+      title: getOriginalText(data.title),
       isLivestream: !!data.liveBroadcastDetails,
       liveStartTimestamp: data.liveBroadcastDetails?.startTimestamp,
       liveEndTimestamp: data.liveBroadcastDetails?.endTimestamp,

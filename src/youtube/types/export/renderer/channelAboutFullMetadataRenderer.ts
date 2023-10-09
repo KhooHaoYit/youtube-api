@@ -1,12 +1,11 @@
 import { Image } from "../generic/image";
 import * as image from "../generic/image";
+import { Text } from "../generic/text";
 import { ViewCountText } from "../generic/viewCountText";
 import * as viewCountText from "../generic/viewCountText";
 
 export type ChannelAboutFullMetadataRenderer = {
-  "description"?: {
-    "simpleText": string,
-  },
+  description?: Text
   /**
    * not defined if user didn't set any links
    */
@@ -42,26 +41,18 @@ export type ChannelAboutFullMetadataRenderer = {
    */
   "canonicalChannelUrl": string,
   "bypassBusinessEmailCaptcha": false,
-  "title": {
-    /**
-     * `hololive ホロライブ - VTuber Group`
-     */
-    "simpleText": string,
-  },
-  "avatar": {
-    "thumbnails": {
-      /**
-       * `https://yt3.googleusercontent.com/ytc/AGIKgqPh-i0-rT3LcMstPws5jlp4CkvsBgzVvDjaFrWtlw=s48-c-k-c0x00ffffff-no-rj`
-       */
-      "url": string,
-    }[],
-  },
-  "country"?: {
-    /**
-     * `Japan`
-     */
-    "simpleText": string
-  },
+  /**
+   * `hololive ホロライブ - VTuber Group`
+   */
+  title: Text
+  /**
+   * `https://yt3.googleusercontent.com/ytc/AGIKgqPh-i0-rT3LcMstPws5jlp4CkvsBgzVvDjaFrWtlw=s48-c-k-c0x00ffffff-no-rj`
+   */
+  avatar: Image
+  /**
+   * `Japan`
+   */
+  country?: Text
   "channelId": string,
   /**
    * not defined when channel didn't set any business email

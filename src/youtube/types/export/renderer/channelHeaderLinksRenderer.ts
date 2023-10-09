@@ -1,21 +1,20 @@
+import { Image } from "../generic/image";
+import { Text } from "../generic/text";
+
 export type ChannelHeaderLinksRenderer = {
   primaryLinks: {
     navigationEndpoint: {
       urlEndpoint: { url: string },
     },
-    icon: {
-      thumbnails: { url: string }[],
-    },
-    title: { simpleText: string },
+    icon: Image
+    title: Text,
   }[],
   secondaryLinks?: {
     navigationEndpoint: {
       urlEndpoint: { url: string },
     },
-    icon: {
-      thumbnails: { url: string }[],
-    },
-    title: { simpleText: string },
+    icon: Image
+    title: Text,
   }[],
 };
 

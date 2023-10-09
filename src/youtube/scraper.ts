@@ -14,13 +14,14 @@ import { getCommunityPosts } from './types/export/url/channelTab/community';
 import { getErrorMessage } from './types/export/url/watch';
 import { getFeaturedDisplay } from './types/export/url/channelTab/home';
 import { getPlaylist, hasPlaylist, listAllVideos } from './types/export/url/playlist';
-import { getChannelId } from './types/export/renderer/playlistVideoRenderer';
+import { getVideoInfo } from './types/export/renderer/playlistVideoRenderer';
 import { PrismaService } from 'nestjs-prisma';
 import { getReleases } from './types/export/url/channelTab/releases';
 import { getCurrentPerksInfo } from './types/export/renderer/sponsorshipsExpandablePerksRenderer';
 import { getOffer } from './types/export/endpoints/getOffer';
 import * as ypcTransactionErrorMessageRenderer from './types/export/renderer/ypcTransactionErrorMessageRenderer';
 import { getOfferInfo } from './types/export/renderer/sponsorshipsOfferRenderer';
+import { getOriginalText } from './types/export/generic/text';
 
 @Injectable()
 export class YoutubeScraper {
@@ -31,7 +32,7 @@ export class YoutubeScraper {
     private prisma: PrismaService,
   ) { }
 
-  async scrapeVideo(videoId: string) {
+  async scrapeVideo(videoId: string) { // TODO: save recommended video
     const page = await this.youtube.scrape(`/watch?v=${videoId}`);
     if (page.ytInitialPlayerResponse!.microformat?.playerMicroformatRenderer)
       await this.model.handlePlayerMicroformatRenderer(
@@ -66,7 +67,7 @@ export class YoutubeScraper {
       }
       await this.model.handleVideoUpdate({
         id: video!.videoId,
-        channelId: getChannelId(video!),
+        channelId: getVideoInfo(video!).ownerId,
       });
     }
     const playlist = getPlaylist(page);
@@ -237,12 +238,16 @@ export class YoutubeScraper {
     await this.model.handleChannelUpdate({
       id: metadata.channelId,
       viewCount: viewCount ? BigInt(viewCount) : 0n,
-      description: metadata.description?.simpleText || null,
-      avatarUrl: metadata.avatar.thumbnails.at(0)?.url,
+      description: metadata.description
+        ? getOriginalText(metadata.description)
+        : null,
+      avatarUrl: metadata.avatar.thumbnails[0].url,
       handle: metadata.canonicalChannelUrl.split('/').at(-1),
       haveBusinessEmail: 'signInForBusinessEmail' in metadata,
-      location: metadata.country?.simpleText || null,
-      name: metadata.title.simpleText,
+      location: metadata.country
+        ? getOriginalText(metadata.country)
+        : null,
+      name: getOriginalText(metadata.title),
       joinedAt: metadata.joinedDateText.runs[1].text,
       links: getLinks(metadata),
     });
@@ -298,7 +303,7 @@ export class YoutubeScraper {
           id: gridChannelRenderer.getChannelId(data),
           avatarUrl: gridChannelRenderer.getChannelAvatarUrl(data),
           handle: gridChannelRenderer.getChannelHandle(data),
-          name: data.title.simpleText,
+          name: getOriginalText(data.title),
           verified: verifiedBadgeIndex === undefined ? undefined : verifiedBadgeIndex !== -1,
           subscriberCount: gridChannelRenderer.getSubscriberCount(data),
         });

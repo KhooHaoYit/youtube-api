@@ -49,6 +49,7 @@
     "prisma-nestjs-graphql": "^18.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
+    "undici": "^5.25.4",
     "webpack": "^5.81.0",
     "ytdl-core": "^4.11.4",
     "zod": "^3.21.4"

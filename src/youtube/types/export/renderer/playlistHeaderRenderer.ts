@@ -1,33 +1,26 @@
 import { Runs } from "../generic/runs";
 import * as runs from "../generic/runs";
+import { Text, getOriginalText } from "../generic/text";
 
 export type PlaylistHeaderRenderer = {
   playlistId: string
-  title: {
-    /**
-     * `Members-only videos`
-     */
-    simpleText: string
-  }
-  numVideosText: {
-    /**
-     * `1,083 videos`
-     */
-    runs: Runs
-  }
-  descriptionText?: {
-    /**
-     * `Videos available to members of this channel. Automatically updated.`
-     */
-    simpleText?: string
-  }
-  viewCountText: {
-    /**
-     * `No views`
-     * `294,862 views`
-     */
-    simpleText: string
-  }
+  /**
+   * `Members-only videos`
+   */
+  title: Text
+  /**
+   * `1,083 videos`
+   */
+  numVideosText: Text
+  /**
+   * `Videos available to members of this channel. Automatically updated.`
+   */
+  descriptionText?: Text
+  /**
+   * `No views`
+   * `294,862 views`
+   */
+  viewCountText: Text
   privacy: 'PUBLIC' | 'UNLISTED'
   byline: {
     playlistBylineRenderer: {
@@ -63,19 +56,21 @@ export type PlaylistHeaderRenderer = {
 export function getPlaylistInfo(data: PlaylistHeaderRenderer) {
   return {
     id: data.playlistId,
-    title: data.title.simpleText,
-    description: data.descriptionText?.simpleText ?? '',
+    title: getOriginalText(data.title),
+    description: data.descriptionText
+      ? getOriginalText(data.descriptionText)
+      : '',
     channelId: data.ownerEndpoint?.browseEndpoint.browseId
       ?? null,
     visibility: data.privacy,
     badges: data.playlistBadges
       ?.map(badge => badge.metadataBadgeRenderer.label)
       ?? [],
-    videoCount: +runs.getOriginalText(data.numVideosText.runs)
+    videoCount: +getOriginalText(data.numVideosText)
       .split(' ')[0]
       .replace(/,/g, ''),
     viewCount: (() => {
-      const text = data.viewCountText.simpleText;
+      const text = getOriginalText(data.viewCountText);
       if (text === 'No views')
         return 0;
       return +text

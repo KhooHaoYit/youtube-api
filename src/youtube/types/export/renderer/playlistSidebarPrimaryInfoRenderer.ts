@@ -1,11 +1,8 @@
 import { Runs } from "../generic/runs";
-import * as runs from "../generic/runs";
+import { Text, getOriginalText } from "../generic/text";
 
 export type PlaylistSidebarPrimaryInfoRenderer = {
-  title: {
-    simpleText?: string
-    runs?: Runs
-  }
+  title: Text
   stats: [
     {
       /**
@@ -26,16 +23,15 @@ export type PlaylistSidebarPrimaryInfoRenderer = {
       runs: Runs
     }
   ]
-  description?: {
-    simpleText?: string
-  }
+  description?: Text
 };
 
 export function getTitle(data: PlaylistSidebarPrimaryInfoRenderer) {
-  return data.title.simpleText
-    ?? runs.getOriginalText(data.title.runs!);
+  return getOriginalText(data.title);
 }
 
 export function getDescription(data: PlaylistSidebarPrimaryInfoRenderer) {
-  return data.description?.simpleText ?? '';
+  return data.description
+    ? getOriginalText(data.description)
+    : '';
 }

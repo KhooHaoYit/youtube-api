@@ -1,11 +1,12 @@
+import { Runs } from "../generic/runs";
+import { Text } from "../generic/text";
+
 export type EndScreenVideoRenderer = {
   "videoId": string,
-  "title": {
-    /**
-     * `食える飯が作りたい。~第2話~【はあちゃまクッキング・改】`
-     */
-    "simpleText": string
-  },
+  /**
+   * `食える飯が作りたい。~第2話~【はあちゃまクッキング・改】`
+   */
+  title: Text
   "shortBylineText": {
     "runs": [
       {
@@ -28,17 +29,13 @@ export type EndScreenVideoRenderer = {
       }
     ]
   },
-  "lengthInSeconds": number,
-  "shortViewCountText": {
-    /**
-     * `128K views`
-     */
-    "simpleText": string,
-  },
-  "publishedTimeText": {
-    /**
-     * `6 months ago`
-     */
-    "simpleText": string
-  },
+  "lengthInSeconds"?: number,
+  /**
+   * `128K views`
+   */
+  shortViewCountText: Text
+  /**
+   * `6 months ago`
+   */
+  publishedTimeText: Text
 };

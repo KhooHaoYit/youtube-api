@@ -5,6 +5,7 @@ import { ContinuationItemRenderer } from "../../renderer/continuationItemRendere
 import { ItemSectionRenderer } from "../../renderer/itemSectionRenderer";
 import { SectionListRenderer } from "../../renderer/sectionListRenderer";
 import * as sectionListRenderer from "../../renderer/sectionListRenderer";
+import { MessageRenderer } from "../../renderer/messageRenderer";
 
 export type Community = {
   title: 'Community',
@@ -13,14 +14,10 @@ export type Community = {
       content: {
         itemSectionRenderer: ItemSectionRenderer<{
           backstagePostThreadRenderer?: BackstagePostThreadRenderer,
-          messageRenderer?: {
-            text: {
-              /**
-               * `Comments are turned off. Learn more`
-               */
-              runs: Runs
-            }
-          }
+          /**
+           * `Comments are turned off. Learn more`
+           */
+          messageRenderer?: MessageRenderer
           continuationItemRenderer?: ContinuationItemRenderer,
         }>
       }

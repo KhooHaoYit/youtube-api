@@ -4,6 +4,7 @@ import { Watch } from './types/export/url/watch';
 import { Channel } from './types/export/url/channel';
 import { Post } from './types/export/url/post';
 import { Playlist } from './types/export/url/playlist';
+import { request } from 'undici';
 
 type ScrapeMap = [
   [
@@ -64,13 +65,13 @@ export class YoutubeApi {
       },
     },
   ) {
-    const html = await fetch(`https://www.youtube.com${href}`, {
+    const html = await request(`https://www.youtube.com${href}`, {
       headers: {
         'accept-language': 'en',
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
         ...options?.headers,
       },
-    }).then(res => res.text());
+    }).then(res => res.body.text());
     const innertubeApiKey = html.match(/(?<=innertubeApiKey":").+?(?=","innertubeApiVersion)/)?.at(0)
       ?? null;
     const ytInitialData = <Record<string, any> | null>JSON.parse(
@@ -98,7 +99,7 @@ export class YoutubeApi {
       params?: string,
     },
   ) {
-    return await fetch(`https://www.youtube.com/youtubei/v1/browse?key=${innertubeApiKey}&prettyPrint=false`, {
+    return await request(`https://www.youtube.com/youtubei/v1/browse?key=${innertubeApiKey}&prettyPrint=false`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -114,7 +115,7 @@ export class YoutubeApi {
           },
         },
       }),
-    }).then(res => res.json() as any);
+    }).then(res => res.body.json() as any);
   }
 
   async* requestAll<T extends Record<string, any>>(

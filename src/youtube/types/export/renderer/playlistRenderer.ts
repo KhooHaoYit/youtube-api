@@ -1,17 +1,16 @@
 import { Runs } from "../generic/runs";
 import * as runs from "../generic/runs";
+import { Text } from "../generic/text";
 
 export type PlaylistRenderer = {
   /**
    * `PL4E0JrsYQEAImmPxsdxZTjQik9gdL_v3W`
    */
   "playlistId": string,
-  "title": {
-    /**
-     * `#子豚相談室`
-     */
-    "simpleText": string
-  },
+  /**
+   * `#子豚相談室`
+   */
+  title: Text
   /**
    * `76`
    */

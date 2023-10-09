@@ -81,6 +81,18 @@ const pages = [
   ['channels/UC5CwaMl1eIgY8h02uZw7u8A/about-withAuth', '/channel/UC5CwaMl1eIgY8h02uZw7u8A/about', true],
   ['channels/UCrzT1p8gn0hQTBeMA6e2YiA/about', '/channel/UCrzT1p8gn0hQTBeMA6e2YiA/about'],
   ['channels/UCrzT1p8gn0hQTBeMA6e2YiA/about-withAuth', '/channel/UCrzT1p8gn0hQTBeMA6e2YiA/about', true],
+  ['videos/ZfDYRy17CBY', '/watch?v=ZfDYRy17CBY'],
+  ['videos/uXUNZLPrgy8', '/watch?v=uXUNZLPrgy8'],
+  ['videos/S1Ya6QYHY0s', '/watch?v=S1Ya6QYHY0s'],
+  ['videos/EwGAcKnE-y4', '/watch?v=EwGAcKnE-y4'],
+  ['videos/RPJ-UeqVnZY', '/watch?v=RPJ-UeqVnZY'],
+  ['videos/i1dQNnUig-k', '/watch?v=i1dQNnUig-k'],
+  ['videos/i33Ytw__TL0', '/watch?v=i33Ytw__TL0'],
+  ['searchs/tuyu', '/results?search_query=tuyu'],
+  ['videos/RSzSuZ1gTm0', '/watch?v=RSzSuZ1gTm0'],
+  ['videos/hURB7goHrYk', '/watch?v=hURB7goHrYk'],
+  ['videos/m0a9RxO2Cwo', '/watch?v=m0a9RxO2Cwo'],
+  ['clips/Ugkx_7XH_e-kdkArvpXV_FIirSfYe_m3ymkl', '/clip/Ugkx_7XH_e-kdkArvpXV_FIirSfYe_m3ymkl'],
 ] as const;
 
 const getOffers = [

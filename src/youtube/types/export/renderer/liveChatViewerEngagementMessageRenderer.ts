@@ -1,11 +1,9 @@
-import { Runs } from "../generic/runs";
+import { Text } from "../generic/text";
 
 export type LiveChatViewerEngagementMessageRenderer = {
   id: string
   timestampUsec: string
-  message: {
-    runs: Runs
-  }
+  message: Text
 };
 
 export function getMessageId(data: LiveChatViewerEngagementMessageRenderer) {

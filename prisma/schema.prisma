@@ -18,6 +18,11 @@ generator nestgraphql {
   graphqlScalars_BigInt_specifier = "graphql-scalars"
 }
 
+// TODO: clip
+// https://www.youtube.com/clip/Ugkxes0UO1XgIY9LlLaisU2a3Le5i8tYkuPe
+// https://www.youtube.com/clip/UgkxBQ0tuOU8BR1QJ-O5fimqZ2isMfzFaA-b
+// https://www.youtube.com/clip/Ugkx_7XH_e-kdkArvpXV_FIirSfYe_m3ymkl
+
 model CommunityPost {
   id String @id
 
@@ -58,6 +63,13 @@ model Playlist {
 }
 
 model Video {
+  // TODO: store
+  // TODO: fundraiser
+  // TODO: chapters
+  // https://youtu.be/EwGAcKnE-y4
+  // TODO: watch time heatmap
+  // TODO: membership tier required
+  // https://youtu.be/hURB7goHrYk
   id            String      @id @unique
   visibility    Visibility?
   removedReason String?

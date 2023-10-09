@@ -1,4 +1,5 @@
 import { Image } from "../generic/image";
+import { Text } from "../generic/text";
 import { SponsorshipsPerkRenderer, getBadgesInfo, getOfferInfo } from "./sponsorshipsPerkRenderer";
 
 export type SponsorshipsExpandablePerksRenderer = {
@@ -9,9 +10,7 @@ export type SponsorshipsExpandablePerksRenderer = {
   /**
    * Current user membership level's name
    */
-  expandableHeader: {
-    simpleText: string
-  }
+  expandableHeader: Text
   expandableItems: {
     sponsorshipsPerkRenderer: SponsorshipsPerkRenderer
   }[]

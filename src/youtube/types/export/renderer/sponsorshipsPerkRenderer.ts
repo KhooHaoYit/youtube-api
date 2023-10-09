@@ -1,27 +1,19 @@
 import { Image } from "../generic/image";
 import * as image from "../generic/image";
-import { Runs } from "../generic/runs";
-import * as runs from "../generic/runs";
+import { Text, getOriginalText } from "../generic/text";
 import { SponsorshipsLoyaltyBadgesRenderer } from "./sponsorshipsLoyaltyBadgesRenderer";
 import * as sponsorshipsLoyaltyBadgesRenderer from "./sponsorshipsLoyaltyBadgesRenderer";
 
 export type SponsorshipsPerkRenderer = {
-  title: {
-    /**
-     * membership level perk's title (not the same as `runs` key)
-     */
-    simpleText?: string,
-    runs?: Runs
-  }
-  description?: {
-    /**
-     * membership level perk's description
-     */
-    simpleText: string,
-  }
-  fulfillmentInstructions?: {
-    runs: Runs
-  }
+  /**
+   * membership level perk's title (not the same as `runs` key)
+   */
+  title: Text
+  /**
+   * membership level perk's description
+   */
+  description?: Text
+  fulfillmentInstructions?: Text
   loyaltyBadges?: {
     sponsorshipsLoyaltyBadgesRenderer: SponsorshipsLoyaltyBadgesRenderer
   }
@@ -37,12 +29,12 @@ export function getBadgesInfo(data: SponsorshipsPerkRenderer) {
 
 export function getOfferInfo(data: SponsorshipsPerkRenderer) {
   return {
-    title: data.title.simpleText
-      ?? runs.getOriginalText(data.title.runs!),
-    description: data.description?.simpleText
-      ?? '',
+    title: getOriginalText(data.title),
+    description: data.description
+      ? getOriginalText(data.description)
+      : '',
     instructions: data.fulfillmentInstructions
-      ? runs.getOriginalText(data.fulfillmentInstructions.runs)
+      ? getOriginalText(data.fulfillmentInstructions)
       : '',
     images: data.images
       ?.map(img => [

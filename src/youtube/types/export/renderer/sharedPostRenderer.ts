@@ -1,9 +1,9 @@
 import * as backstage from "./backstagePostRenderer";
-import { getOriginalText, Runs } from "../generic/runs";
+import { Text, getOriginalText } from "../generic/text";
 
 export type SharedPostRenderer = {
   postId: string,
-  content: { runs: Runs }
+  content: Text
   /**
    * not defined if post is deleted
    */
@@ -13,7 +13,7 @@ export type SharedPostRenderer = {
   /**
    * `shared 2 days ago`
    */
-  publishedTimeText: { runs: Runs }
+  publishedTimeText: Text
 };
 
 export function getPostId(post: SharedPostRenderer) {
@@ -28,9 +28,9 @@ export function getSharedPostId(post: SharedPostRenderer) {
 }
 
 export function getContent(post: SharedPostRenderer) {
-  return getOriginalText(post.content.runs);
+  return getOriginalText(post.content);
 }
 
 export function getPublishedTime(post: SharedPostRenderer) {
-  return getOriginalText(post.publishedTimeText.runs);
+  return getOriginalText(post.publishedTimeText);
 }

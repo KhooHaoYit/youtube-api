@@ -1,16 +1,17 @@
 import { Image } from "../generic/image"
 import { Runs } from "../generic/runs"
 import * as runs from "../generic/runs"
+import { Text } from "../generic/text";
 
 export type PlaylistVideoRenderer = {
   videoId: string
   thumbnail: Image
-  title: { runs: Runs }
+  title: Text
   shortBylineText: { runs: Runs },
 };
 
-
-
-export function getChannelId(data: PlaylistVideoRenderer) {
-  return runs.getBrowseId(data.shortBylineText.runs);
+export function getVideoInfo(data: PlaylistVideoRenderer) {
+  return {
+    ownerId: runs.getBrowseId(data.shortBylineText.runs),
+  };
 }

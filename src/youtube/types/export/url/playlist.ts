@@ -1,4 +1,5 @@
 import { ItemSectionRenderer } from "../renderer/itemSectionRenderer";
+import { MessageRenderer } from "../renderer/messageRenderer";
 import { PlaylistHeaderRenderer } from "../renderer/playlistHeaderRenderer";
 import * as playlistHeaderRenderer from "../renderer/playlistHeaderRenderer";
 import { PlaylistSidebarRenderer } from "../renderer/playlistSidebarRenderer";
@@ -29,7 +30,7 @@ type YtInitialData = {
             sectionListRenderer: SectionListRenderer<{
               content: {
                 itemSectionRenderer: ItemSectionRenderer<{
-                  messageRenderer?: {}
+                  messageRenderer?: MessageRenderer
                   playlistVideoListRenderer?: PlaylistVideoListRenderer
                   richGridRenderer?: RichGridRenderer<{
                     richItemRenderer: RichItemRenderer<{

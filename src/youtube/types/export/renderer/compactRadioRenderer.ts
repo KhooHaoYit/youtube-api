@@ -1,11 +1,11 @@
+import { Text } from "../generic/text";
+
 export type CompactRadioRenderer = {
   "playlistId": string,
-  "title": {
-    /**
-     * `Mix - HAACHAMA Ch 赤井はあと`
-     */
-    "simpleText": string,
-  },
+  /**
+   * `Mix - HAACHAMA Ch 赤井はあと`
+   */
+  "title": Text
   "navigationEndpoint": {
     "watchEndpoint": {
       /**

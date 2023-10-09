@@ -15,6 +15,11 @@ import { CompactRadioRenderer } from '../renderer/compactRadioRenderer';
 import { PlaylistPanelVideoRenderer } from '../renderer/playlistPanelVideoRenderer';
 import { Runs } from '../generic/runs';
 import * as runs from '../generic/runs';
+import { PlayerOverlayRenderer } from '../renderer/playerOverlayRenderer';
+import { MessageRenderer } from '../renderer/messageRenderer';
+import { BackgroundPromoRenderer } from '../renderer/backgroundPromoRenderer';
+import { CommentsEntryPointHeaderRenderer } from '../renderer/commentsEntryPointHeaderRenderer';
+import { ClipSectionRenderer } from '../renderer/clipSectionRenderer';
 
 export type Watch = {
   innertubeApiKey: string,
@@ -29,7 +34,33 @@ export function getErrorMessage(data: Watch) {
   return;
 }
 
+export function getPlaylistExtraChannelIds(data: YtInitialData) {
+  const textRuns = data.contents.twoColumnWatchNextResults
+    .playlist?.playlist.longBylineText.runs;
+  if (!textRuns)
+    return;
+  return textRuns
+    .map(run => {
+      const browseId = runs.getBrowseId([run]);
+      if (!browseId)
+        return;
+      return [runs.getOriginalText([run]), browseId];
+    })
+    .filter(browseId => browseId);
+}
 
+const membershipLevelRegex = /^This video is available to this channel's members on level: ([^]+?) \(or any higher level\)\. Join this channel to get access to members-only content and other exclusive perks\.$/;
+const minimumMembershipLevelRegex = /^Join this channel to get access to members-only content like this video, and other exclusive perks\.$/;
+export function getRequiredMembershipLevel(data: Watch) {
+  const error = getErrorMessage(data);
+  if (!error)
+    return;
+  if (minimumMembershipLevelRegex.test(error))
+    return true;
+  if (membershipLevelRegex.test(error))
+    return error.match(membershipLevelRegex)![1];
+  return;
+}
 
 type YtInitialPlayerResponse = {
   playabilityStatus: {
@@ -64,10 +95,13 @@ type YtInitialData = {
             videoPrimaryInfoRenderer?: VideoPrimaryInfoRenderer
             videoSecondaryInfoRenderer?: VideoSecondaryInfoRenderer
             itemSectionRenderer?: ItemSectionRenderer<{
-              messageRenderer?: {}
-              commentsEntryPointHeaderRenderer?: {}
-              backgroundPromoRenderer?: {}
-              continuationItemRenderer?: {}
+              /**
+               * `Comments are turned off`
+               */
+              messageRenderer?: MessageRenderer
+              commentsEntryPointHeaderRenderer?: CommentsEntryPointHeaderRenderer
+              backgroundPromoRenderer?: BackgroundPromoRenderer
+              continuationItemRenderer?: ContinuationItemRenderer
             }>
           }[]
           [key: string]: unknown
@@ -105,37 +139,71 @@ type YtInitialData = {
       }
     }
   },
-  // "playerOverlays": {
-  //   "playerOverlayRenderer": {
-  //     "endScreen": {
-  //       "watchNextEndScreenRenderer": {
-  //         "results": (
-  //           { endScreenVideoRenderer: EndScreenVideoRenderer }
-  //           | { endScreenPlaylistRenderer: EndScreenPlaylistRenderer }
-  //         )[],
-  //       }
-  //     },
-  //     /**
-  //      * replay frequency graph can be found here
-  //      */
-  //     "decoratedPlayerBarRenderer": {}
-  //   }
-  // },
+  frameworkUpdates?: {
+    entityBatchUpdate: {
+      mutations: (
+        | {
+          type: 'ENTITY_MUTATION_TYPE_REPLACE'
+          payload: {
+            likeStatusEntity?: {}
+            playlistLoopStateEntity?: {}
+            macroMarkersListEntity?: {
+              markersList: (
+                | {
+                  markerType: 'MARKER_TYPE_HEATMAP'
+                  markers: {
+                    startMillis: string
+                    durationMillis: string
+                    intensityScoreNormalized: number
+                  }[]
+                }
+                | {
+                  markerType: 'MARKER_TYPE_TIMESTAMPS'
+                }
+              )
+            }
+            subscriptionStateEntity?: {}
+          }
+        }
+        | {
+          type: 'ENTITY_MUTATION_TYPE_DELETE'
+          options: {}
+        }
+      )[]
+    }
+  }
+  playerOverlays?: {
+    playerOverlayRenderer: PlayerOverlayRenderer
+  }
+  engagementPanels: {
+    engagementPanelSectionListRenderer: (
+      | {
+        targetId: 'engagement-panel-ads'
+      }
+      | {
+        targetId: 'engagement-panel-macro-markers-auto-chapters'
+      }
+      | {
+        targetId: 'engagement-panel-clip-view'
+        content: {
+          clipSectionRenderer: ClipSectionRenderer
+        }
+      }
+      | {
+        targetId: 'engagement-panel-structured-description'
+      }
+      | {
+        targetId: 'engagement-panel-comments-section'
+      }
+      | {
+        targetId: 'engagement-panel-searchable-transcript'
+      }
+      | {
+        targetId: 'engagement-panel-macro-markers-description-chapters'
+      }
+      | {
+        targetId: 'engagement-panel-transcript'
+      }
+    )
+  }[]
 };
-
-
-
-export function getPlaylistExtraChannelIds(data: YtInitialData) {
-  const textRuns = data.contents.twoColumnWatchNextResults
-    .playlist?.playlist.longBylineText.runs;
-  if (!textRuns)
-    return;
-  return textRuns
-    .map(run => {
-      const browseId = runs.getBrowseId([run]);
-      if (!browseId)
-        return;
-      return [runs.getOriginalText([run]), browseId];
-    })
-    .filter(browseId => browseId);
-}

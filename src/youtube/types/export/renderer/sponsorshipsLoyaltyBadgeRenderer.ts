@@ -1,7 +1,6 @@
 import { Image } from "../generic/image";
 import * as image from "../generic/image";
-import { Runs } from "../generic/runs";
-import * as runs from "../generic/runs";
+import { Text, getOriginalText } from "../generic/text";
 
 export type SponsorshipsLoyaltyBadgeRenderer = {
   icon: Image,
@@ -12,7 +11,7 @@ export type SponsorshipsLoyaltyBadgeRenderer = {
    * 
    * `Month ${number} badge:`
    */
-  title: { runs: Runs }
+  title: Text
 };
 
 export function getBadgeImageUrl(data: SponsorshipsLoyaltyBadgeRenderer) {
@@ -20,7 +19,7 @@ export function getBadgeImageUrl(data: SponsorshipsLoyaltyBadgeRenderer) {
 }
 
 export function getBadgeMonthRequirement(data: SponsorshipsLoyaltyBadgeRenderer) {
-  const digits = runs.getOriginalText(data.title.runs).match(/\d+/)?.[0];
+  const digits = getOriginalText(data.title).match(/\d+/)?.[0];
   if (!digits)
     return 0;
   return +digits;

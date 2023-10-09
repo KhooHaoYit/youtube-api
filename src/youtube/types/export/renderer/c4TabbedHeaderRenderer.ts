@@ -1,11 +1,11 @@
 import { getUrl } from '../generic/image';
 import { Image } from '../generic/image';
-import { getOriginalText, Runs } from '../generic/runs';
 import { MetadataBadgeRenderer } from './metadataBadgeRenderer';
 import { SubscriberCountText } from '../generic/subscriberCountText';
 import * as subscriberCountText from '../generic/subscriberCountText';
 import { getOffer } from '../endpoints/getOffer';
 import { Credentials } from '../generic/credentials';
+import { Text, getOriginalText } from '../generic/text';
 
 export type C4TabbedHeaderRenderer = {
   /**
@@ -73,24 +73,17 @@ export type C4TabbedHeaderRenderer = {
   subscriberCountText?: SubscriberCountText,
   /**
    * not defined if channel is Topic channel
+   * 
+   * `@hololiveEnglish`
    */
-  channelHandleText?: {
-    /**
-     * `@hololiveEnglish`
-     */
-    runs: Runs
-  },
+  channelHandleText?: Text
   /**
    * not defined if channel doesn't exists
+   * 
+   * `77 videos`
+   * `No videos`
    */
-  videosCountText?: {
-    /**
-     * `77 videos`
-     * 
-     * `No videos`
-     */
-    runs: Runs
-  },
+  videosCountText?: Text
   /**
    * contains part of description of channel
    * 
@@ -125,10 +118,9 @@ export function getBannerUrl(data: C4TabbedHeaderRenderer) {
 }
 
 export function getHandle(data: C4TabbedHeaderRenderer) {
-  const runs = data.channelHandleText?.runs;
-  if (!runs)
+  if (!data.channelHandleText)
     return;
-  return getOriginalText(runs)
+  return getOriginalText(data.channelHandleText)
     .replace('@', '');
 }
 

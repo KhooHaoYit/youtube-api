@@ -2,6 +2,7 @@ import { SubscriberCountText } from '../generic/subscriberCountText';
 import * as subscriberCountText from '../generic/subscriberCountText';
 import { getUrl, Image } from '../generic/image';
 import { MetadataBadgeRenderer } from './metadataBadgeRenderer';
+import { Text } from '../generic/text';
 
 export type GridChannelRenderer = {
   channelId: string,
@@ -20,12 +21,10 @@ export type GridChannelRenderer = {
       canonicalBaseUrl: string
     }
   },
-  title: {
-    /**
-     * `Miko Ch. さくらみこ`
-     */
-    simpleText: string,
-  },
+  /**
+   * `Miko Ch. さくらみこ`
+   */
+  title: Text
   ownerBadges?: MetadataBadgeRenderer[],
 };
 

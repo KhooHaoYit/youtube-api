@@ -1,5 +1,4 @@
 import { BackstageImageRenderer, getImageUrl } from "./backstageImageRenderer";
-import { getOriginalText, Runs } from "../generic/runs";
 import { PlaylistRenderer, getPlaylistInfo } from "./playlistRenderer";
 import { VideoRenderer } from "./videoRenderer";
 import { StringOfDigitsAndComma } from "../generic/stringOfDigitsAndComma";
@@ -7,12 +6,11 @@ import { PostMultiImageRenderer, getAllImageUrls } from "./postMultiImageRendere
 import { PollRenderer, getPollInfo } from "./pollRenderer";
 import { SponsorsOnlyBadgeRenderer } from "./sponsorsOnlyBadgeRenderer";
 import { QuizRenderer, getQuizInfo } from "./quizRenderer";
+import { Text, getOriginalText } from "../generic/text";
 
 export type BackstagePostRenderer = {
   postId: string,
-  contentText: {
-    runs?: Runs,
-  },
+  contentText: Text
   authorEndpoint: {
     browseEndpoint: {
       browseId: string,
@@ -54,9 +52,7 @@ export type BackstagePostRenderer = {
       }
     },
   },
-  "publishedTimeText": {
-    "runs": Runs
-  }
+  publishedTimeText: Text
   sponsorsOnlyBadge?: {
     sponsorsOnlyBadgeRenderer: SponsorsOnlyBadgeRenderer
   }
@@ -72,23 +68,22 @@ export function getReplyCount(post: BackstagePostRenderer) {
     return undefined;
   const text = replyButton.buttonRenderer.text
     ?.accessibility.accessibilityData.label
-    .match(/\d+/)?.[0] || '0';
+    .match(/\d+/)?.[0]
+    ?? '0';
   return +text;
 }
 
 export function getPublishedTime(post: BackstagePostRenderer) {
-  const text = getOriginalText(post.publishedTimeText.runs);
-  return text;
+  return getOriginalText(post.publishedTimeText);
   // if (/^\d+ seconds ago$/.test(text))
   //   return Date.now() - +text.match(/\d+/)![0];
   // throw new Error(`Unable to parse relative date: ${text}`);
 }
 
 export function getContent(post: BackstagePostRenderer) {
-  const runs = post.contentText.runs;
-  if (!runs)
-    return '';
-  return getOriginalText(runs);
+  if (!post.contentText)
+    return;
+  return getOriginalText(post.contentText);
 }
 
 type Extra =

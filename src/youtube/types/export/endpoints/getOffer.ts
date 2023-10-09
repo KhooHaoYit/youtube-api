@@ -1,3 +1,4 @@
+import { request } from "undici";
 import { Credentials } from "../generic/credentials";
 import { ResponseContext } from "../generic/responseContext";
 import { SponsorshipsOfferRenderer } from "../renderer/sponsorshipsOfferRenderer";
@@ -17,7 +18,7 @@ export async function getOffer(
       .toString('base64url');
   if (!itemParams)
     throw new Error(`itemParams is not defined`);
-  return await fetch("https://www.youtube.com/youtubei/v1/ypc/get_offers", {
+  return await request("https://www.youtube.com/youtubei/v1/ypc/get_offers", {
     method: 'POST',
     headers: {
       ...credential,
@@ -33,7 +34,7 @@ export async function getOffer(
         },
       },
     }),
-  }).then(res => <Promise<GetOffer>>res.json());
+  }).then(res => <Promise<GetOffer>>res.body.json());
 }
 
 export type GetOffer = Partial<

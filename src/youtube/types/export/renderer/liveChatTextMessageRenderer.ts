@@ -1,16 +1,13 @@
 import { Image } from "../generic/image";
 import { Runs } from "../generic/runs";
+import { Text } from "../generic/text";
 
 export type LiveChatTextMessageRenderer = {
   id: string
   timestampUsec: string
   authorExternalChannelId: string
-  message: {
-    runs: Runs
-  }
-  authorName: {
-    simpleText: string
-  }
+  message: Text
+  authorName: Text
   authorPhoto: Image
 };
 

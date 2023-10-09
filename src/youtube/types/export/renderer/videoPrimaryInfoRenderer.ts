@@ -1,53 +1,27 @@
-import { Runs } from "../generic/runs";
+import { Text } from "../generic/text";
+import { SegmentedLikeDislikeButtonRenderer } from "./segmentedLikeDislikeButtonRenderer";
+import { VideoViewCountRenderer } from "./videoViewCountRenderer";
 
 export type VideoPrimaryInfoRenderer = {
-  title: {
-    /**
-     * Delicious Yummy Tasty GYOZA!!!
-     */
-    runs: Runs,
-  },
+  /**
+   * Delicious Yummy Tasty GYOZA!!!
+   */
+  title: Text
   viewCount?: {
-    videoViewCountRenderer: {
-      viewCount: {
-        /**
-         * `61,712 views`
-         */
-        simpleText: string
-      },
-    }
-  },
+    videoViewCountRenderer: VideoViewCountRenderer
+  }
   videoActions: {
     menuRenderer: {
       topLevelButtons: {
         buttonRenderer?: {}
-        segmentedLikeDislikeButtonRenderer?: {
-          likeButton: {
-            buttonRenderer?: {}
-            toggleButtonRenderer?: {
-              defaultText: {
-                accessibility?: {
-                  accessibilityData: {
-                    /**
-                     * `5,139 likes`
-                     */
-                    label: string
-                  }
-                },
-                [key: string]: unknown
-              },
-            }
-          }
-        }
+        segmentedLikeDislikeButtonRenderer?: SegmentedLikeDislikeButtonRenderer
       }[],
     }
   },
-  dateText: {
-    /**
-     * Dec 15, 2022
-     */
-    simpleText: string
-  },
+  /**
+   * Dec 15, 2022
+   */
+  dateText: Text
 };
 
 

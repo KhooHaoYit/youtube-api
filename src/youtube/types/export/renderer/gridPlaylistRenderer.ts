@@ -1,16 +1,12 @@
-import { getOriginalText, Runs } from "../generic/runs";
+import { Text, getOriginalText } from "../generic/text";
 
 export type GridPlaylistRenderer = {
   playlistId: string,
-  title: {
-    runs: Runs,
-  },
-  videoCountShortText: {
-    /**
-     * `1,133`
-     */
-    simpleText: string,
-  },
+  title: Text
+  /**
+   * `1,133`
+   */
+  videoCountShortText: Text
 };
 
 export function getPlaylistId(data: GridPlaylistRenderer) {
@@ -18,9 +14,10 @@ export function getPlaylistId(data: GridPlaylistRenderer) {
 }
 
 export function getPlaylistTitle(data: GridPlaylistRenderer) {
-  return getOriginalText(data.title.runs);
+  return getOriginalText(data.title);
 }
 
 export function getAmountOfVideos(data: GridPlaylistRenderer) {
-  return +data.videoCountShortText.simpleText.replace(/,/g, '');
+  return +getOriginalText(data.videoCountShortText)
+    .replace(/,/g, '');
 }

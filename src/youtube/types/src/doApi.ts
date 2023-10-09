@@ -1,3 +1,7 @@
+import {
+  request as undiciFetch,
+} from 'undici';
+
 export async function request(
   innertubeApiKey: string,
   options: {
@@ -6,7 +10,7 @@ export async function request(
     params?: string,
   },
 ) {
-  return await fetch(`https://www.youtube.com/youtubei/v1/browse?key=${innertubeApiKey}&prettyPrint=false`, {
+  return await undiciFetch(`https://www.youtube.com/youtubei/v1/browse?key=${innertubeApiKey}&prettyPrint=false`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -22,5 +26,5 @@ export async function request(
         },
       },
     }),
-  }).then(res => res.json() as any);
+  }).then(res => res.body.json() as any);
 }

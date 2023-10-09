@@ -1,14 +1,13 @@
 import { Image } from "../generic/image";
+import { Text } from "../generic/text";
 import { ViewCountText } from "../generic/viewCountText";
 
 export type CompactVideoRenderer = {
   videoId: string,
-  title: {
-    /**
-     * `食える飯が作りたい。~第2話~【はあちゃまクッキング・改】`
-     */
-    simpleText: string,
-  },
+  /**
+   * `食える飯が作りたい。~第2話~【はあちゃまクッキング・改】`
+   */
+  title: Text
   longBylineText: {
     runs: [
       {
@@ -37,9 +36,7 @@ export type CompactVideoRenderer = {
    * 
    * `7:09`
    */
-  lengthText?: {
-    simpleText: string
-  },
+  lengthText?: Text
   channelThumbnail: Image,
   /**
    * Not accurate

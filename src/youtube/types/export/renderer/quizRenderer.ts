@@ -1,10 +1,9 @@
-import { Runs } from "../generic/runs";
-import * as runs from "../generic/runs";
+import { Text, getOriginalText } from "../generic/text";
 
 export type QuizRenderer = {
   choices: {
-    text: { runs: Runs }
-    explanation: { runs: Runs }
+    text: Text
+    explanation: Text
     isCorrect: boolean
   }[]
 };
@@ -15,8 +14,8 @@ export function getQuizInfo(
   data: QuizRenderer,
 ): [text: string, explaination: string, isCorrect: boolean][] {
   return data.choices.map(choice => [
-    runs.getOriginalText(choice.explanation.runs),
-    runs.getOriginalText(choice.text.runs),
+    getOriginalText(choice.explanation),
+    getOriginalText(choice.text),
     choice.isCorrect,
   ]);
 }

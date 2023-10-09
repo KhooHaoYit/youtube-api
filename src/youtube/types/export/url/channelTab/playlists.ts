@@ -3,6 +3,7 @@ import * as channelSubMenuRenderer from '../../renderer/channelSubMenuRenderer';
 import { GridPlaylistRenderer } from "../../renderer/gridPlaylistRenderer";
 import { GridRenderer } from "../../renderer/gridRenderer";
 import { ItemSectionRenderer } from "../../renderer/itemSectionRenderer";
+import { MessageRenderer } from "../../renderer/messageRenderer";
 import { SectionListRenderer } from "../../renderer/sectionListRenderer";
 import * as sectionListRenderer from '../../renderer/sectionListRenderer';
 
@@ -25,7 +26,7 @@ export type Playlists = {
           /**
            * defined when channel doesn't have any playlists
            */
-          messageRenderer?: {}
+          messageRenderer?: MessageRenderer
         }>,
       },
       /**

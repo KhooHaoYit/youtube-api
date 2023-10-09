@@ -1,13 +1,9 @@
-import { Runs, getOriginalText } from "../generic/runs"
+import { Text, getOriginalText } from "../generic/text";
 
 export type YpcTransactionErrorMessageRenderer = {
-  errorMessages: [
-    {
-      runs: Runs
-    }
-  ]
+  errorMessages: [Text]
 }
 
 export function getErrorMessage(data: YpcTransactionErrorMessageRenderer) {
-  return getOriginalText(data.errorMessages[0].runs);
+  return getOriginalText(data.errorMessages[0]);
 }
