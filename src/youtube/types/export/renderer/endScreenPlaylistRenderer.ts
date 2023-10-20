@@ -1,3 +1,4 @@
+import { NavigationEndpoint } from "../generic/navigationEndpoint";
 import { Text } from "../generic/text"
 
 export type EndScreenPlaylistRenderer = {
@@ -9,12 +10,5 @@ export type EndScreenPlaylistRenderer = {
    * `Mix - HAACHAMA Ch 赤井はあと`
    */
   title: Text
-  "navigationEndpoint": {
-    "watchEndpoint": {
-      /**
-       * `A9HY4DsRTCg`
-       */
-      "videoId": string,
-    }
-  },
+  navigationEndpoint: NavigationEndpoint
 };

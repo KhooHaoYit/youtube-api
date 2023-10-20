@@ -3,6 +3,7 @@ import * as subscriberCountText from '../generic/subscriberCountText';
 import { getUrl, Image } from '../generic/image';
 import { MetadataBadgeRenderer } from './metadataBadgeRenderer';
 import { Text } from '../generic/text';
+import { NavigationEndpoint } from '../generic/navigationEndpoint';
 
 export type GridChannelRenderer = {
   channelId: string,
@@ -16,11 +17,7 @@ export type GridChannelRenderer = {
    * https://youtube.com/channel/UCRMpIxnySp7Fy5SbZ8dBv2w
    */
   subscriberCountText?: SubscriberCountText,
-  navigationEndpoint: {
-    browseEndpoint: {
-      canonicalBaseUrl: string
-    }
-  },
+  navigationEndpoint: NavigationEndpoint
   /**
    * `Miko Ch. さくらみこ`
    */
@@ -33,8 +30,11 @@ export function getChannelId(data: GridChannelRenderer) {
 }
 
 export function getChannelHandle(data: GridChannelRenderer) {
-  return data.navigationEndpoint.browseEndpoint.canonicalBaseUrl
-    .replace(/^[^@]@*/, '');
+  const handle = data.navigationEndpoint.browseEndpoint?.canonicalBaseUrl
+    ?.replace(/^[^@]@*/, '');
+  if (!handle)
+    throw new Error('Expected to have handle');
+  return handle;
 }
 
 export function getChannelAvatarUrl(data: GridChannelRenderer) {

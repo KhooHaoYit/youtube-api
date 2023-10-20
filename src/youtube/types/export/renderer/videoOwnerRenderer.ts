@@ -1,4 +1,5 @@
 import { Image } from "../generic/image"
+import { NavigationEndpoint } from "../generic/navigationEndpoint"
 import { SubscriberCountText } from "../generic/subscriberCountText"
 import { Text } from "../generic/text"
 
@@ -8,18 +9,7 @@ export type VideoOwnerRenderer = {
    * `HAACHAMA Ch 赤井はあと`
    */
   title: Text
-  navigationEndpoint: {
-    browseEndpoint: {
-      /**
-       * `UC1CfXB_kRs3C-zaeTG3oGyg`
-       */
-      browseId: string
-      /**
-       * /@AkaiHaato
-       */
-      canonicalBaseUrl: string
-    }
-  }
+  navigationEndpoint: NavigationEndpoint
   subscriberCountText: SubscriberCountText
   membershipButton?: {}
 }

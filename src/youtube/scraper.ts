@@ -13,7 +13,7 @@ import { Channel } from './types/export/url/channel';
 import { getCommunityPosts } from './types/export/url/channelTab/community';
 import { getErrorMessage } from './types/export/url/watch';
 import { getFeaturedDisplay } from './types/export/url/channelTab/home';
-import { getPlaylist, hasPlaylist, listAllVideos } from './types/export/url/playlist';
+import { getPlaylist, hasPlaylist } from './types/export/url/playlist';
 import { getVideoInfo } from './types/export/renderer/playlistVideoRenderer';
 import { PrismaService } from 'nestjs-prisma';
 import { getReleases } from './types/export/url/channelTab/releases';
@@ -22,6 +22,8 @@ import { getOffer } from './types/export/endpoints/getOffer';
 import * as ypcTransactionErrorMessageRenderer from './types/export/renderer/ypcTransactionErrorMessageRenderer';
 import { getOfferInfo } from './types/export/renderer/sponsorshipsOfferRenderer';
 import { getOriginalText } from './types/export/generic/text';
+import { browsePlaylist } from './types/export/endpoints/browse';
+import { listAllVideos } from './types/export/generic/playlistItemSection';
 
 @Injectable()
 export class YoutubeScraper {
@@ -58,8 +60,18 @@ export class YoutubeScraper {
       return;
     if (!page.innertubeApiKey)
       throw new Error(`innertubeApiKey not defined`);
+    const browsedPlaylist = await browsePlaylist(playlistId);
     const videoIds: string[] = [];
-    for await (const { video, shorts } of listAllVideos(page, page.innertubeApiKey)) {
+    for await (
+      const { video, shorts }
+      of listAllVideos(
+        browsedPlaylist
+          .contents.twoColumnBrowseResultsRenderer.tabs[0]
+          .tabRenderer.content.sectionListRenderer.contents[0]
+          .itemSectionRenderer,
+        page.innertubeApiKey,
+      )
+    ) {
       videoIds.push((video ?? shorts!).videoId);
       if (shorts) {
         await this.scrapeVideo(shorts.videoId);

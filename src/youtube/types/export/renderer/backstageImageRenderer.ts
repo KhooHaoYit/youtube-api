@@ -1,7 +1,7 @@
 import { getUrl, Image } from "../generic/image";
 
 export type BackstageImageRenderer = {
-  image: Image,
+  image: Image
 };
 
 export function getImageUrl(renderer: BackstageImageRenderer) {

@@ -1,17 +1,7 @@
 import { Image } from "../generic/image"
+import { NavigationEndpoint } from "../generic/navigationEndpoint"
 
 export type ChannelThumbnailWithLinkRenderer = {
   thumbnail: Image
-  navigationEndpoint: {
-    browseEndpoint: {
-      /**
-       * `UCAPdxmEjYxUdQMf_JaQRl1Q`
-       */
-      browseId: string
-      /**
-       * `/@manae_nme`
-       */
-      canonicalBaseUrl?: string
-    }
-  }
+  navigationEndpoint: NavigationEndpoint
 }

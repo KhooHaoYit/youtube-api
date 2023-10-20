@@ -1,4 +1,4 @@
-import { Runs } from "../generic/runs";
+import { NavigationEndpoint } from "../generic/navigationEndpoint";
 import { Text } from "../generic/text";
 
 export type EndScreenVideoRenderer = {
@@ -13,19 +13,8 @@ export type EndScreenVideoRenderer = {
         /**
          * `HAACHAMA Ch 赤井はあと`
          */
-        "text": string,
-        "navigationEndpoint": {
-          "browseEndpoint": {
-            /**
-             * `UC1CfXB_kRs3C-zaeTG3oGyg`
-             */
-            "browseId": string,
-            /**
-             * `/@AkaiHaato`
-             */
-            "canonicalBaseUrl": string
-          }
-        }
+        text: string
+        navigationEndpoint: NavigationEndpoint
       }
     ]
   },

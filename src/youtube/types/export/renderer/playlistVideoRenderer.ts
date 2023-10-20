@@ -7,11 +7,13 @@ export type PlaylistVideoRenderer = {
   videoId: string
   thumbnail: Image
   title: Text
-  shortBylineText: { runs: Runs },
+  shortBylineText?: { runs: Runs },
 };
 
 export function getVideoInfo(data: PlaylistVideoRenderer) {
   return {
-    ownerId: runs.getBrowseId(data.shortBylineText.runs),
+    ownerId: data.shortBylineText
+      ? runs.getBrowseId(data.shortBylineText.runs)
+      : undefined,
   };
 }

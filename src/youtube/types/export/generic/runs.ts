@@ -1,17 +1,10 @@
 import { Image } from "./image";
 import * as image from "./image";
+import { NavigationEndpoint } from "./navigationEndpoint";
 
 export type Runs = {
   text?: string,
-  navigationEndpoint?: {
-    urlEndpoint?: {
-      url: string,
-    },
-    browseEndpoint?: {
-      browseId: string,
-    }
-    [key: string]: unknown,
-  },
+  navigationEndpoint?: NavigationEndpoint
   emoji?: {
     emojiId: `${ChannelId}/${EmojiId}`
     image: Image

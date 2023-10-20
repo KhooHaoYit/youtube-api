@@ -1,4 +1,5 @@
 import { Image } from "../generic/image";
+import { NavigationEndpoint } from "../generic/navigationEndpoint";
 import { Text } from "../generic/text";
 import { ViewCountText } from "../generic/viewCountText";
 
@@ -15,18 +16,7 @@ export type CompactVideoRenderer = {
          * `HAACHAMA Ch 赤井はあと`
          */
         text: string,
-        navigationEndpoint: {
-          browseEndpoint: {
-            /**
-             * `UC1CfXB_kRs3C-zaeTG3oGyg`
-             */
-            browseId: string,
-            /**
-             * `/@AkaiHaato`
-             */
-            canonicalBaseUrl: string
-          }
-        }
+        navigationEndpoint: NavigationEndpoint
       }
     ]
   },

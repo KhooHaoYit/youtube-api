@@ -1,20 +1,17 @@
 import { Image } from "../generic/image";
+import { NavigationEndpoint } from "../generic/navigationEndpoint";
 import { Text } from "../generic/text";
 
 export type ChannelHeaderLinksRenderer = {
   primaryLinks: {
-    navigationEndpoint: {
-      urlEndpoint: { url: string },
-    },
+    navigationEndpoint: NavigationEndpoint
     icon: Image
-    title: Text,
+    title: Text
   }[],
   secondaryLinks?: {
-    navigationEndpoint: {
-      urlEndpoint: { url: string },
-    },
+    navigationEndpoint: NavigationEndpoint
     icon: Image
-    title: Text,
+    title: Text
   }[],
 };
 
