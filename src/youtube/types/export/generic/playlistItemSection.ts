@@ -1,5 +1,6 @@
 import { ItemSectionRenderer } from "../renderer/itemSectionRenderer"
 import { MessageRenderer } from "../renderer/messageRenderer"
+import { PlaylistShowMetadataRenderer } from "../renderer/playlistShowMetadataRenderer"
 import { PlaylistVideoListRenderer } from "../renderer/playlistVideoListRenderer"
 import * as playlistVideoListRenderer from "../renderer/playlistVideoListRenderer"
 import { PlaylistVideoRenderer } from "../renderer/playlistVideoRenderer"
@@ -10,6 +11,7 @@ import { RichItemRenderer } from "../renderer/richItemRenderer"
 export type PlaylistItemSection = ItemSectionRenderer<{
   messageRenderer?: MessageRenderer
   playlistVideoListRenderer?: PlaylistVideoListRenderer
+  playlistShowMetadataRenderer?: PlaylistShowMetadataRenderer
   richGridRenderer?: RichGridRenderer<{
     richItemRenderer: RichItemRenderer<{
       reelItemRenderer: ReelItemRenderer

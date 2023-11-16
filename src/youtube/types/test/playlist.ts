@@ -10,6 +10,7 @@ import { Data as p8 } from '../data/playlists/UUPSpZIbzoEC_3rZglErpQkbDg';
 import { Data as p9 } from '../data/playlists/UUPVJBLW359gx5XCwf07LdoTUg';
 import { Data as p10 } from '../data/playlists/UUPSJBLW359gx5XCwf07LdoTUg';
 import { Data as p11 } from '../data/playlists/UULPJBLW359gx5XCwf07LdoTUg';
+import { Data as p12 } from '../data/playlists/PLJ8cMiYb3G5cOFj1VQf8ykNOI0ptuHybc';
 
 import { Playlist } from '../export/url/playlist';
 
@@ -25,3 +26,4 @@ import { Playlist } from '../export/url/playlist';
 <p9>{} satisfies Playlist['ytInitialData'];
 <p10>{} satisfies Playlist['ytInitialData'];
 <p11>{} satisfies Playlist['ytInitialData'];
+<p12>{} satisfies Playlist['ytInitialData'];

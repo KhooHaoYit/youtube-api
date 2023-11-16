@@ -6,6 +6,7 @@ import { ItemSectionRenderer } from "../../renderer/itemSectionRenderer";
 import { SectionListRenderer } from "../../renderer/sectionListRenderer";
 import * as sectionListRenderer from "../../renderer/sectionListRenderer";
 import { MessageRenderer } from "../../renderer/messageRenderer";
+import { BackgroundPromoRenderer } from "../../renderer/backgroundPromoRenderer";
 
 export type Community = {
   title: 'Community',
@@ -18,7 +19,11 @@ export type Community = {
            * `Comments are turned off. Learn more`
            */
           messageRenderer?: MessageRenderer
-          continuationItemRenderer?: ContinuationItemRenderer,
+          /**
+           * `Something went wrong`
+           */
+          backgroundPromoRenderer?: BackgroundPromoRenderer
+          continuationItemRenderer?: ContinuationItemRenderer
         }>
       }
     }>,

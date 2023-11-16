@@ -42,6 +42,8 @@ model CommunityPost {
 }
 
 model Playlist {
+  // TODO: seasoned playlist
+  // https://www.youtube.com/playlist?list=PLJ8cMiYb3G5eFOtMi4Ox74bj2hhmL-hdc
   id String @id @unique
 
   title          String?
@@ -70,6 +72,9 @@ model Video {
   // TODO: watch time heatmap
   // TODO: membership tier required
   // https://youtu.be/hURB7goHrYk
+  // TODO: video badges (ratings, age restriction)
+  // https://youtu.be/XmxZoBLzSSw
+  // https://youtu.be/1XOo1OJFAeQ
   id            String      @id @unique
   visibility    Visibility?
   removedReason String?
@@ -128,6 +133,7 @@ model Channel {
   releases         String[]
   featuredDisplay  Json?
   playlistsDisplay Json?
+  // gone??
   channels         Json?
   links            Json?
   membershipOffers Json?

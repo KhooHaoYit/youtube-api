@@ -97,6 +97,11 @@ const pages = [
   ['playlists/UUPVJBLW359gx5XCwf07LdoTUg', '/playlist?list=UUPVJBLW359gx5XCwf07LdoTUg'],
   ['playlists/UUPSJBLW359gx5XCwf07LdoTUg', '/playlist?list=UUPSJBLW359gx5XCwf07LdoTUg'],
   ['playlists/UULPJBLW359gx5XCwf07LdoTUg', '/playlist?list=UULPJBLW359gx5XCwf07LdoTUg'],
+  ['playlists/UULPJBLW359gx5XCwf07LdoTUg', '/playlist?list=UUPS758B56bESyznwmUP0o9FHA'],
+  ['videos/ho2IpTpgRUQ', '/watch?v=ho2IpTpgRUQ'],
+  ['videos/x8fpeVICeGg', '/watch?v=x8fpeVICeGg'],
+  ['playlists/PLJ8cMiYb3G5cOFj1VQf8ykNOI0ptuHybc', '/playlist?list=PLJ8cMiYb3G5cOFj1VQf8ykNOI0ptuHybc'],
+  ['videos/M2cckDmNLMI', '/watch?v=M2cckDmNLMI'],
 ] as const;
 
 const getOffers = [

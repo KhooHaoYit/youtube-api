@@ -222,12 +222,12 @@ export class YoutubeScraper {
         const { gridPlaylistRenderer: playlist }
         of this.youtube.requestAll(page.innertubeApiKey, initialItems)
       ) {
-        list.push(playlist.playlistId);
+        list.push(playlist!.playlistId);
         this.model.handlePlaylistUpdate({
           channelId,
-          id: getPlaylistId(playlist),
-          title: getPlaylistTitle(playlist),
-          estimatedCount: getAmountOfVideos(playlist),
+          id: getPlaylistId(playlist!),
+          title: getPlaylistTitle(playlist!),
+          estimatedCount: getAmountOfVideos(playlist!),
         });
       }
       playlistsDisplay.push([title, list]);

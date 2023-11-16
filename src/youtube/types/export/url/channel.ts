@@ -29,7 +29,7 @@ export type YtInitialData = {
   /**
    * defined only when requesting /channel/CHANNEL_ID
    */
-  header?: { c4TabbedHeaderRenderer: C4TabbedHeaderRenderer },
+  header?: { c4TabbedHeaderRenderer: C4TabbedHeaderRenderer }
   /**
    * not defined when channel doesn't exists
    */
@@ -40,27 +40,34 @@ export type YtInitialData = {
         | Home
         | Channels
         | Playlists
-        | About
+        // | About
         | Community
         | Membership
         | Releases
         | Videos
         | Live
         | Shorts
-        | Podcasts,
+        | Podcasts
         expandableTabRenderer?: Search
-      }[],
-    },
+      }[]
+    }
     twoColumnWatchNextResults?: {
       results: {
         results: {
           contents: {
-            videoPrimaryInfoRenderer?: VideoPrimaryInfoRenderer,
-            videoSecondaryInfoRenderer?: VideoSecondaryInfoRenderer,
-            itemSectionRenderer?: {},
+            videoPrimaryInfoRenderer?: VideoPrimaryInfoRenderer
+            videoSecondaryInfoRenderer?: VideoSecondaryInfoRenderer
+            itemSectionRenderer?: {}
           }[]
         }
       }
     }
-  },
+  }
+  // onResponseReceivedEndpoints?:{
+  //   showEngagementPanelEndpoint: {
+  //     engagementPanel: {
+
+  //     }
+  //   }
+  // }[]
 };

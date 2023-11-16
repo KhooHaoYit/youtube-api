@@ -20,7 +20,10 @@ export type CompactVideoRenderer = {
       }
     ]
   },
-  viewCountText: ViewCountText,
+  /**
+   * could be hidden??
+   */
+  viewCountText?: ViewCountText,
   /**
    * not defined when streaming
    * 

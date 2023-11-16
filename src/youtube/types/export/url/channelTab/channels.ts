@@ -3,6 +3,7 @@ import { ContinuationItemRenderer } from "../../renderer/continuationItemRendere
 import { GridChannelRenderer } from "../../renderer/gridChannelRenderer";
 import { GridRenderer } from "../../renderer/gridRenderer";
 import { ItemSectionRenderer } from "../../renderer/itemSectionRenderer";
+import { MessageRenderer } from "../../renderer/messageRenderer";
 import { SectionListRenderer } from "../../renderer/sectionListRenderer";
 
 export type Channels = {
@@ -26,10 +27,10 @@ export type Channels = {
           },
           /**
            * defined when channel doesn't have any subs
+           * 
+           * `This channel doesn't feature any other channels.`
            */
-          messageRenderer?: {
-            text: { simpleText: "This channel doesn't feature any other channels." },
-          },
+          messageRenderer?: MessageRenderer
         }>,
       }[],
       /**

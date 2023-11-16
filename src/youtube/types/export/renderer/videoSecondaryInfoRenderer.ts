@@ -1,4 +1,5 @@
 import { SubscriberCountText } from "../generic/subscriberCountText";
+import { MetadataRowContainerRenderer } from "./metadataRowContainerRenderer";
 import { VideoOwnerRenderer } from "./videoOwnerRenderer";
 
 export type VideoSecondaryInfoRenderer = {
@@ -30,6 +31,9 @@ export type VideoSecondaryInfoRenderer = {
         }
       }
     }[],
+  }
+  metadataRowContainer: {
+    metadataRowContainerRenderer: MetadataRowContainerRenderer
   }
 };
 

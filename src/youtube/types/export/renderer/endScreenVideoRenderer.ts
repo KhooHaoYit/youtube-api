@@ -21,8 +21,10 @@ export type EndScreenVideoRenderer = {
   "lengthInSeconds"?: number,
   /**
    * `128K views`
+   * 
+   * could be hidden??
    */
-  shortViewCountText: Text
+  shortViewCountText?: Text
   /**
    * `6 months ago`
    */

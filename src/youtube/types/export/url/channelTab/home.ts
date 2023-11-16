@@ -1,6 +1,8 @@
+import { NavigationEndpoint } from "../../generic/navigationEndpoint";
 import { Text, getOriginalText } from "../../generic/text";
 import { ChannelFeaturedContentRenderer } from "../../renderer/channelFeaturedContentRenderer";
 import * as channelFeaturedContentRenderer from "../../renderer/channelFeaturedContentRenderer";
+import { ChannelOwnerEmptyStateRenderer } from "../../renderer/channelOwnerEmptyStateRenderer";
 import { ChannelVideoPlayerRenderer } from "../../renderer/channelVideoPlayerRenderer";
 import * as channelVideoPlayerRenderer from "../../renderer/channelVideoPlayerRenderer";
 import { ItemSectionRenderer } from "../../renderer/itemSectionRenderer";
@@ -26,7 +28,8 @@ export type Home = {
   content?: {
     sectionListRenderer: SectionListRenderer<{
       content: {
-        itemSectionRenderer: ItemSectionRenderer<{
+        channelOwnerEmptyStateRenderer?: ChannelOwnerEmptyStateRenderer
+        itemSectionRenderer?: ItemSectionRenderer<{
           /**
            * defined when channel doesn't have any featured content
            */
@@ -34,26 +37,10 @@ export type Home = {
           recognitionShelfRenderer?: RecognitionShelfRenderer
           channelVideoPlayerRenderer?: ChannelVideoPlayerRenderer
           channelFeaturedContentRenderer?: ChannelFeaturedContentRenderer
-          reelShelfRenderer?: ReelShelfRenderer,
+          reelShelfRenderer?: ReelShelfRenderer
           shelfRenderer?: {
             title: Text
-            "endpoint": {
-              "commandMetadata": {
-                "webCommandMetadata": {
-                  /**
-                   * `/playlist?list=PLiniJMqFuOJ5Abuuomzy10K4UyZKw-6l0`
-                   * `/@AlettaSky/playlists?view=50&sort=dd&shelf_id=6`
-                   */
-                  "url": string,
-                },
-              },
-              "browseEndpoint": {
-                /**
-                 * `VLPLYKsjO4OGbhgTGv8M1s06Kempg9Dj-Iay`
-                 */
-                "browseId": string,
-              }
-            },
+            endpoint: NavigationEndpoint
             "content": {
               // "horizontalListRenderer": {
               //   "items": (
@@ -147,10 +134,10 @@ export function getFeaturedDisplay(data: Home): (
 )[] {
   if (
     data.content!.sectionListRenderer.contents[0]
-      .itemSectionRenderer.contents[0].messageRenderer
+      .itemSectionRenderer?.contents[0].messageRenderer
   ) return [];
   return data.content!.sectionListRenderer.contents.map(content => {
-    const item = content.itemSectionRenderer.contents[0];
+    const item = content.itemSectionRenderer!.contents[0];
     if (item.channelFeaturedContentRenderer)
       return [
         'live',
@@ -163,26 +150,26 @@ export function getFeaturedDisplay(data: Home): (
       ];
     if ('recognitionShelfRenderer' in item)
       return ['membersRecognition'];
-    if (item.shelfRenderer?.endpoint.commandMetadata.webCommandMetadata
+    if (item.shelfRenderer?.endpoint.commandMetadata?.webCommandMetadata
       .url.includes('/playlist?')
     ) return [
       'playlist',
-      item.shelfRenderer.endpoint.browseEndpoint.browseId
+      item.shelfRenderer.endpoint.browseEndpoint!.browseId
         .replace(/^VL/, '') // View List??
     ];
-    if (item.shelfRenderer?.endpoint.commandMetadata.webCommandMetadata
+    if (item.shelfRenderer?.endpoint.commandMetadata?.webCommandMetadata
       .url.includes('/playlists?')
     ) return [
       'playlists',
       getOriginalText(item.shelfRenderer.title),
     ];
-    if (item.shelfRenderer?.endpoint.commandMetadata.webCommandMetadata
+    if (item.shelfRenderer?.endpoint.commandMetadata?.webCommandMetadata
       .url.includes('/channels?')
     ) return [
       'channels',
       getOriginalText(item.shelfRenderer.title),
     ];
-    if (item.shelfRenderer?.endpoint.commandMetadata.webCommandMetadata
+    if (item.shelfRenderer?.endpoint.commandMetadata?.webCommandMetadata
       .url.includes('/videos?')
     ) return [
       'videos',

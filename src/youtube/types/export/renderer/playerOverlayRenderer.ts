@@ -3,6 +3,7 @@ import { PlayerOverlayVideoDetailsRenderer } from "./playerOverlayVideoDetailsRe
 import { WatchNextEndScreenRenderer } from "./watchNextEndScreenRenderer"
 
 export type PlayerOverlayRenderer = {
+  [key: string]: unknown
   decoratedPlayerBarRenderer?: {
     decoratedPlayerBarRenderer: {
       playerBar: {
@@ -13,7 +14,7 @@ export type PlayerOverlayRenderer = {
   endScreen?: {
     watchNextEndScreenRenderer: WatchNextEndScreenRenderer
   }
-  videoDetails: {
+  videoDetails?: {
     playerOverlayVideoDetailsRenderer: PlayerOverlayVideoDetailsRenderer
   }
 }

@@ -12,7 +12,7 @@ type YtInitialData = {
   contents: {
     twoColumnBrowseResultsRenderer: {
       tabs: {
-        tabRenderer: Community
+        tabRenderer: Omit<Community, 'title'>
       }[]
     }
   }

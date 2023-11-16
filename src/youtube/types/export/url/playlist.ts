@@ -1,4 +1,5 @@
 import { PlaylistItemSection } from "../generic/playlistItemSection";
+import { ContinuationItemRenderer } from "../renderer/continuationItemRenderer";
 import { PlaylistHeaderRenderer } from "../renderer/playlistHeaderRenderer";
 import * as playlistHeaderRenderer from "../renderer/playlistHeaderRenderer";
 import { PlaylistSidebarRenderer } from "../renderer/playlistSidebarRenderer";
@@ -25,7 +26,8 @@ type YtInitialData = {
           content: {
             sectionListRenderer: SectionListRenderer<{
               content: {
-                itemSectionRenderer: PlaylistItemSection
+                itemSectionRenderer?: PlaylistItemSection
+                continuationItemRenderer?: ContinuationItemRenderer
               }
             }>
           }

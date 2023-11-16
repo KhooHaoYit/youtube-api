@@ -1,5 +1,6 @@
 import { Text } from "../generic/text"
 
-export type BackgroundPromoRenderer = {
+export type MetadataRowRenderer = {
   title: Text
+  contents: Text
 }

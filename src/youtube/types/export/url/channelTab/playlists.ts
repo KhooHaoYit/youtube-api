@@ -1,5 +1,6 @@
 import { ChannelSubMenuRenderer } from "../../renderer/channelSubMenuRenderer";
 import * as channelSubMenuRenderer from '../../renderer/channelSubMenuRenderer';
+import { ContinuationItemRenderer } from "../../renderer/continuationItemRenderer";
 import { GridPlaylistRenderer } from "../../renderer/gridPlaylistRenderer";
 import { GridRenderer } from "../../renderer/gridRenderer";
 import { ItemSectionRenderer } from "../../renderer/itemSectionRenderer";
@@ -17,7 +18,8 @@ export type Playlists = {
       content: {
         itemSectionRenderer: ItemSectionRenderer<{
           gridRenderer?: GridRenderer<{
-            gridPlaylistRenderer: GridPlaylistRenderer
+            gridPlaylistRenderer?: GridPlaylistRenderer
+            continuationItemRenderer?:ContinuationItemRenderer
           }>,
           /**
            * defined when showing multiple playlists categories

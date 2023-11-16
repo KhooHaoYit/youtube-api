@@ -1,5 +1,6 @@
 import { ChapterRenderer } from "./chapterRenderer"
 import { HeatmapRenderer } from "./heatmapRenderer"
+import { MarkerRenderer } from "./markerRenderer"
 
 export type MultiMarkersPlayerBarRenderer = {
   markersMap?: (
@@ -16,6 +17,14 @@ export type MultiMarkersPlayerBarRenderer = {
       value: {
         chapters: {
           chapterRenderer: ChapterRenderer
+        }[]
+      }
+    }
+    | {
+      key: 'ANIMATION_ANNOTATION_MARKERS'
+      value: {
+        markers: {
+          markerRenderer: MarkerRenderer
         }[]
       }
     }
