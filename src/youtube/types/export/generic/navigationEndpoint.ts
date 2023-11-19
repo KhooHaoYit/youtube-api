@@ -1,3 +1,8 @@
+import { ContinuationItemRenderer } from "../renderer/continuationItemRenderer"
+import { EngagementPanelSectionListRenderer } from "../renderer/engagementPanelSectionListRenderer"
+import { GridChannelRenderer } from "../renderer/gridChannelRenderer"
+import { GridRenderer } from "../renderer/gridRenderer"
+
 export type NavigationEndpoint = {
   browseEndpoint?: {
     /**
@@ -25,6 +30,16 @@ export type NavigationEndpoint = {
        * `/@AlettaSky/playlists?view=50&sort=dd&shelf_id=6`
        */
       url: string
+    }
+  }
+  showEngagementPanelEndpoint?: {
+    engagementPanel: {
+      engagementPanelSectionListRenderer: EngagementPanelSectionListRenderer<{
+        continuationItemRenderer?: ContinuationItemRenderer
+        gridRenderer: GridRenderer<{
+          gridChannelRenderer: GridChannelRenderer
+        }>
+      }>
     }
   }
   [key: string]: unknown

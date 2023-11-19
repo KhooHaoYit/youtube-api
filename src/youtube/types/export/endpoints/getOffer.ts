@@ -14,7 +14,7 @@ export async function getOffer(
   const itemParams = options.itemParams
     // Assuming channelId is always 0x18 long
     // https://github.com/pawitp/protobuf-decoder
-    ?? Buffer.from(`\n\x1C\b\x03\x12\x18${options.channelId}\x18\x03*\x04\x18\x01H\x01`)
+    ?? Buffer.from(`\n\x1C\b\x03\x12\x18${options.channelId}\x18\x03*\x04\x18\x01H\x01`) // from 'binary'??
       .toString('base64url');
   if (!itemParams)
     throw new Error(`itemParams is not defined`);

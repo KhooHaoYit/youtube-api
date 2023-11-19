@@ -1,3 +1,4 @@
+import { browseAll, browseChannelSubs } from "../../endpoints/browse";
 import { NavigationEndpoint } from "../../generic/navigationEndpoint";
 import { Text, getOriginalText } from "../../generic/text";
 import { ChannelFeaturedContentRenderer } from "../../renderer/channelFeaturedContentRenderer";
@@ -163,12 +164,13 @@ export function getFeaturedDisplay(data: Home): (
       'playlists',
       getOriginalText(item.shelfRenderer.title),
     ];
-    if (item.shelfRenderer?.endpoint.commandMetadata?.webCommandMetadata
-      .url.includes('/channels?')
-    ) return [
-      'channels',
-      getOriginalText(item.shelfRenderer.title),
-    ];
+    if (item.shelfRenderer?.endpoint.showEngagementPanelEndpoint)
+      return [
+        'channels',
+        getOriginalText(item.shelfRenderer.endpoint.showEngagementPanelEndpoint
+          .engagementPanel.engagementPanelSectionListRenderer.header
+          .engagementPanelTitleHeaderRenderer.title),
+      ];
     if (item.shelfRenderer?.endpoint.commandMetadata?.webCommandMetadata
       .url.includes('/videos?')
     ) return [
@@ -179,4 +181,36 @@ export function getFeaturedDisplay(data: Home): (
       return ['shorts'];
     throw new Error(`Unknown featured display`);
   });
+}
+
+export async function getAllRelatedChannel(innertubeApiKey: string, data: Home, channelId: string) {
+  const output: [string, string[]][] = [['Subscriptions', []]];
+  // subs
+  const initialItems = await browseChannelSubs(channelId)
+    .then(res => res.onResponseReceivedEndpoints[0]
+      .appendContinuationItemsAction.continuationItems[0]
+      .gridRenderer.items);
+  for await (const { gridChannelRenderer } of browseAll(innertubeApiKey, initialItems))
+    output[0][1].push(gridChannelRenderer!.channelId);
+  // featured
+  for (const content of data.content!.sectionListRenderer.contents) {
+    const item = content.itemSectionRenderer?.contents[0]
+      .shelfRenderer?.endpoint.showEngagementPanelEndpoint
+      ?.engagementPanel.engagementPanelSectionListRenderer;
+    if (!item)
+      continue;
+    const initialItems = item.content.sectionListRenderer.contents[0].itemSectionRenderer.contents;
+    const channelIds: string[] = [];
+    for await (const { gridRenderer } of browseAll(innertubeApiKey, initialItems)) {
+      const initialItems = gridRenderer.items;
+      for await (const { gridChannelRenderer } of browseAll(innertubeApiKey, initialItems))
+        channelIds.push(gridChannelRenderer.channelId);
+    }
+    output.push([
+      getOriginalText(item.header.engagementPanelTitleHeaderRenderer.title),
+      channelIds,
+    ]);
+  }
+
+  return output;
 }

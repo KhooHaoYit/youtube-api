@@ -1,9 +1,9 @@
 import { ResponseContext } from "../generic/responseContext";
+import { AboutChannelRenderer } from "../renderer/aboutChannelRenderer";
 import { C4TabbedHeaderRenderer } from "../renderer/c4TabbedHeaderRenderer";
 import { EngagementPanelSectionListRenderer } from "../renderer/engagementPanelSectionListRenderer";
 import { VideoPrimaryInfoRenderer } from "../renderer/videoPrimaryInfoRenderer";
 import { VideoSecondaryInfoRenderer } from "../renderer/videoSecondaryInfoRenderer";
-import { About } from "./channelTab/about";
 import { Channels } from "./channelTab/channels";
 import { Community } from "./channelTab/community";
 import { Home } from "./channelTab/home";
@@ -67,7 +67,9 @@ export type YtInitialData = {
   onResponseReceivedEndpoints?: {
     showEngagementPanelEndpoint?: {
       engagementPanel: {
-        engagementPanelSectionListRenderer: EngagementPanelSectionListRenderer
+        engagementPanelSectionListRenderer: EngagementPanelSectionListRenderer<{
+          aboutChannelRenderer: AboutChannelRenderer
+        }>
       }
     }
     signalServiceEndpoint?: {}

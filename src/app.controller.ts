@@ -99,7 +99,6 @@ export class AppController {
   ) {
     const includeVideo = _includeVideo !== '0';
     await this.scraper.scrapeChannelAbout(channelId);
-    await this.scraper.scrapeChannelChannels(channelId);
     await this.scraper.scrapeChannelFeatured(channelId);
     await this.scraper.scrapeChannelPlaylists(channelId);
     await this.scraper.scrapeChannelReleasesTab(channelId);
@@ -160,12 +159,6 @@ export class AppController {
         channels: true,
       },
     }).then(channel => stringify(channel?.channels || null));
-  }
-
-  @Post('/channel/:id/channels/fetch')
-  async fetchChannelChannels(@Param('id') id: string) {
-    await this.scraper.scrapeChannelChannels(id);
-    return await this.getChannelChannels(id);
   }
 
   @Post('/channel/:id/featured/fetch')

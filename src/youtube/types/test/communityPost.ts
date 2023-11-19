@@ -7,6 +7,7 @@ import { Data as c5 } from '../data/AlettaSky/community_0.json';
 import { __dirnameFromImportMeta } from '../../../app.utils';
 import { YoutubeApi } from '../../api';
 import { writeFile } from 'fs/promises';
+import { browseAll } from '../export/endpoints/browse';
 
 const schema: Record<string, unknown[] | undefined> = {};
 const addSchema = (data: Record<string, any>, key: string) => {
@@ -49,7 +50,7 @@ const addSchema = (data: Record<string, any>, key: string) => {
     throw new Error(`Channel does not exists`);
   for await (
     const item
-    of api.requestAll(innertubeApiKey, (<any>ytInitialData).contents.twoColumnBrowseResultsRenderer.tabs
+    of browseAll(innertubeApiKey, (<any>ytInitialData).contents.twoColumnBrowseResultsRenderer.tabs
       .find((tab: any) => tab.tabRenderer?.title === 'Community')
       .tabRenderer.content.sectionListRenderer.contents[0]
       .itemSectionRenderer.contents)

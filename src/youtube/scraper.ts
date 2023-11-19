@@ -4,15 +4,12 @@ import { YoutubeApi } from './api';
 import { getChannelTab } from './helper';
 import { Visibility } from '@prisma/client';
 import { getPost } from './types/export/renderer/backstagePostThreadRenderer';
-import * as gridChannelRenderer from './types/export/renderer/gridChannelRenderer';
 import { getAmountOfVideos, getPlaylistId, getPlaylistTitle } from './types/export/renderer/gridPlaylistRenderer';
-import { getLinks } from './types/export/renderer/channelAboutFullMetadataRenderer';
-import { getViewCount } from './types/export/renderer/channelAboutFullMetadataRenderer';
 import { getPlaylists } from './types/export/url/channelTab/playlists';
 import { Channel } from './types/export/url/channel';
 import { getCommunityPosts } from './types/export/url/channelTab/community';
 import { getErrorMessage } from './types/export/url/watch';
-import { getFeaturedDisplay } from './types/export/url/channelTab/home';
+import { getAllRelatedChannel, getFeaturedDisplay } from './types/export/url/channelTab/home';
 import { getPlaylist, hasPlaylist } from './types/export/url/playlist';
 import { getVideoInfo } from './types/export/renderer/playlistVideoRenderer';
 import { PrismaService } from 'nestjs-prisma';
@@ -21,8 +18,7 @@ import { getCurrentPerksInfo } from './types/export/renderer/sponsorshipsExpanda
 import { getOffer } from './types/export/endpoints/getOffer';
 import * as ypcTransactionErrorMessageRenderer from './types/export/renderer/ypcTransactionErrorMessageRenderer';
 import { getOfferInfo } from './types/export/renderer/sponsorshipsOfferRenderer';
-import { getOriginalText } from './types/export/generic/text';
-import { browsePlaylist } from './types/export/endpoints/browse';
+import { browse, browseAll, browsePlaylist } from './types/export/endpoints/browse';
 import { listAllVideos } from './types/export/generic/playlistItemSection';
 import { getChannelInfo } from './types/export/generic/models/aboutChannelViewModel';
 
@@ -126,7 +122,7 @@ export class YoutubeScraper {
     );
     for await (
       const { backstagePostThreadRenderer }
-      of this.youtube.requestAll(page.innertubeApiKey, initialPosts)
+      of browseAll(page.innertubeApiKey, initialPosts)
     ) {
       const post = getPost(backstagePostThreadRenderer!);
       if (post.extra?.[0] === 'share' && post.extra[1] === null) {
@@ -153,46 +149,15 @@ export class YoutubeScraper {
     const page = await this.youtube.scrape(`/channel/${channelId}/featured`);
     if (!page.ytInitialData?.header)
       return;
+    if (!page.innertubeApiKey)
+      throw new Error('Unable to extract innertubeApiKey');
     await this.model.handleC4TabbedHeaderRendererUpdate(page.ytInitialData.header.c4TabbedHeaderRenderer);
+    const tab = getChannelTab(page.ytInitialData!, 'Home').tabRenderer;
     await this.model.handleChannelUpdate({
       id: page.ytInitialData.header.c4TabbedHeaderRenderer.channelId,
-      featuredDisplay: getFeaturedDisplay(
-        getChannelTab(page.ytInitialData!, 'Home').tabRenderer
-      ),
+      featuredDisplay: getFeaturedDisplay(tab),
+      channels: await getAllRelatedChannel(page.innertubeApiKey, tab, channelId),
     });
-    // for (const b of a) {
-    //   if ('channelVideoPlayerRenderer' in b) {
-    //     const viewCount = b.channelVideoPlayerRenderer.viewCountText.simpleText
-    //       .split(' ')
-    //       .at(0)
-    //       ?.replace(/,/g, '');
-    //     this.model.handleVideoUpdate({
-    //       id: b.channelVideoPlayerRenderer.videoId,
-    //       title: b.channelVideoPlayerRenderer.title.runs.at(0)?.text,
-    //       viewCount: viewCount ? +viewCount : undefined,
-    //       description: b.channelVideoPlayerRenderer.description.runs
-    //         .map(run => run.text)
-    //         .join(''),
-    //     });
-    //   }
-    //   if ('shelfRenderer' in b) {
-    //     this.model.handlePlaylistUpdate({
-    //       id: b.shelfRenderer.endpoint.browseEndpoint.browseId.replace(/^VL/, ''),
-    //       title: b.shelfRenderer.title.runs.at(0)?.text,
-    //     });
-    //     for (
-    //       const { gridVideoRenderer }
-    //       of b.shelfRenderer.content.horizontalListRenderer.items
-    //     ) {
-    //       this.model.handleChannelUpdate({
-    //         id: gridVideoRenderer.shortBylineText.runs.at(0)!.navigationEndpoint.browseEndpoint.browseId,
-    //         handle: gridVideoRenderer.shortBylineText.runs.at(0)!.navigationEndpoint.browseEndpoint.canonicalBaseUrl,
-    //         name: gridVideoRenderer.shortBylineText.runs.at(0)!.text,
-    //       });
-
-    //     }
-    //   }
-    // }
   }
 
   async scrapeChannelPlaylists(channelId: string) {
@@ -209,7 +174,7 @@ export class YoutubeScraper {
 
     const playlistsDisplay: [string, string[]][] = [];
     for (const [title, { browseId, params }] of categories) {
-      const initialItems = await this.youtube.browse(page.innertubeApiKey, {
+      const initialItems = await browse(page.innertubeApiKey, {
         browseId: browseId,
         params: params,
       }).then((res: Channel['ytInitialData']) =>
@@ -221,7 +186,7 @@ export class YoutubeScraper {
       const list: string[] = [];
       for await (
         const { gridPlaylistRenderer: playlist }
-        of this.youtube.requestAll(page.innertubeApiKey, initialItems)
+        of browseAll(page.innertubeApiKey, initialItems)
       ) {
         list.push(playlist!.playlistId);
         this.model.handlePlaylistUpdate({
@@ -259,69 +224,6 @@ export class YoutubeScraper {
       joinedAt: channelInfo.joinedAt,
       links: channelInfo.links,
       artistBio: channelInfo.artistBio,
-    });
-  }
-
-  async scrapeChannelChannels(channelId: string) {
-    // view === 59 // All channels (show grid that got categorized)
-    // view === 56 // Subscriptions
-    // view === 49 // custom??
-    const page = await this.youtube.scrape(`/channel/${channelId}/channels?view=56`);
-    if (!page.innertubeApiKey)
-      throw new Error(`innertubeApiKey not defined`);
-    if (page.ytInitialData?.header)
-      await this.model.handleC4TabbedHeaderRendererUpdate(page.ytInitialData.header.c4TabbedHeaderRenderer);
-    const subMenu = getChannelTab(page.ytInitialData!, 'Channels')
-      .tabRenderer.content!.sectionListRenderer.subMenu;
-    if (!subMenu)
-      return await this.model.handleChannelUpdate({
-        id: channelId,
-        channels: [],
-      });
-    const categories = subMenu.channelSubMenuRenderer.contentTypeSubMenuItems
-      .filter((_, index, arr) => arr.length === 1 || index !== 0 ? true : false)
-      .map((item) => [item.title, item.endpoint.browseEndpoint] as const);
-
-    const channels: [string, string[]][] = [];
-    for (const [title, { browseId, params }] of categories) {
-      const initialItems = await this.youtube.browse(page.innertubeApiKey, {
-        browseId: browseId,
-        params: params,
-      }).then((res: Channel['ytInitialData']) => {
-        const tab = getChannelTab(res!, 'Channels');
-        if (
-          categories.length !== 1 &&
-          tab.tabRenderer.content!.sectionListRenderer.subMenu
-            ?.channelSubMenuRenderer.contentTypeSubMenuItems[0]
-            .selected
-        ) return [];
-        return tab
-          .tabRenderer.content!.sectionListRenderer.contents[0]
-          .itemSectionRenderer.contents[0].gridRenderer!.items
-      });
-      const list: string[] = [];
-      for await (
-        const { gridChannelRenderer: renderer }
-        of this.youtube.requestAll(page.innertubeApiKey, initialItems)
-      ) {
-        const data = renderer!;
-        list.push(data.channelId);
-        const verifiedBadgeIndex = data.ownerBadges
-          ?.findIndex(badge => badge.metadataBadgeRenderer.icon.iconType === 'CHECK_CIRCLE_THICK');
-        this.model.handleChannelUpdate({
-          id: gridChannelRenderer.getChannelId(data),
-          avatarUrl: gridChannelRenderer.getChannelAvatarUrl(data),
-          handle: gridChannelRenderer.getChannelHandle(data),
-          name: getOriginalText(data.title),
-          verified: verifiedBadgeIndex === undefined ? undefined : verifiedBadgeIndex !== -1,
-          subscriberCount: gridChannelRenderer.getSubscriberCount(data),
-        });
-      }
-      channels.push([title, list]);
-    }
-    await this.model.handleChannelUpdate({
-      id: channelId,
-      channels,
     });
   }
 
