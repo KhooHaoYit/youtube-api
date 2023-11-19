@@ -90,8 +90,8 @@ dependencies:
     specifier: ^7.8.1
     version: 7.8.1
   undici:
-    specifier: ^5.25.4
-    version: 5.25.4
+    specifier: ^5.26.2
+    version: 5.26.2
   webpack:
     specifier: ^5.81.0
     version: 5.81.0
@@ -7083,8 +7083,8 @@ packages:
       busboy: 1.6.0
     dev: false
 
-  /undici@5.25.4:
-    resolution: {integrity: sha512-450yJxT29qKMf3aoudzFpIciqpx6Pji3hEWaXqXmanbXF58LTAGCKxcJjxMXWu3iG+Mudgo3ZUfDB6YDFd/dAw==}
+  /undici@5.26.2:
+    resolution: {integrity: sha512-a4PDLQgLTPHVzOK+x3F79/M4GtyYPl+aX9AAK7aQxpwxDwCqkeZCScy7Gk5kWT3JtdFq1uhO3uZJdLtHI4dK9A==}
     engines: {node: '>=14.0'}
     dependencies:
       '@fastify/busboy': 2.0.0
