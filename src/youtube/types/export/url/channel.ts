@@ -1,5 +1,6 @@
 import { ResponseContext } from "../generic/responseContext";
 import { C4TabbedHeaderRenderer } from "../renderer/c4TabbedHeaderRenderer";
+import { EngagementPanelSectionListRenderer } from "../renderer/engagementPanelSectionListRenderer";
 import { VideoPrimaryInfoRenderer } from "../renderer/videoPrimaryInfoRenderer";
 import { VideoSecondaryInfoRenderer } from "../renderer/videoSecondaryInfoRenderer";
 import { About } from "./channelTab/about";
@@ -63,11 +64,13 @@ export type YtInitialData = {
       }
     }
   }
-  // onResponseReceivedEndpoints?:{
-  //   showEngagementPanelEndpoint: {
-  //     engagementPanel: {
-
-  //     }
-  //   }
-  // }[]
+  onResponseReceivedEndpoints?: {
+    showEngagementPanelEndpoint?: {
+      engagementPanel: {
+        engagementPanelSectionListRenderer: EngagementPanelSectionListRenderer
+      }
+    }
+    signalServiceEndpoint?: {}
+    loadMarkersCommand?: {}
+  }[]
 };

@@ -122,6 +122,7 @@ model Channel {
   description String?
   location    String?
   joinedAt    String?
+  artistBio   String?
 
   viewCount       BigInt?
   subscriberCount Int?

@@ -24,6 +24,7 @@ import { getOfferInfo } from './types/export/renderer/sponsorshipsOfferRenderer'
 import { getOriginalText } from './types/export/generic/text';
 import { browsePlaylist } from './types/export/endpoints/browse';
 import { listAllVideos } from './types/export/generic/playlistItemSection';
+import { getChannelInfo } from './types/export/generic/models/aboutChannelViewModel';
 
 @Injectable()
 export class YoutubeScraper {
@@ -242,26 +243,22 @@ export class YoutubeScraper {
     const page = await this.youtube.scrape(`/channel/${channelId}/about`);
     if (page.ytInitialData?.header)
       await this.model.handleC4TabbedHeaderRendererUpdate(page.ytInitialData.header.c4TabbedHeaderRenderer);
-    const metadata = getChannelTab(page.ytInitialData!, 'About')
-      .tabRenderer.content!.sectionListRenderer.contents[0]
-      .itemSectionRenderer.contents[0].channelAboutFullMetadataRenderer;
-
-    const viewCount = getViewCount(metadata);
+    const about = page.ytInitialData?.onResponseReceivedEndpoints?.[0].showEngagementPanelEndpoint
+      ?.engagementPanel.engagementPanelSectionListRenderer.content.sectionListRenderer
+      .contents[0].itemSectionRenderer.contents[0].aboutChannelRenderer.metadata.aboutChannelViewModel;
+    if (!about)
+      throw new Error('Unable to fetch channel about');
+    const channelInfo = getChannelInfo(about);
     await this.model.handleChannelUpdate({
-      id: metadata.channelId,
-      viewCount: viewCount ? BigInt(viewCount) : 0n,
-      description: metadata.description
-        ? getOriginalText(metadata.description)
-        : null,
-      avatarUrl: metadata.avatar.thumbnails[0].url,
-      handle: metadata.canonicalChannelUrl.split('/').at(-1),
-      haveBusinessEmail: 'signInForBusinessEmail' in metadata,
-      location: metadata.country
-        ? getOriginalText(metadata.country)
-        : null,
-      name: getOriginalText(metadata.title),
-      joinedAt: metadata.joinedDateText.runs[1].text,
-      links: getLinks(metadata),
+      id: channelInfo.channelId,
+      viewCount: channelInfo.viewCount,
+      description: channelInfo.description,
+      handle: channelInfo.handle,
+      haveBusinessEmail: channelInfo.haveBusinessEmail,
+      location: channelInfo.country,
+      joinedAt: channelInfo.joinedAt,
+      links: channelInfo.links,
+      artistBio: channelInfo.artistBio,
     });
   }
 

@@ -1,5 +1,5 @@
 import { Image } from "../generic/image";
-import * as image from "../generic/image";
+import { ChannelExternalLinkViewModel, getLinkInfo } from "../generic/models/channelExternalLinkViewModel";
 import { Text } from "../generic/text";
 import { ViewCountText } from "../generic/viewCountText";
 import * as viewCountText from "../generic/viewCountText";
@@ -10,14 +10,7 @@ export type ChannelAboutFullMetadataRenderer = {
    * not defined if user didn't set any links
    */
   links?: {
-    channelExternalLinkViewModel: {
-      title: {
-        content: string
-      }
-      link: {
-        content: string
-      }
-    }
+    channelExternalLinkViewModel: ChannelExternalLinkViewModel
   }[]
   /**
    * not defined when channel doesn't have views
@@ -66,13 +59,8 @@ export function getViewCount(data: ChannelAboutFullMetadataRenderer) {
   return viewCountText.getViewCount(data.viewCountText);
 }
 
-export type Link = [title: string, iconUrl: string | null, url: string | null];
 export function getLinks(data: ChannelAboutFullMetadataRenderer) {
   if (!data.links)
     return [];
-  return data.links.map(link => [
-    link.channelExternalLinkViewModel.title.content,
-    null,
-    'https://' + link.channelExternalLinkViewModel.link.content,
-  ] as Link);
+  return data.links.map(link => getLinkInfo(link.channelExternalLinkViewModel));
 }

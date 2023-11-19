@@ -6,9 +6,9 @@ import { C4TabbedHeaderRenderer } from './youtube/types/export/renderer/c4Tabbed
 import * as c4TabbedHeaderRenderer from './youtube/types/export/renderer/c4TabbedHeaderRenderer';
 import * as playerMicroformatRenderer from './youtube/types/export/renderer/playerMicroformatRenderer';
 import type { PlayerMicroformatRenderer } from './youtube/types/export/renderer/playerMicroformatRenderer';
-import { Link } from './youtube/types/export/renderer/channelAboutFullMetadataRenderer';
 import { getPost } from './youtube/types/export/renderer/backstagePostThreadRenderer';
 import { getOriginalText } from './youtube/types/export/generic/text';
+import { Link } from './youtube/types/export/generic/models/channelExternalLinkViewModel';
 
 @Injectable()
 export class AppHandleUpdate {
@@ -70,6 +70,7 @@ export class AppHandleUpdate {
       name?: string
       handle?: string
       avatarUrl?: string
+      artistBio?: string | null
       releases?: string[]
       channels?: [string, string[]][]
       playlistsDisplay?: [string, string[]][]
