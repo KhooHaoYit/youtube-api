@@ -6,6 +6,10 @@ import * as channelFeaturedContentRenderer from "../../renderer/channelFeaturedC
 import { ChannelOwnerEmptyStateRenderer } from "../../renderer/channelOwnerEmptyStateRenderer";
 import { ChannelVideoPlayerRenderer } from "../../renderer/channelVideoPlayerRenderer";
 import * as channelVideoPlayerRenderer from "../../renderer/channelVideoPlayerRenderer";
+import { ExpandedShelfContentsRenderer } from "../../renderer/expandedShelfContentsRenderer";
+import { GridChannelRenderer } from "../../renderer/gridChannelRenderer";
+import { GridPlaylistRenderer } from "../../renderer/gridPlaylistRenderer";
+import { GridVideoRenderer } from "../../renderer/gridVideoRenderer";
 import { ItemSectionRenderer } from "../../renderer/itemSectionRenderer";
 import { MessageRenderer } from "../../renderer/messageRenderer";
 import { RecognitionShelfRenderer } from "../../renderer/recognitionShelfRenderer";
@@ -42,85 +46,21 @@ export type Home = {
           shelfRenderer?: {
             title: Text
             endpoint: NavigationEndpoint
-            "content": {
-              // "horizontalListRenderer": {
-              //   "items": (
-              //     {
-              //       gridVideoRenderer: {
-              //         "videoId": string,
-              //         "title": {
-              //           /**
-              //            * `最愛 - KOH⁺(Cover)／まなえ`
-              //            */
-              //           "simpleText": string
-              //         },
-              //         "publishedTimeText": {
-              //           /**
-              //            * `3 months ago`
-              //            */
-              //           "simpleText": string
-              //         },
-              //         /**
-              //          * not defined when it's membership video
-              //          */
-              //         "viewCountText"?: {
-              //           /**
-              //            * `1,513 views`
-              //            */
-              //           "simpleText": string,
-              //         },
-              //         "shortBylineText": {
-              //           "runs": [{
-              //             /**
-              //              * `manae ch. / まなえ`
-              //              */
-              //             "text": string,
-              //             "navigationEndpoint": {
-              //               "browseEndpoint": {
-              //                 /**
-              //                  * `UCAPdxmEjYxUdQMf_JaQRl1Q`
-              //                  */
-              //                 "browseId": string,
-              //                 /**
-              //                  * `/@manae_nme`
-              //                  */
-              //                 "canonicalBaseUrl": string
-              //               }
-              //             }
-              //           }]
-              //         },
-              //         /**
-              //          * contains info that video can be view offline or not
-              //          */
-              //         "offlineability": {},
-              //         "thumbnailOverlays": (
-              //           {
-              //             "thumbnailOverlayTimeStatusRenderer": {
-              //               "text": {
-              //                 /**
-              //                  * `5:34`
-              //                  */
-              //                 "simpleText": string
-              //               },
-              //             }
-              //           } | {
-              //             thumbnailOverlayToggleButtonRenderer: {},
-              //           } | {
-              //             thumbnailOverlayNowPlayingRenderer: {},
-              //           }
-              //         )[]
-              //       }
-              //     } | {
-              //       gridPlaylistRenderer: {}
-              //     }
-              //   )[],
-              // },
-            },
-          },
-        }>,
+            content: {
+              expandedShelfContentsRenderer?: ExpandedShelfContentsRenderer
+              horizontalListRenderer?: {
+                items: {
+                  gridVideoRenderer?: GridVideoRenderer
+                  gridChannelRenderer?: GridChannelRenderer
+                  gridPlaylistRenderer?: GridPlaylistRenderer
+                }[]
+              }
+            }
+          }
+        }>
       }
-    }>,
-  },
+    }>
+  }
 };
 
 export function getFeaturedDisplay(data: Home): (
@@ -158,16 +98,15 @@ export function getFeaturedDisplay(data: Home): (
       item.shelfRenderer.endpoint.browseEndpoint!.browseId
         .replace(/^VL/, '') // View List??
     ];
-    if (item.shelfRenderer?.endpoint.commandMetadata?.webCommandMetadata
-      .url.includes('/playlists?')
-    ) return [
-      'playlists',
-      getOriginalText(item.shelfRenderer.title),
-    ];
-    if (item.shelfRenderer?.endpoint.showEngagementPanelEndpoint)
+    if (item.shelfRenderer?.content.horizontalListRenderer?.items[0].gridPlaylistRenderer)
+      return [
+        'playlists',
+        getOriginalText(item.shelfRenderer.title),
+      ];
+    if (item.shelfRenderer?.content.horizontalListRenderer?.items[0].gridChannelRenderer)
       return [
         'channels',
-        getOriginalText(item.shelfRenderer.endpoint.showEngagementPanelEndpoint
+        getOriginalText(item.shelfRenderer.endpoint.showEngagementPanelEndpoint!
           .engagementPanel.engagementPanelSectionListRenderer.header
           .engagementPanelTitleHeaderRenderer.title),
       ];
@@ -195,11 +134,12 @@ export async function getAllRelatedChannel(innertubeApiKey: string, data: Home, 
   // featured
   for (const content of data.content!.sectionListRenderer.contents) {
     const item = content.itemSectionRenderer?.contents[0]
-      .shelfRenderer?.endpoint.showEngagementPanelEndpoint
-      ?.engagementPanel.engagementPanelSectionListRenderer;
-    if (!item)
+      .shelfRenderer;
+    if (!item?.content.horizontalListRenderer?.items[0].gridChannelRenderer)
       continue;
-    const initialItems = item.content.sectionListRenderer.contents[0].itemSectionRenderer.contents;
+    const initialItems = item.endpoint.showEngagementPanelEndpoint!
+      .engagementPanel.engagementPanelSectionListRenderer
+      .content.sectionListRenderer.contents[0].itemSectionRenderer.contents;
     const channelIds: string[] = [];
     for await (const { gridRenderer } of browseAll(innertubeApiKey, initialItems)) {
       const initialItems = gridRenderer.items;
@@ -207,7 +147,9 @@ export async function getAllRelatedChannel(innertubeApiKey: string, data: Home, 
         channelIds.push(gridChannelRenderer.channelId);
     }
     output.push([
-      getOriginalText(item.header.engagementPanelTitleHeaderRenderer.title),
+      getOriginalText(item.endpoint.showEngagementPanelEndpoint!
+        .engagementPanel.engagementPanelSectionListRenderer
+        .header.engagementPanelTitleHeaderRenderer.title),
       channelIds,
     ]);
   }
