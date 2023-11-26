@@ -4,14 +4,8 @@ import { ViewCountText } from "../generic/viewCountText";
 import { ChannelThumbnailWithLinkRenderer } from "./channelThumbnailWithLinkRenderer";
 
 export type VideoRenderer = {
-  "videoId": string,
-  "title": {
-    "runs": Runs,
-    /**
-     * contains information on total views
-     */
-    "accessibility": {}
-  },
+  videoId: string,
+  title: Text
   /**
    * contains partial description
    * 

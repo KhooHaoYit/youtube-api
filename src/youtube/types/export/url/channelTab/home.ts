@@ -4,6 +4,7 @@ import { Text, getOriginalText } from "../../generic/text";
 import { ChannelFeaturedContentRenderer } from "../../renderer/channelFeaturedContentRenderer";
 import * as channelFeaturedContentRenderer from "../../renderer/channelFeaturedContentRenderer";
 import { ChannelOwnerEmptyStateRenderer } from "../../renderer/channelOwnerEmptyStateRenderer";
+import { ChannelRenderer } from "../../renderer/channelRenderer";
 import { ChannelVideoPlayerRenderer } from "../../renderer/channelVideoPlayerRenderer";
 import * as channelVideoPlayerRenderer from "../../renderer/channelVideoPlayerRenderer";
 import { ExpandedShelfContentsRenderer } from "../../renderer/expandedShelfContentsRenderer";
@@ -15,6 +16,7 @@ import { MessageRenderer } from "../../renderer/messageRenderer";
 import { RecognitionShelfRenderer } from "../../renderer/recognitionShelfRenderer";
 import { ReelShelfRenderer } from "../../renderer/reelShelfRenderer";
 import { SectionListRenderer } from "../../renderer/sectionListRenderer";
+import { VideoRenderer } from "../../renderer/videoRenderer";
 
 export type Home = {
   title: 'Home',
@@ -47,7 +49,10 @@ export type Home = {
             title: Text
             endpoint: NavigationEndpoint
             content: {
-              expandedShelfContentsRenderer?: ExpandedShelfContentsRenderer
+              expandedShelfContentsRenderer?: ExpandedShelfContentsRenderer<{
+                channelRenderer?: ChannelRenderer
+                videoRenderer?: VideoRenderer
+              }>
               horizontalListRenderer?: {
                 items: {
                   gridVideoRenderer?: GridVideoRenderer
@@ -103,7 +108,10 @@ export function getFeaturedDisplay(data: Home): (
         'playlists',
         getOriginalText(item.shelfRenderer.title),
       ];
-    if (item.shelfRenderer?.content.horizontalListRenderer?.items[0].gridChannelRenderer)
+    if (
+      item.shelfRenderer?.content.horizontalListRenderer?.items[0].gridChannelRenderer
+      || item.shelfRenderer?.content.expandedShelfContentsRenderer?.items[0].channelRenderer
+    )
       return [
         'channels',
         getOriginalText(item.shelfRenderer.endpoint.showEngagementPanelEndpoint!
@@ -135,8 +143,10 @@ export async function getAllRelatedChannel(innertubeApiKey: string, data: Home, 
   for (const content of data.content!.sectionListRenderer.contents) {
     const item = content.itemSectionRenderer?.contents[0]
       .shelfRenderer;
-    if (!item?.content.horizontalListRenderer?.items[0].gridChannelRenderer)
-      continue;
+    if (
+      !item?.content.expandedShelfContentsRenderer?.items[0].channelRenderer
+      && !item?.content.horizontalListRenderer?.items[0].gridChannelRenderer
+    ) continue;
     const initialItems = item.endpoint.showEngagementPanelEndpoint!
       .engagementPanel.engagementPanelSectionListRenderer
       .content.sectionListRenderer.contents[0].itemSectionRenderer.contents;
@@ -144,7 +154,7 @@ export async function getAllRelatedChannel(innertubeApiKey: string, data: Home, 
     for await (const { gridRenderer } of browseAll(innertubeApiKey, initialItems)) {
       const initialItems = gridRenderer.items;
       for await (const { gridChannelRenderer } of browseAll(innertubeApiKey, initialItems))
-        channelIds.push(gridChannelRenderer.channelId);
+        channelIds.push(gridChannelRenderer!.channelId);
     }
     output.push([
       getOriginalText(item.endpoint.showEngagementPanelEndpoint!

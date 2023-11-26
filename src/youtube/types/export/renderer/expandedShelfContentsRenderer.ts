@@ -1,3 +1,3 @@
-export type ExpandedShelfContentsRenderer = {
-
+export type ExpandedShelfContentsRenderer<T> = {
+  items: T[]
 }

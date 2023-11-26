@@ -102,6 +102,7 @@ const pages = [
   ['videos/x8fpeVICeGg', '/watch?v=x8fpeVICeGg'],
   ['playlists/PLJ8cMiYb3G5cOFj1VQf8ykNOI0ptuHybc', '/playlist?list=PLJ8cMiYb3G5cOFj1VQf8ykNOI0ptuHybc'],
   ['videos/M2cckDmNLMI', '/watch?v=M2cckDmNLMI'],
+  ['channels/UCVNnPW2HBlmWzsAFh0aUUgA/featured', '/channel/UCVNnPW2HBlmWzsAFh0aUUgA/featured'],
 ] as const;
 
 const getOffers = [
