@@ -167,10 +167,11 @@ export class YoutubeScraper {
     const page = await this.youtube.scrape(`/channel/${channelId}/playlists?view=58`);
     if (!page.innertubeApiKey)
       throw new Error(`innertubeApiKey not defined`);
-    const categories = getPlaylists(
-      getChannelTab(page.ytInitialData!, 'Playlists')
-        .tabRenderer,
-    ).subMenu;
+    const tabRenderer = getChannelTab(page.ytInitialData!, 'Playlists')
+      ?.tabRenderer;
+    if (!tabRenderer) // channel have no playlist??
+      return;
+    const categories = getPlaylists(tabRenderer).subMenu;
 
     const playlistsDisplay: [string, string[]][] = [];
     for (const [title, { browseId, params }] of categories) {
@@ -179,7 +180,7 @@ export class YoutubeScraper {
         params: params,
       }).then((res: Channel['ytInitialData']) =>
         getPlaylists(
-          getChannelTab(res!, 'Playlists')
+          getChannelTab(res!, 'Playlists')!
             .tabRenderer,
         ).playlists,
       );

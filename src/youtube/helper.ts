@@ -18,7 +18,7 @@ export function getChannelTab<T extends 'About'>(
 export function getChannelTab<T extends 'Playlists'>(
   data: ChannelPage,
   tabName: T,
-): { tabRenderer: Playlists };
+): { tabRenderer: Playlists } | undefined;
 export function getChannelTab<T extends 'Channels'>(
   data: ChannelPage,
   tabName: T,
