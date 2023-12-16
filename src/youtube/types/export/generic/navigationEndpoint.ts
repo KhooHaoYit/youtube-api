@@ -36,7 +36,7 @@ export type NavigationEndpoint = {
     engagementPanel: {
       engagementPanelSectionListRenderer: EngagementPanelSectionListRenderer<{
         continuationItemRenderer?: ContinuationItemRenderer
-        gridRenderer: GridRenderer<{
+        gridRenderer?: GridRenderer<{
           gridChannelRenderer?: GridChannelRenderer
           continuationItemRenderer?: ContinuationItemRenderer
         }>

@@ -13,6 +13,7 @@ import { GridPlaylistRenderer } from "../../renderer/gridPlaylistRenderer";
 import { GridVideoRenderer } from "../../renderer/gridVideoRenderer";
 import { ItemSectionRenderer } from "../../renderer/itemSectionRenderer";
 import { MessageRenderer } from "../../renderer/messageRenderer";
+import { PlaylistRenderer } from "../../renderer/playlistRenderer";
 import { RecognitionShelfRenderer } from "../../renderer/recognitionShelfRenderer";
 import { ReelShelfRenderer } from "../../renderer/reelShelfRenderer";
 import { SectionListRenderer } from "../../renderer/sectionListRenderer";
@@ -52,6 +53,7 @@ export type Home = {
               expandedShelfContentsRenderer?: ExpandedShelfContentsRenderer<{
                 channelRenderer?: ChannelRenderer
                 videoRenderer?: VideoRenderer
+                playlistRenderer?: PlaylistRenderer
               }>
               horizontalListRenderer?: {
                 items: {
@@ -103,7 +105,10 @@ export function getFeaturedDisplay(data: Home): (
       item.shelfRenderer.endpoint.browseEndpoint!.browseId
         .replace(/^VL/, '') // View List??
     ];
-    if (item.shelfRenderer?.content.horizontalListRenderer?.items[0].gridPlaylistRenderer)
+    if (
+      item.shelfRenderer?.content.horizontalListRenderer?.items[0].gridPlaylistRenderer
+      || item.shelfRenderer?.content.expandedShelfContentsRenderer?.items[0].playlistRenderer
+    )
       return [
         'playlists',
         getOriginalText(item.shelfRenderer.title),
@@ -152,7 +157,7 @@ export async function getAllRelatedChannel(innertubeApiKey: string, data: Home, 
       .content.sectionListRenderer.contents[0].itemSectionRenderer.contents;
     const channelIds: string[] = [];
     for await (const { gridRenderer } of browseAll(innertubeApiKey, initialItems)) {
-      const initialItems = gridRenderer.items;
+      const initialItems = gridRenderer!.items;
       for await (const { gridChannelRenderer } of browseAll(innertubeApiKey, initialItems))
         channelIds.push(gridChannelRenderer!.channelId);
     }
