@@ -61,7 +61,6 @@ export type Home = {
 
 export function getFeaturedDisplay(data: Home): (
   | ['membersRecognition']
-  | ['shorts']
   | ['live', string[]]
   | ['featured', string]
   | ['playlist', string]
@@ -114,11 +113,11 @@ export function getFeaturedDisplay(data: Home): (
           .engagementPanel.engagementPanelSectionListRenderer.header
           .engagementPanelTitleHeaderRenderer.title),
       ];
+    const channelId = data.endpoint.browseEndpoint!.browseId;
     if (item.shelfRenderer?.endpoint.commandMetadata?.webCommandMetadata
       .url?.includes('/videos?')
     ) {
       const url = item.shelfRenderer.endpoint.commandMetadata.webCommandMetadata.url;
-      const channelId = data.endpoint.browseEndpoint!.browseId;
       if (url.endsWith('/videos?view=0&sort=dd&shelf_id=0')) // Videos
         return ['playlist', channelId.replace('UC', 'UULF')];
       if (url.endsWith('/videos?view=0&sort=p&shelf_id=0')) // Popular videos
@@ -132,7 +131,7 @@ export function getFeaturedDisplay(data: Home): (
       throw new Error(`Unknown videos: ${url} (${getOriginalText(item.shelfRenderer.title)})`);
     }
     if (item.reelShelfRenderer)
-      return ['shorts'];
+      return ['playlist', channelId.replace('UC', 'UUSH')];
     throw new Error(`Unknown featured display`);
   });
 }

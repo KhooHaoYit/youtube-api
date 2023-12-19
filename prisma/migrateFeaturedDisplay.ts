@@ -23,12 +23,15 @@ const prisma = new PrismaClient;
     if (featuredDisplay.includes(<any>null))
       featuredDisplay = featuredDisplay.filter(display => display);
     if (featuredDisplay
-      .some(display =>
+      .some(display => (
         display[0] === 'videos'
         && ['Popular videos', 'Videos', 'Past live streams'].includes(display[1])
+      ) || display[0] === <any>'shorts'
       )
     )
       featuredDisplay = featuredDisplay.map(display => {
+        if (display[0] === <any>'shorts')
+          return ['playlist', channel.id.replace('UC', 'UUSH')];
         if (display[0] !== 'videos')
           return display;
         switch (display[1]) {
