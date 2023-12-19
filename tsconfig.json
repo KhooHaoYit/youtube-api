@@ -18,6 +18,7 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "strict": true,
+    "rootDir": ".",
     "lib": [
       "ESNext"
     ]
