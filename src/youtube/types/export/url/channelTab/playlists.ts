@@ -19,24 +19,26 @@ export type Playlists = {
         itemSectionRenderer: ItemSectionRenderer<{
           gridRenderer?: GridRenderer<{
             gridPlaylistRenderer?: GridPlaylistRenderer
-            continuationItemRenderer?:ContinuationItemRenderer
-          }>,
+            continuationItemRenderer?: ContinuationItemRenderer
+          }>
           /**
            * defined when showing multiple playlists categories
            */
-          shelfRenderer?: {},
+          shelfRenderer?: {}
           /**
            * defined when channel doesn't have any playlists
            */
           messageRenderer?: MessageRenderer
-        }>,
-      },
+        }>
+      }
       /**
        * not defined when channel doesn't have any playlists
        */
-      subMenu: { channelSubMenuRenderer: ChannelSubMenuRenderer },
-    }>,
-  },
+      subMenu: {
+        channelSubMenuRenderer: ChannelSubMenuRenderer
+      }
+    }>
+  }
 };
 
 export function getPlaylists(tab: Playlists) {

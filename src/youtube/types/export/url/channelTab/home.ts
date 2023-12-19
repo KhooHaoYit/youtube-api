@@ -21,18 +21,7 @@ import { VideoRenderer } from "../../renderer/videoRenderer";
 
 export type Home = {
   title: 'Home',
-  // "endpoint": {
-  //   "browseEndpoint": {
-  //     /**
-  //      * `UCAPdxmEjYxUdQMf_JaQRl1Q`
-  //      */
-  //     "browseId": string,
-  //     /**
-  //      * `/@manae_nme`
-  //      */
-  //     "canonicalBaseUrl": string
-  //   }
-  // },
+  endpoint: NavigationEndpoint
   content?: {
     sectionListRenderer: SectionListRenderer<{
       content: {
@@ -78,10 +67,12 @@ export function getFeaturedDisplay(data: Home): (
   | ['playlist', string]
   | ['playlists', string]
   | ['channels', string]
-  | ['videos', string]
+  | ['videos', 'Upcoming live streams' | 'Live now']
 )[] {
   if (
     data.content!.sectionListRenderer.contents[0]
+      .channelOwnerEmptyStateRenderer
+    || data.content!.sectionListRenderer.contents[0]
       .itemSectionRenderer?.contents[0].messageRenderer
   ) return [];
   return data.content!.sectionListRenderer.contents.map(content => {
@@ -125,10 +116,21 @@ export function getFeaturedDisplay(data: Home): (
       ];
     if (item.shelfRenderer?.endpoint.commandMetadata?.webCommandMetadata
       .url?.includes('/videos?')
-    ) return [
-      'videos',
-      getOriginalText(item.shelfRenderer.title),
-    ];
+    ) {
+      const url = item.shelfRenderer.endpoint.commandMetadata.webCommandMetadata.url;
+      const channelId = data.endpoint.browseEndpoint!.browseId;
+      if (url.endsWith('/videos?view=0&sort=dd&shelf_id=0')) // Videos
+        return ['playlist', channelId.replace('UC', 'UULF')];
+      if (url.endsWith('/videos?view=0&sort=p&shelf_id=0')) // Popular videos
+        return ['playlist', channelId.replace('UC', 'UULP')];
+      if (url.endsWith('/videos?view=2&sort=dd&live_view=503&shelf_id=0')) // Past live streams
+        return ['playlist', channelId.replace('UC', 'UULV')];
+      if (url.endsWith('/videos?view=2&sort=dd&live_view=501&shelf_id=0')) // Live now
+        return ['videos', 'Live now'];
+      if (url.endsWith('/videos?view=2&sort=dd&live_view=502&shelf_id=0')) // Upcoming live streams
+        return ['videos', 'Upcoming live streams'];
+      throw new Error(`Unknown videos: ${url} (${getOriginalText(item.shelfRenderer.title)})`);
+    }
     if (item.reelShelfRenderer)
       return ['shorts'];
     throw new Error(`Unknown featured display`);

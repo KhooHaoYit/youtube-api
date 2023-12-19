@@ -139,6 +139,7 @@ const pages = [
   // Short videos
   ['playlists/UUSH5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UUSH5CwaMl1eIgY8h02uZw7u8A'],
   //*/ playlist
+  ['channels/UCdAOVLtjHXkOrNk1ghPCSOw/featured', '/channel/UCdAOVLtjHXkOrNk1ghPCSOw/featured'],
 ] as const;
 
 const getOffers = [
