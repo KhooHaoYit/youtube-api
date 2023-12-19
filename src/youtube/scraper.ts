@@ -5,11 +5,9 @@ import { getChannelTab } from './helper';
 import { Visibility } from '@prisma/client';
 import { getPost } from './types/export/renderer/backstagePostThreadRenderer';
 import { getAmountOfVideos, getPlaylistId, getPlaylistTitle } from './types/export/renderer/gridPlaylistRenderer';
-import { getPlaylists } from './types/export/url/channelTab/playlists';
-import { Channel } from './types/export/url/channel';
 import { getCommunityPosts } from './types/export/url/channelTab/community';
 import { getErrorMessage } from './types/export/url/watch';
-import { getAllRelatedChannel, getFeaturedDisplay } from './types/export/url/channelTab/home';
+import { getAllRelatedChannel, getAllRelatedPlaylists, getFeaturedDisplay } from './types/export/url/channelTab/home';
 import { getPlaylist, getUnviewableReason, hasPlaylist } from './types/export/url/playlist';
 import { getVideoInfo } from './types/export/renderer/playlistVideoRenderer';
 import { PrismaService } from 'nestjs-prisma';
@@ -18,7 +16,7 @@ import { getCurrentPerksInfo } from './types/export/renderer/sponsorshipsExpanda
 import { getOffer } from './types/export/endpoints/getOffer';
 import * as ypcTransactionErrorMessageRenderer from './types/export/renderer/ypcTransactionErrorMessageRenderer';
 import { getOfferInfo } from './types/export/renderer/sponsorshipsOfferRenderer';
-import { browse, browseAll, browsePlaylist } from './types/export/endpoints/browse';
+import { browseAll, browsePlaylist } from './types/export/endpoints/browse';
 import { listAllVideos } from './types/export/generic/playlistItemSection';
 import { getChannelInfo } from './types/export/generic/models/aboutChannelViewModel';
 
@@ -165,6 +163,7 @@ export class YoutubeScraper {
       id: page.ytInitialData.header.c4TabbedHeaderRenderer.channelId,
       featuredDisplay: getFeaturedDisplay(tab),
       channels: await getAllRelatedChannel(page.innertubeApiKey, tab, channelId),
+      playlistsDisplay: await getAllRelatedPlaylists(page.innertubeApiKey, tab, channelId),
     });
   }
 
@@ -172,45 +171,25 @@ export class YoutubeScraper {
     // view === 58 // All playlists (with categories)
     // view === 1 // All playlists created
     // view === 50 // Specific category playlist
-    const page = await this.youtube.scrape(`/channel/${channelId}/playlists?view=58`);
+    const page = await this.youtube.scrape(`/channel/${channelId}/playlists`);
     if (!page.innertubeApiKey)
       throw new Error(`innertubeApiKey not defined`);
-    const tabRenderer = getChannelTab(page.ytInitialData!, 'Playlists')
-      ?.tabRenderer;
-    if (!tabRenderer) // channel have no playlist??
+    const initialItems = getChannelTab(page.ytInitialData!, 'Playlists')
+      ?.tabRenderer.content?.sectionListRenderer.contents[0]
+      .itemSectionRenderer.contents[0].gridRenderer?.items;
+    if (!initialItems) // channel have no playlist??
       return;
-    const categories = getPlaylists(tabRenderer).subMenu;
-
-    const playlistsDisplay: [string, string[]][] = [];
-    for (const [title, { browseId, params }] of categories) {
-      const initialItems = await browse(page.innertubeApiKey, {
-        browseId: browseId,
-        params: params,
-      }).then((res: Channel['ytInitialData']) =>
-        getPlaylists(
-          getChannelTab(res!, 'Playlists')!
-            .tabRenderer,
-        ).playlists,
-      );
-      const list: string[] = [];
-      for await (
-        const { gridPlaylistRenderer: playlist }
-        of browseAll(page.innertubeApiKey, initialItems)
-      ) {
-        list.push(playlist!.playlistId);
-        this.model.handlePlaylistUpdate({
-          channelId,
-          id: getPlaylistId(playlist!),
-          title: getPlaylistTitle(playlist!),
-          estimatedCount: getAmountOfVideos(playlist!),
-        });
-      }
-      playlistsDisplay.push([title, list]);
+    for await (
+      const { gridPlaylistRenderer: playlist }
+      of browseAll(page.innertubeApiKey, initialItems)
+    ) {
+      await this.model.handlePlaylistUpdate({
+        channelId,
+        id: getPlaylistId(playlist!),
+        title: getPlaylistTitle(playlist!),
+        estimatedCount: getAmountOfVideos(playlist!),
+      });
     }
-    await this.model.handleChannelUpdate({
-      id: channelId,
-      playlistsDisplay,
-    });
   }
 
   async scrapeChannelAbout(channelId: string) {

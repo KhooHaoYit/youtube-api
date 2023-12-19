@@ -4,6 +4,7 @@ import { PlaylistItemSection } from "../generic/playlistItemSection";
 import { GridRenderer } from "../renderer/gridRenderer";
 import { ContinuationItemRenderer } from "../renderer/continuationItemRenderer";
 import { GridChannelRenderer } from "../renderer/gridChannelRenderer";
+import { Channel } from "../url/channel";
 
 export async function browsePlaylist(
   playlistId: string,
@@ -22,13 +23,13 @@ export async function browsePlaylist(
     },
     body: JSON.stringify({
       browseId: `VL${playlistId}`,
+      params: `wgYCCAA`, // wgYCCAE hide unavailable videos
       context: {
         client: {
           clientName: "WEB",
           clientVersion: "2.20230831.09.00",
         },
       },
-      params: `wgYCCAA`, // wgYCCAE hide unavailable videos
     }),
   }).then(res => <Promise<BrowsePlaylist>>res.body.json());
 }
@@ -92,6 +93,33 @@ export type BrowseChannelSubs = {
   }]
 }
 
+export async function browseChannelPlaylists(
+  channelId: string,
+  options?: {
+    headers?: Record<string, string>
+  },
+) {
+  if (!channelId)
+    throw new Error(`channelId not defined`);
+  return await request(`https://www.youtube.com/youtubei/v1/browse`, {
+    method: 'POST',
+    headers: {
+      ...options?.headers,
+      'accept-language': 'en',
+      'origin': 'https://www.youtube.com',
+    },
+    body: JSON.stringify({
+      browseId: channelId,
+      params: `EglwbGF5bGlzdHPyBgQKAkIA`,
+      context: {
+        client: {
+          clientName: "WEB",
+          clientVersion: "2.20230831.09.00",
+        },
+      },
+    }),
+  }).then(res => <Promise<Exclude<Channel['ytInitialData'], null>>>res.body.json());
+}
 
 export async function browse(
   innertubeApiKey: string,

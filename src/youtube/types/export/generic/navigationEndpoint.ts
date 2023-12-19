@@ -1,6 +1,7 @@
 import { ContinuationItemRenderer } from "../renderer/continuationItemRenderer"
 import { EngagementPanelSectionListRenderer } from "../renderer/engagementPanelSectionListRenderer"
 import { GridChannelRenderer } from "../renderer/gridChannelRenderer"
+import { GridPlaylistRenderer } from "../renderer/gridPlaylistRenderer"
 import { GridRenderer } from "../renderer/gridRenderer"
 
 export type NavigationEndpoint = {
@@ -39,6 +40,7 @@ export type NavigationEndpoint = {
         continuationItemRenderer?: ContinuationItemRenderer
         gridRenderer?: GridRenderer<{
           gridChannelRenderer?: GridChannelRenderer
+          gridPlaylistRenderer?: GridPlaylistRenderer
           continuationItemRenderer?: ContinuationItemRenderer
         }>
       }>

@@ -1,4 +1,5 @@
-import { browseAll, browseChannelSubs } from "../../endpoints/browse";
+import { getChannelTab } from "src/youtube/helper";
+import { browseAll, browseChannelPlaylists, browseChannelSubs } from "../../endpoints/browse";
 import { NavigationEndpoint } from "../../generic/navigationEndpoint";
 import { Text, getOriginalText } from "../../generic/text";
 import { ChannelFeaturedContentRenderer } from "../../renderer/channelFeaturedContentRenderer";
@@ -167,6 +168,43 @@ export async function getAllRelatedChannel(innertubeApiKey: string, data: Home, 
         .engagementPanel.engagementPanelSectionListRenderer
         .header.engagementPanelTitleHeaderRenderer.title),
       channelIds,
+    ]);
+  }
+
+  return output;
+}
+
+export async function getAllRelatedPlaylists(innertubeApiKey: string, data: Home, channelId: string) {
+  const output: [string, string[]][] = [['Created playlists', []]];
+  // playlists
+  const initialItems = await browseChannelPlaylists(channelId)
+    .then(res => getChannelTab(res, 'Playlists')!.tabRenderer.content!
+      .sectionListRenderer.contents[0].itemSectionRenderer
+      .contents[0].gridRenderer!.items);
+  for await (const { gridPlaylistRenderer } of browseAll(innertubeApiKey, initialItems))
+    output[0][1].push(gridPlaylistRenderer!.playlistId);
+  // featured
+  for (const content of data.content!.sectionListRenderer.contents) {
+    const item = content.itemSectionRenderer?.contents[0]
+      .shelfRenderer;
+    if (
+      !item?.content.expandedShelfContentsRenderer?.items[0].playlistRenderer
+      && !item?.content.horizontalListRenderer?.items[0].gridPlaylistRenderer
+    ) continue;
+    const initialItems = item.endpoint.showEngagementPanelEndpoint!
+      .engagementPanel.engagementPanelSectionListRenderer
+      .content.sectionListRenderer.contents[0].itemSectionRenderer.contents;
+    const playlistIds: string[] = [];
+    for await (const { gridRenderer } of browseAll(innertubeApiKey, initialItems)) {
+      const initialItems = gridRenderer!.items;
+      for await (const { gridPlaylistRenderer } of browseAll(innertubeApiKey, initialItems))
+        playlistIds.push(gridPlaylistRenderer!.playlistId);
+    }
+    output.push([
+      getOriginalText(item.endpoint.showEngagementPanelEndpoint!
+        .engagementPanel.engagementPanelSectionListRenderer
+        .header.engagementPanelTitleHeaderRenderer.title),
+      playlistIds,
     ]);
   }
 
