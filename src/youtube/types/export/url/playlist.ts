@@ -1,13 +1,12 @@
 import { PlaylistItemSection } from "../generic/playlistItemSection";
+import { getOriginalText } from "../generic/text";
+import { AlertRenderer } from "../renderer/alertRenderer";
+import { AlertWithButtonRenderer } from "../renderer/alertWithButtonRenderer";
 import { ContinuationItemRenderer } from "../renderer/continuationItemRenderer";
 import { PlaylistHeaderRenderer } from "../renderer/playlistHeaderRenderer";
 import * as playlistHeaderRenderer from "../renderer/playlistHeaderRenderer";
 import { PlaylistSidebarRenderer } from "../renderer/playlistSidebarRenderer";
-import * as playlistVideoListRenderer from "../renderer/playlistVideoListRenderer";
-import { PlaylistVideoRenderer } from "../renderer/playlistVideoRenderer";
-import { ReelItemRenderer } from "../renderer/reelItemRenderer";
 import { SectionListRenderer } from "../renderer/sectionListRenderer";
-import * as sectionListRenderer from "../renderer/sectionListRenderer";
 
 export type Playlist = {
   innertubeApiKey: string | null,
@@ -41,9 +40,19 @@ type YtInitialData = {
   header?: {
     playlistHeaderRenderer: PlaylistHeaderRenderer
   }
+  alerts?: {
+    alertRenderer?: AlertRenderer
+    alertWithButtonRenderer?: AlertWithButtonRenderer
+  }[]
 };
 
 
+export function getUnviewableReason(data: Playlist) {
+  const alert = data.ytInitialData?.alerts?.[0].alertRenderer;
+  if (!alert)
+    return null;
+  return getOriginalText(alert.text);
+}
 
 export function hasPlaylist(data: Playlist) {
   return !!data.ytInitialData?.contents?.twoColumnBrowseResultsRenderer

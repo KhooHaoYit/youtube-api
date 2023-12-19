@@ -1,3 +1,9 @@
-export type RichGridRenderer<T extends any> = {
-  contents: T extends [...unknown[]] ? T : [T, ...T[]],
+export type RichGridRenderer<
+  T extends {
+    content: unknown
+    header?: unknown
+  }
+> = {
+  contents: T['content'][]
+  header?: T['header']
 };

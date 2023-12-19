@@ -117,7 +117,16 @@ export class AppController {
     for (const id of releases)
       await this.scraper.scrapePlaylist(id);
     await this.scraper.scrapePlaylist(channelId.replace('UC', 'UU'));
+    await this.scraper.scrapePlaylist(channelId.replace('UC', 'UULF'));
+    await this.scraper.scrapePlaylist(channelId.replace('UC', 'UULP'));
+    await this.scraper.scrapePlaylist(channelId.replace('UC', 'UULV'));
+    await this.scraper.scrapePlaylist(channelId.replace('UC', 'UUMF'));
     await this.scraper.scrapePlaylist(channelId.replace('UC', 'UUMO'));
+    await this.scraper.scrapePlaylist(channelId.replace('UC', 'UUMS'));
+    await this.scraper.scrapePlaylist(channelId.replace('UC', 'UUMV'));
+    await this.scraper.scrapePlaylist(channelId.replace('UC', 'UUPS'));
+    await this.scraper.scrapePlaylist(channelId.replace('UC', 'UUPV'));
+    await this.scraper.scrapePlaylist(channelId.replace('UC', 'UUSH'));
     if (includeVideo)
       for (
         const videoId

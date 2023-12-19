@@ -29,7 +29,8 @@ export type NavigationEndpoint = {
        * `/playlist?list=PLiniJMqFuOJ5Abuuomzy10K4UyZKw-6l0`
        * `/@AlettaSky/playlists?view=50&sort=dd&shelf_id=6`
        */
-      url: string
+      url?: string
+      [key: string]: unknown
     }
   }
   showEngagementPanelEndpoint?: {

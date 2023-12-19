@@ -6,9 +6,11 @@ export type Podcasts = {
   title: 'Podcasts'
   content?: {
     richGridRenderer: RichGridRenderer<{
-      richItemRenderer: RichItemRenderer<{
-        playlistRenderer: PlaylistRenderer
-      }>
+      content: {
+        richItemRenderer: RichItemRenderer<{
+          playlistRenderer: PlaylistRenderer
+        }>
+      }
     }>
   }
 };

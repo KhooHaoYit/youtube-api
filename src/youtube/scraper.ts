@@ -10,7 +10,7 @@ import { Channel } from './types/export/url/channel';
 import { getCommunityPosts } from './types/export/url/channelTab/community';
 import { getErrorMessage } from './types/export/url/watch';
 import { getAllRelatedChannel, getFeaturedDisplay } from './types/export/url/channelTab/home';
-import { getPlaylist, hasPlaylist } from './types/export/url/playlist';
+import { getPlaylist, getUnviewableReason, hasPlaylist } from './types/export/url/playlist';
 import { getVideoInfo } from './types/export/renderer/playlistVideoRenderer';
 import { PrismaService } from 'nestjs-prisma';
 import { getReleases } from './types/export/url/channelTab/releases';
@@ -53,8 +53,16 @@ export class YoutubeScraper {
 
   async scrapePlaylist(playlistId: string) {
     const page = await this.youtube.scrape(`/playlist?list=${playlistId}`);
-    if (!hasPlaylist(page))
+    if (!hasPlaylist(page)) {
+      const unviewableReason = getUnviewableReason(page);
+      if (!unviewableReason)
+        return;
+      await this.model.handlePlaylistUpdate({
+        id: playlistId,
+        unviewableReason,
+      });
       return;
+    }
     if (!page.innertubeApiKey)
       throw new Error(`innertubeApiKey not defined`);
     const browsedPlaylist = await browsePlaylist(playlistId);

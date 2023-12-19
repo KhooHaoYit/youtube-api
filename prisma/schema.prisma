@@ -18,6 +18,8 @@ generator nestgraphql {
   graphqlScalars_BigInt_specifier = "graphql-scalars"
 }
 
+// TODO: comments
+
 // TODO: clip
 // https://www.youtube.com/clip/Ugkxes0UO1XgIY9LlLaisU2a3Le5i8tYkuPe
 // https://www.youtube.com/clip/UgkxBQ0tuOU8BR1QJ-O5fimqZ2isMfzFaA-b
@@ -46,12 +48,13 @@ model Playlist {
   // https://www.youtube.com/playlist?list=PLJ8cMiYb3G5eFOtMi4Ox74bj2hhmL-hdc
   id String @id @unique
 
-  title          String?
-  view           Int?
-  estimatedCount Int?
-  lastUpdated    String?
-  description    String?
-  visibility     String?
+  title            String?
+  view             Int?
+  estimatedCount   Int?
+  lastUpdated      String?
+  description      String?
+  visibility       String?
+  unviewableReason String?
 
   badges          String[]
   videoIds        String[]

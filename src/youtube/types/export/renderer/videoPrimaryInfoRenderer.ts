@@ -1,5 +1,5 @@
 import { Text } from "../generic/text";
-import { SegmentedLikeDislikeButtonRenderer } from "./segmentedLikeDislikeButtonRenderer";
+import { MenuNavigationItemRenderer } from "./menuNavigationItemRenderer";
 import { VideoViewCountRenderer } from "./videoViewCountRenderer";
 
 export type VideoPrimaryInfoRenderer = {
@@ -12,10 +12,9 @@ export type VideoPrimaryInfoRenderer = {
   }
   videoActions: {
     menuRenderer: {
-      topLevelButtons: {
-        buttonRenderer?: {}
-        segmentedLikeDislikeButtonRenderer?: SegmentedLikeDislikeButtonRenderer
-      }[],
+      items: {
+        menuNavigationItemRenderer: MenuNavigationItemRenderer
+      }[]
     }
   },
   /**

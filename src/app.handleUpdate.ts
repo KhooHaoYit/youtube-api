@@ -173,6 +173,7 @@ export class AppHandleUpdate {
       estimatedCount?: number,
       lastUpdated?: string,
       title?: string,
+      unviewableReason?: string,
       videoIds?: string[],
       view?: number,
       visibility?: string,

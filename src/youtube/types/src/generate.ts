@@ -97,14 +97,48 @@ const pages = [
   ['playlists/UUPVJBLW359gx5XCwf07LdoTUg', '/playlist?list=UUPVJBLW359gx5XCwf07LdoTUg'],
   ['playlists/UUPSJBLW359gx5XCwf07LdoTUg', '/playlist?list=UUPSJBLW359gx5XCwf07LdoTUg'],
   ['playlists/UULPJBLW359gx5XCwf07LdoTUg', '/playlist?list=UULPJBLW359gx5XCwf07LdoTUg'],
-  ['playlists/UULPJBLW359gx5XCwf07LdoTUg', '/playlist?list=UUPS758B56bESyznwmUP0o9FHA'],
+  ['playlists/UUPS758B56bESyznwmUP0o9FHA', '/playlist?list=UUPS758B56bESyznwmUP0o9FHA'],
   ['videos/ho2IpTpgRUQ', '/watch?v=ho2IpTpgRUQ'],
   ['videos/x8fpeVICeGg', '/watch?v=x8fpeVICeGg'],
   ['playlists/PLJ8cMiYb3G5cOFj1VQf8ykNOI0ptuHybc', '/playlist?list=PLJ8cMiYb3G5cOFj1VQf8ykNOI0ptuHybc'],
   ['videos/M2cckDmNLMI', '/watch?v=M2cckDmNLMI'],
   ['channels/UCVNnPW2HBlmWzsAFh0aUUgA/featured', '/channel/UCVNnPW2HBlmWzsAFh0aUUgA/featured'],
   ['channels/UC-9XR09NhZO1yTNUL5McsSw/playlists', '/channel/UC-9XR09NhZO1yTNUL5McsSw/playlists'],
-  ['channels/UCRMpIxnySp7Fy5SbZ8dBv2w/featured', '/channels/UCRMpIxnySp7Fy5SbZ8dBv2w/featured'],
+  ['channels/UCRMpIxnySp7Fy5SbZ8dBv2w/featured', '/channel/UCRMpIxnySp7Fy5SbZ8dBv2w/featured'],
+  ['channels/UCwuS0uY-Z2Gr_5OV2oFybFA/videos', '/channel/UCwuS0uY-Z2Gr_5OV2oFybFA/videos'],
+  ///* playlist
+  ['playlists/BB5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=BB5CwaMl1eIgY8h02uZw7u8A'],
+  ['playlists/CL5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=CL5CwaMl1eIgY8h02uZw7u8A'],
+  ['playlists/EL5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=EL5CwaMl1eIgY8h02uZw7u8A'],
+  ['playlists/FL5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=FL5CwaMl1eIgY8h02uZw7u8A'],
+  ['playlists/LL5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=LL5CwaMl1eIgY8h02uZw7u8A'],
+  ['playlists/MQ5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=MQ5CwaMl1eIgY8h02uZw7u8A'],
+  ['playlists/PU5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=PU5CwaMl1eIgY8h02uZw7u8A'],
+  ['playlists/TT5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=TT5CwaMl1eIgY8h02uZw7u8A'],
+  // Uploads from Suisei Channel
+  ['playlists/UU5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UU5CwaMl1eIgY8h02uZw7u8A'],
+  // Videos
+  ['playlists/UULF5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UULF5CwaMl1eIgY8h02uZw7u8A'],
+  // Popular videos
+  ['playlists/UULP5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UULP5CwaMl1eIgY8h02uZw7u8A'],
+  // Live streams
+  ['playlists/UULV5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UULV5CwaMl1eIgY8h02uZw7u8A'],
+  // Members-only videos (video only??)
+  ['playlists/UUMF5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UUMF5CwaMl1eIgY8h02uZw7u8A'],
+  // Members-only videos (All)
+  ['playlists/UUMO5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UUMO5CwaMl1eIgY8h02uZw7u8A'],
+  // Members-only shorts
+  ['playlists/UUMS5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UUMS5CwaMl1eIgY8h02uZw7u8A'],
+  ['playlists/UUMSMDEQHqKrB4i1_6kDdE1BKQ', '/playlist?list=UUMSMDEQHqKrB4i1_6kDdE1BKQ'],
+  // Members-only live streams
+  ['playlists/UUMV5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UUMV5CwaMl1eIgY8h02uZw7u8A'],
+  // Popular short videos
+  ['playlists/UUPS5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UUPS5CwaMl1eIgY8h02uZw7u8A'],
+  // Popular live streams
+  ['playlists/UUPV5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UUPV5CwaMl1eIgY8h02uZw7u8A'],
+  // Short videos
+  ['playlists/UUSH5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UUSH5CwaMl1eIgY8h02uZw7u8A'],
+  //*/ playlist
 ] as const;
 
 const getOffers = [

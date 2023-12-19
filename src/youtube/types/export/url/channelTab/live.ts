@@ -4,13 +4,15 @@ import { RichItemRenderer } from "../../renderer/richItemRenderer";
 import { VideoRenderer } from "../../renderer/videoRenderer";
 
 export type Live = {
-  title: 'Live',
+  title: 'Live'
   content?: {
     richGridRenderer: RichGridRenderer<{
-      richItemRenderer?: RichItemRenderer<{
-        videoRenderer: VideoRenderer,
-      }>
-      continuationItemRenderer?: ContinuationItemRenderer,
+      content: {
+        richItemRenderer?: RichItemRenderer<{
+          videoRenderer: VideoRenderer
+        }>
+        continuationItemRenderer?: ContinuationItemRenderer
+      }
     }>
   }
 };

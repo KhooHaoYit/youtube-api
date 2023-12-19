@@ -14,6 +14,7 @@ import { Podcasts } from "./channelTab/podcasts";
 import { Releases } from "./channelTab/releases";
 import { Search } from "./channelTab/search";
 import { Shorts } from "./channelTab/shorts";
+import { Store } from "./channelTab/store";
 import { Videos } from "./channelTab/videos";
 
 export type Channel = {
@@ -49,6 +50,7 @@ export type YtInitialData = {
         | Live
         | Shorts
         | Podcasts
+        | Store
         expandableTabRenderer?: Search
       }[]
     }

@@ -13,9 +13,11 @@ export type PlaylistItemSection = ItemSectionRenderer<{
   playlistVideoListRenderer?: PlaylistVideoListRenderer
   playlistShowMetadataRenderer?: PlaylistShowMetadataRenderer
   richGridRenderer?: RichGridRenderer<{
-    richItemRenderer: RichItemRenderer<{
-      reelItemRenderer: ReelItemRenderer
-    }>
+    content: {
+      richItemRenderer: RichItemRenderer<{
+        reelItemRenderer: ReelItemRenderer
+      }>
+    }
   }>
 }>
 

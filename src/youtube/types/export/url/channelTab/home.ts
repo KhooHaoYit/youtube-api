@@ -99,7 +99,7 @@ export function getFeaturedDisplay(data: Home): (
     if ('recognitionShelfRenderer' in item)
       return ['membersRecognition'];
     if (item.shelfRenderer?.endpoint.commandMetadata?.webCommandMetadata
-      .url.includes('/playlist?')
+      .url?.includes('/playlist?')
     ) return [
       'playlist',
       item.shelfRenderer.endpoint.browseEndpoint!.browseId
@@ -124,7 +124,7 @@ export function getFeaturedDisplay(data: Home): (
           .engagementPanelTitleHeaderRenderer.title),
       ];
     if (item.shelfRenderer?.endpoint.commandMetadata?.webCommandMetadata
-      .url.includes('/videos?')
+      .url?.includes('/videos?')
     ) return [
       'videos',
       getOriginalText(item.shelfRenderer.title),

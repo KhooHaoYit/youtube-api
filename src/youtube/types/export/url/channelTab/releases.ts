@@ -6,9 +6,11 @@ export type Releases = {
   title: 'Releases'
   content?: {
     richGridRenderer: RichGridRenderer<{
-      richItemRenderer: RichItemRenderer<{
-        playlistRenderer: PlaylistRenderer
-      }>
+      content: {
+        richItemRenderer: RichItemRenderer<{
+          playlistRenderer: PlaylistRenderer
+        }>
+      }
     }>
   }
 };

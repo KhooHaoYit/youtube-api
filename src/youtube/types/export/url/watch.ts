@@ -20,6 +20,7 @@ import { MessageRenderer } from '../renderer/messageRenderer';
 import { BackgroundPromoRenderer } from '../renderer/backgroundPromoRenderer';
 import { CommentsEntryPointHeaderRenderer } from '../renderer/commentsEntryPointHeaderRenderer';
 import { ClipSectionRenderer } from '../renderer/clipSectionRenderer';
+import { MerchandiseShelfRenderer } from '../renderer/merchandiseShelfRenderer';
 
 export type Watch = {
   innertubeApiKey: string,
@@ -94,6 +95,7 @@ type YtInitialData = {
           contents?: {
             videoPrimaryInfoRenderer?: VideoPrimaryInfoRenderer
             videoSecondaryInfoRenderer?: VideoSecondaryInfoRenderer
+            merchandiseShelfRenderer?: MerchandiseShelfRenderer
             itemSectionRenderer?: ItemSectionRenderer<{
               /**
                * `Comments are turned off`
@@ -203,6 +205,15 @@ type YtInitialData = {
       }
       | {
         targetId: 'engagement-panel-transcript'
+      }
+      | {
+        targetId: 'shopping_panel_for_entry_point_4'
+      }
+      | {
+        targetId: 'shopping_panel_for_entry_point_5'
+      }
+      | {
+        targetId: 'shopping_panel_for_entry_point_9'
       }
     )
   }[]

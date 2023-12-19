@@ -10,7 +10,9 @@ import { StringOfDigitsAndComma } from "./stringOfDigitsAndComma";
  */
 export type ViewCountText = {
   runs?: Runs
-  simpleText?: `${StringOfDigitsAndComma} views`,
+  simpleText?:
+  | `${StringOfDigitsAndComma} views`
+  | `✪ Members only`
 };
 
 export function getViewCount(data: ViewCountText) {
@@ -19,6 +21,8 @@ export function getViewCount(data: ViewCountText) {
     : data.simpleText;
   if (!text)
     throw new Error(`Unable to parse view count`);
+  if (text === '✪ Members only')
+    return undefined;
   return +text
     .replace(/ [^]+/, '')
     .replace(/,/g, '');

@@ -7,10 +7,12 @@ export type Shorts = {
   title: 'Shorts',
   content?: {
     richGridRenderer: RichGridRenderer<{
-      richItemRenderer?: RichItemRenderer<{
-        reelItemRenderer: ReelItemRenderer
-      }>
-      continuationItemRenderer?: ContinuationItemRenderer
+      content: {
+        richItemRenderer?: RichItemRenderer<{
+          reelItemRenderer: ReelItemRenderer
+        }>
+        continuationItemRenderer?: ContinuationItemRenderer
+      }
     }>
   }
 };
