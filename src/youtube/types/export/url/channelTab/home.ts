@@ -175,14 +175,18 @@ export async function getAllRelatedChannel(innertubeApiKey: string, data: Home, 
 }
 
 export async function getAllRelatedPlaylists(innertubeApiKey: string, data: Home, channelId: string) {
-  const output: [string, string[]][] = [['Created playlists', []]];
+  const output: [string, string[]][] = [];
   // playlists
   const initialItems = await browseChannelPlaylists(channelId)
-    .then(res => getChannelTab(res, 'Playlists')!.tabRenderer.content!
-      .sectionListRenderer.contents[0].itemSectionRenderer
-      .contents[0].gridRenderer!.items);
-  for await (const { gridPlaylistRenderer } of browseAll(innertubeApiKey, initialItems))
-    output[0][1].push(gridPlaylistRenderer!.playlistId);
+    .then(res => getChannelTab(res, 'Playlists')
+      ?.tabRenderer.content!.sectionListRenderer.contents[0]
+      .itemSectionRenderer.contents[0].gridRenderer!.items);
+  if (initialItems) {
+    const playlistIds = [];
+    for await (const { gridPlaylistRenderer } of browseAll(innertubeApiKey, initialItems))
+      playlistIds.push(gridPlaylistRenderer!.playlistId);
+    output.push(['Created playlists', playlistIds]);
+  }
   // featured
   for (const content of data.content!.sectionListRenderer.contents) {
     const item = content.itemSectionRenderer?.contents[0]
