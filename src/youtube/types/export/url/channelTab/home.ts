@@ -157,6 +157,11 @@ export async function getAllRelatedChannel(innertubeApiKey: string, data: Home, 
     const initialItems = item.endpoint.showEngagementPanelEndpoint!
       .engagementPanel.engagementPanelSectionListRenderer
       .content.sectionListRenderer.contents[0].itemSectionRenderer.contents;
+    // skip `Subscriptions` in featured
+    if (
+      initialItems[0].continuationItemRenderer?.continuationEndpoint.continuationCommand.token
+        .includes('aRjhnWXZHaTJ5QVNvS0FoSUFHaVEyT')
+    ) continue;
     const channelIds: string[] = [];
     for await (const { gridRenderer } of browseAll(innertubeApiKey, initialItems)) {
       const initialItems = gridRenderer!.items;
@@ -195,7 +200,10 @@ export async function getAllRelatedPlaylists(innertubeApiKey: string, data: Home
       !item?.content.expandedShelfContentsRenderer?.items[0].playlistRenderer
       && !item?.content.horizontalListRenderer?.items[0].gridPlaylistRenderer
     ) continue;
-    const initialItems = item.endpoint.showEngagementPanelEndpoint!
+    // skip `Created playlists` in featured
+    if (!item.endpoint.showEngagementPanelEndpoint)
+      continue;
+    const initialItems = item.endpoint.showEngagementPanelEndpoint
       .engagementPanel.engagementPanelSectionListRenderer
       .content.sectionListRenderer.contents[0].itemSectionRenderer.contents;
     const playlistIds: string[] = [];
