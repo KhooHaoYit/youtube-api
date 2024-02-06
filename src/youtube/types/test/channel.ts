@@ -35,6 +35,7 @@ import { Data as c3 } from '../data/channels/UC5CwaMl1eIgY8h02uZw7u8A/about-with
 import { Data as c4 } from '../data/channels/UCrzT1p8gn0hQTBeMA6e2YiA/about';
 import { Data as c5 } from '../data/channels/UCrzT1p8gn0hQTBeMA6e2YiA/about-withAuth';
 import { Data as c6 } from '../data/channels/UCwuS0uY-Z2Gr_5OV2oFybFA/videos';
+import { Data as c7 } from '../data/channels/UCKQi12nOGZsJ5nOuCTHErmA/featured';
 import { Channel } from '../export/url/channel';
 
 type ChannelPage = Channel['ytInitialData'];
@@ -76,3 +77,4 @@ type ChannelPage = Channel['ytInitialData'];
 <c4>{} satisfies ChannelPage;
 <c5>{} satisfies ChannelPage;
 <c6>{} satisfies ChannelPage;
+<c7>{} satisfies ChannelPage;

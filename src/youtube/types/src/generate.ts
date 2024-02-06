@@ -107,39 +107,42 @@ const pages = [
   ['channels/UCRMpIxnySp7Fy5SbZ8dBv2w/featured', '/channel/UCRMpIxnySp7Fy5SbZ8dBv2w/featured'],
   ['channels/UCwuS0uY-Z2Gr_5OV2oFybFA/videos', '/channel/UCwuS0uY-Z2Gr_5OV2oFybFA/videos'],
   ///* playlist
+  // Videos + Live + Shorts = All - Pending Live
   ['playlists/BB5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=BB5CwaMl1eIgY8h02uZw7u8A'],
   ['playlists/CL5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=CL5CwaMl1eIgY8h02uZw7u8A'],
   ['playlists/EL5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=EL5CwaMl1eIgY8h02uZw7u8A'],
   ['playlists/FL5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=FL5CwaMl1eIgY8h02uZw7u8A'],
+  // Liked videos (/LL(channelIdWithoutUC)?/)
   ['playlists/LL5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=LL5CwaMl1eIgY8h02uZw7u8A'],
   ['playlists/MQ5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=MQ5CwaMl1eIgY8h02uZw7u8A'],
   ['playlists/PU5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=PU5CwaMl1eIgY8h02uZw7u8A'],
   ['playlists/TT5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=TT5CwaMl1eIgY8h02uZw7u8A'],
   // Uploads from Suisei Channel
   ['playlists/UU5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UU5CwaMl1eIgY8h02uZw7u8A'],
-  // Videos
+  // Videos (Videos)
   ['playlists/UULF5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UULF5CwaMl1eIgY8h02uZw7u8A'],
   // Popular videos
   ['playlists/UULP5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UULP5CwaMl1eIgY8h02uZw7u8A'],
-  // Live streams
+  // Live streams (Live)
   ['playlists/UULV5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UULV5CwaMl1eIgY8h02uZw7u8A'],
-  // Members-only videos (video only??)
+  // Members-only videos (Videos)
   ['playlists/UUMF5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UUMF5CwaMl1eIgY8h02uZw7u8A'],
   // Members-only videos (All)
   ['playlists/UUMO5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UUMO5CwaMl1eIgY8h02uZw7u8A'],
-  // Members-only shorts
+  // Members-only shorts (Shorts)
   ['playlists/UUMS5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UUMS5CwaMl1eIgY8h02uZw7u8A'],
   ['playlists/UUMSMDEQHqKrB4i1_6kDdE1BKQ', '/playlist?list=UUMSMDEQHqKrB4i1_6kDdE1BKQ'],
-  // Members-only live streams
+  // Members-only live streams (Live)
   ['playlists/UUMV5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UUMV5CwaMl1eIgY8h02uZw7u8A'],
   // Popular short videos
   ['playlists/UUPS5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UUPS5CwaMl1eIgY8h02uZw7u8A'],
   // Popular live streams
   ['playlists/UUPV5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UUPV5CwaMl1eIgY8h02uZw7u8A'],
-  // Short videos
+  // Short videos (Shorts)
   ['playlists/UUSH5CwaMl1eIgY8h02uZw7u8A', '/playlist?list=UUSH5CwaMl1eIgY8h02uZw7u8A'],
   //*/ playlist
   ['channels/UCdAOVLtjHXkOrNk1ghPCSOw/featured', '/channel/UCdAOVLtjHXkOrNk1ghPCSOw/featured'],
+  ['channels/UCKQi12nOGZsJ5nOuCTHErmA/featured', '/channel/UCKQi12nOGZsJ5nOuCTHErmA/featured'],
 ] as const;
 
 const getOffers = [

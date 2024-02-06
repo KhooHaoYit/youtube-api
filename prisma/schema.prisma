@@ -43,9 +43,44 @@ model CommunityPost {
   @@index([channelId])
 }
 
+// TODO: some random stuff
+// https://www.youtube.com/playlist?list=OLAK5uy_npZucV05HRrJHGekuyEETUfd6jn24sOm4 (get large thumbnail)
+// https://www.youtube.com/channel/UCYfdidRxbB8Qhf0Nx7ioOYw/sports
+// https://www.youtube.com/channel/UCEgdi0XIXXZ-qJOFPf4JSKw/sportstab
+// https://www.youtube.com/channel/UC-9-kyTW8ZkZNDHQJ6FgpwQ/community
+
 model Playlist {
   // TODO: seasoned playlist
   // https://www.youtube.com/playlist?list=PLJ8cMiYb3G5eFOtMi4Ox74bj2hhmL-hdc
+
+  // TODO: Temporarily List
+  // video_ids,title,more_url,type,index,feature
+  // https://www.youtube.com/watch?v=Ze2nSsLJDaY
+  // https://youtube.com/watch_videos?title=Duskers+Challenges+2023-12-29&video_ids=WZ1tiLFJmjg
+  // https://www.youtube.com/watch?v=he3CDqJhBNY
+  // http://www.youtube.com/watch_videos?video_ids=YFMNfjo-8To%2C9qt5ui3P9QA%2Che3CDqJhBNY%2CorDNt0SW9e8%2C9nXOV7bwl78%2CQkypqltOL_M%2CEhrmgCBtMZg%2CxtBJsKSM33M&feature=c4-overview&title=Crazy+Router+Lathe&more_url=&type=0
+
+  // TODO: Mixes
+  // /RD(MM)?(videoId)?/ ! My Mix
+  // /RDCM(channelId)/ !
+  // /RDGMEM(category)(VM(videoId))?/
+  // /RDC(albumIdWithoutO)/ ??
+  // https://www.youtube.com/watch?v=1IVfW_rvxQw&list=RDGMEMXdNDEg4wQ96My0DhjI-cIg
+  // https://www.youtube.com/watch?v=fokontvrio0&list=RDGMEMQ1dJ7wXfLlqCjwV0xfSNbA
+  // https://www.youtube.com/watch?v=fJaNISDyhZE&list=RDGMEMYH9CUrFO7CfLJpaD7UR85wVMfJaNISDyhZE
+  // https://www.youtube.com/watch?v=3AGfHOYaoMs&list=RDGMEMYH9CUrFO7CfLJpaD7UR85wVM3AGfHOYaoMs
+  // https://www.youtube.com/watch?v=xMpTFCca9qo&list=RDGMEMhCgTQvcskbGUxqI4Sn2QYwVMxMpTFCca9qo
+  // https://www.youtube.com/watch?v=Rb463TodXJA&list=RDGMEMCMFH2exzjBeE_zAHHJOdxgVMRb463TodXJA
+  // https://www.youtube.com/watch?v=fokontvrio0&list=RDGMEMJQXQAmqrnmK1SEjY_rKBGAVMfokontvrio0
+  // https://www.youtube.com/watch?v=vKkoBUPav3s&list=RDCLAK5uy_k5n4srrEB1wgvIjPNTXS9G1ufE9WQxhnA
+  // https://www.youtube.com/watch?v=FkOpwodhROI&list=RDCLAK5uy_kmPRjHDECIcuVwnKsx2Ng7fyNgFKWNJFs
+  // https://www.youtube.com/watch?v=eB6txyhHFG4&list=RDCLAK5uy_lBNUteBRencHzKelu5iDHwLF6mYqjL-JU
+  // https://www.youtube.com/watch?v=c5j7lpWprro&list=RDCLAK5uy_nbK9qSkqYZvtMXH1fLCMmC1yn8HEm0W90
+  // https://www.youtube.com/watch?v=dhMdqqAng8E&list=RDCLAK5uy_k-msS6PWOCGNcJo7gx0NQIPfyFzHglYEk
+
+  // TODO: Watch later
+  // https://www.youtube.com/playlist?list=WL
+
   id String @id @unique
 
   title            String?

@@ -185,7 +185,7 @@ export async function getAllRelatedPlaylists(innertubeApiKey: string, data: Home
   const initialItems = await browseChannelPlaylists(channelId)
     .then(res => getChannelTab(res, 'Playlists')
       ?.tabRenderer.content!.sectionListRenderer.contents[0]
-      .itemSectionRenderer.contents[0].gridRenderer!.items);
+      .itemSectionRenderer.contents[0].gridRenderer?.items);
   if (initialItems) {
     const playlistIds = [];
     for await (const { gridPlaylistRenderer } of browseAll(innertubeApiKey, initialItems))
