@@ -51,6 +51,7 @@ import { Data as v8 } from '../data/clips/Ugkx_7XH_e-kdkArvpXV_FIirSfYe_m3ymkl';
 import { Data as v9 } from '../data/videos/ho2IpTpgRUQ';
 import { Data as v10 } from '../data/videos/x8fpeVICeGg';
 import { Data as v11 } from '../data/videos/M2cckDmNLMI';
+import { Data as v12 } from '../data/videos/LNqEMUFl1sc';
 
 type YtInitialData = Watch['ytInitialData'];
 type YtInitialPlayerResponse = Watch['ytInitialPlayerResponse'];
@@ -71,6 +72,7 @@ type YtInitialPlayerResponse = Watch['ytInitialPlayerResponse'];
 <v9>{} satisfies YtInitialData;
 <v10>{} satisfies YtInitialData;
 <v11>{} satisfies YtInitialData;
+<v12>{} satisfies YtInitialData;
 <haachamachama__video>{} satisfies YtInitialData;
 <MapleAlcesiaCh__video>{} satisfies YtInitialData;
 <UruhaRushia__video>{} satisfies YtInitialData;

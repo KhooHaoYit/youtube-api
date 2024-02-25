@@ -124,23 +124,24 @@ export class AppHandleUpdate {
   // https://i.ytimg.com/an/otXwY6s8pWmuWd_snKYjhg/featured_channel.jpg
   async handleVideoUpdate(
     data: {
-      id: string,
-      channelId?: string,
-      visibility?: Visibility,
-      removedReason?: string,
-      title?: string,
-      description?: string | null,
-      liveStartTimestamp?: string,
-      liveEndTimestamp?: string,
-      viewCount?: number,
-      uploadDate?: string,
-      category?: string,
-      duration?: number,
-      keywords?: string[],
-      publishDate?: string,
-      isLivestream?: boolean,
-      isMembershipContent?: boolean,
-      isAgeRestricted?: boolean,
+      id: string
+      channelId?: string
+      visibility?: Visibility
+      removedReason?: string
+      title?: string
+      description?: string | null
+      liveStartTimestamp?: string
+      liveEndTimestamp?: string
+      viewCount?: number
+      uploadDate?: string
+      category?: string
+      duration?: number
+      keywords?: string[]
+      publishDate?: string
+      isLivestream?: boolean
+      isAgeRestricted?: boolean
+      isMembershipContent?: boolean
+      minimumMembershipLevel?: string
     },
   ) {
     const newData = await removeSame(this.prisma.video, data);

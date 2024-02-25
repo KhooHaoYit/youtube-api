@@ -4,6 +4,7 @@ import {
   getBasicInfo as _getBasicInfo,
 } from 'ytdl-core';
 import { AppHandleUpdate } from './app.handleUpdate';
+import { membershipLevelRegex, minimumMembershipLevelRegex } from './youtube/types/export/url/watch';
 
 @Injectable()
 export class AppService {
@@ -106,7 +107,6 @@ export class AppService {
         isLivestream: result.videoDetails.isLiveContent,
         liveStartTimestamp: result.videoDetails.liveBroadcastDetails?.startTimestamp,
         liveEndTimestamp: result.videoDetails.liveBroadcastDetails?.endTimestamp,
-        isMembershipContent: result.player_response.playabilityStatus.status !== 'OK',
         visibility: Visibility[result.videoDetails.isUnlisted ? 'unlisted' : 'public'],
         viewCount: +result.videoDetails.viewCount,
         uploadDate: result.videoDetails.uploadDate,
@@ -115,6 +115,18 @@ export class AppService {
         duration: +result.videoDetails.lengthSeconds,
         keywords: result.videoDetails.keywords,
         publishDate: result.videoDetails.publishDate,
+        ...(() => {
+          const reason = (<{ reason?: string }>result.player_response.playabilityStatus)?.reason ?? '';
+          if (!reason)
+            return { isMembershipContent: false };
+          if (minimumMembershipLevelRegex.test(reason))
+            return { isMembershipContent: true };
+          if (membershipLevelRegex.test(reason))
+            return {
+              isMembershipContent: true,
+              minimumMembershipLevel: reason.match(membershipLevelRegex)![1],
+            };
+        })(),
       }),
       this.model.handleChannelUpdate({
         id: result.videoDetails.author.id,

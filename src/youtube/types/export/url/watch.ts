@@ -50,8 +50,8 @@ export function getPlaylistExtraChannelIds(data: YtInitialData) {
     .filter(browseId => browseId);
 }
 
-const membershipLevelRegex = /^This video is available to this channel's members on level: ([^]+?) \(or any higher level\)\. Join this channel to get access to members-only content and other exclusive perks\.$/;
-const minimumMembershipLevelRegex = /^Join this channel to get access to members-only content like this video, and other exclusive perks\.$/;
+export const membershipLevelRegex = /^This video is available to this channel's members on level: ([^]+?) \(or any higher level\)\. Join this channel to get access to members-only content and other exclusive perks\.$/;
+export const minimumMembershipLevelRegex = /^Join this channel to get access to members-only content like this video, and other exclusive perks\.$/;
 export function getRequiredMembershipLevel(data: Watch) {
   const error = getErrorMessage(data);
   if (!error)

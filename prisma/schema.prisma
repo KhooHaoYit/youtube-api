@@ -129,9 +129,11 @@ model Video {
   viewCount          BigInt?
   duration           Int?
 
-  isLivestream        Boolean?
-  isAgeRestricted     Boolean?
-  isMembershipContent Boolean?
+  isLivestream    Boolean?
+  isAgeRestricted Boolean?
+
+  isMembershipContent    Boolean?
+  minimumMembershipLevel String?
 
   channelId String?
   channel   Channel? @relation(fields: [channelId], references: [id])
