@@ -8,9 +8,15 @@ export type Podcasts = {
     richGridRenderer: RichGridRenderer<{
       content: {
         richItemRenderer: RichItemRenderer<{
-          playlistRenderer: PlaylistRenderer
+          // TODO: removed??
+          // playlistRenderer: PlaylistRenderer
+          lockupViewModel: LockupViewModel
         }>
       }
     }>
   }
 };
+
+type LockupViewModel = {
+  contentId: string
+}

@@ -3,6 +3,7 @@ import * as channelSubMenuRenderer from '../../renderer/channelSubMenuRenderer';
 import { ContinuationItemRenderer } from "../../renderer/continuationItemRenderer";
 import { GridPlaylistRenderer } from "../../renderer/gridPlaylistRenderer";
 import { GridRenderer } from "../../renderer/gridRenderer";
+import { GridShowRenderer } from "../../renderer/gridShowRenderer";
 import { ItemSectionRenderer } from "../../renderer/itemSectionRenderer";
 import { MessageRenderer } from "../../renderer/messageRenderer";
 import { SectionListRenderer } from "../../renderer/sectionListRenderer";
@@ -19,6 +20,7 @@ export type Playlists = {
         itemSectionRenderer: ItemSectionRenderer<{
           gridRenderer?: GridRenderer<{
             gridPlaylistRenderer?: GridPlaylistRenderer
+            gridShowRenderer?: GridShowRenderer
             continuationItemRenderer?: ContinuationItemRenderer
           }>
           /**

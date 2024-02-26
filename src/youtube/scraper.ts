@@ -180,14 +180,23 @@ export class YoutubeScraper {
     if (!initialItems) // channel have no playlist??
       return;
     for await (
-      const { gridPlaylistRenderer: playlist }
+      const { gridPlaylistRenderer, gridShowRenderer }
       of browseAll(page.innertubeApiKey, initialItems)
     ) {
+      const id = gridPlaylistRenderer?.playlistId
+        ?? gridShowRenderer?.navigationEndpoint.browseEndpoint?.browseId.replace(/^VL/, '');
+      if (!id)
+        throw new Error(`Unable to extract playlistId`);
+      const title = getOriginalText(gridPlaylistRenderer?.title ?? gridShowRenderer?.title!);
+      const estimatedCount = +getOriginalText(
+        gridPlaylistRenderer?.videoCountShortText
+        ?? gridShowRenderer?.thumbnailOverlays[0].thumbnailOverlayBottomPanelRenderer.text!
+      ).replace(/,| [^]+/g, '');
       await this.model.handlePlaylistUpdate({
         channelId,
-        id: getPlaylistId(playlist!),
-        title: getPlaylistTitle(playlist!),
-        estimatedCount: getAmountOfVideos(playlist!),
+        id,
+        title,
+        estimatedCount,
       });
     }
   }

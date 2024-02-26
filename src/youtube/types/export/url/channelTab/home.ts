@@ -188,8 +188,13 @@ export async function getAllRelatedPlaylists(innertubeApiKey: string, data: Home
       .itemSectionRenderer.contents[0].gridRenderer?.items);
   if (initialItems) {
     const playlistIds = [];
-    for await (const { gridPlaylistRenderer } of browseAll(innertubeApiKey, initialItems))
-      playlistIds.push(gridPlaylistRenderer!.playlistId);
+    for await (const { gridPlaylistRenderer, gridShowRenderer } of browseAll(innertubeApiKey, initialItems)) {
+      const playlistId = gridPlaylistRenderer?.playlistId
+        ?? gridShowRenderer?.navigationEndpoint.browseEndpoint?.browseId.replace(/^VL/, '');
+      if (!playlistId)
+        throw new Error(`Unable to get playlistId`);
+      playlistIds.push(playlistId);
+    }
     output.push(['Created playlists', playlistIds]);
   }
   // featured
@@ -209,8 +214,13 @@ export async function getAllRelatedPlaylists(innertubeApiKey: string, data: Home
     const playlistIds: string[] = [];
     for await (const { gridRenderer } of browseAll(innertubeApiKey, initialItems)) {
       const initialItems = gridRenderer!.items;
-      for await (const { gridPlaylistRenderer } of browseAll(innertubeApiKey, initialItems))
-        playlistIds.push(gridPlaylistRenderer!.playlistId);
+      for await (const { gridPlaylistRenderer, gridShowRenderer } of browseAll(innertubeApiKey, initialItems)) {
+        const playlistId = gridPlaylistRenderer?.playlistId
+          ?? gridShowRenderer?.navigationEndpoint.browseEndpoint?.browseId.replace(/^VL/, '');
+        if (!playlistId)
+          throw new Error(`Unable to get playlistId`);
+        playlistIds.push(playlistId);
+      }
     }
     output.push([
       getOriginalText(item.endpoint.showEngagementPanelEndpoint!
