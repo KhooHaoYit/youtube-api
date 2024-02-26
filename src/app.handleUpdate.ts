@@ -168,18 +168,19 @@ export class AppHandleUpdate {
 
   async handlePlaylistUpdate(
     data: {
-      id: string,
-      channelId?: string | null,
-      description?: string,
-      estimatedCount?: number,
-      lastUpdated?: string,
-      title?: string,
-      unviewableReason?: string,
-      videoIds?: string[],
-      view?: number,
-      visibility?: string,
-      badges?: string[],
-      extraChannelIds?: [channelName: string, channelId: string][],
+      id: string
+      channelId?: string | null
+      description?: string
+      estimatedCount?: number
+      lastUpdated?: string
+      title?: string
+      unviewableReason?: string
+      videoIds?: string[]
+      view?: number
+      visibility?: string
+      badges?: string[]
+      extraChannelIds?: [channelName: string, channelId: string][]
+      seasons?: [title: string, playlistId: string][]
     },
   ) {
     const newData = await removeSame(this.prisma.playlist, data);

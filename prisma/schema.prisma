@@ -50,9 +50,6 @@ model CommunityPost {
 // https://www.youtube.com/channel/UC-9-kyTW8ZkZNDHQJ6FgpwQ/community
 
 model Playlist {
-  // TODO: seasoned playlist
-  // https://www.youtube.com/playlist?list=PLJ8cMiYb3G5eFOtMi4Ox74bj2hhmL-hdc
-
   // TODO: Temporarily List
   // video_ids,title,more_url,type,index,feature
   // https://www.youtube.com/watch?v=Ze2nSsLJDaY
@@ -94,6 +91,7 @@ model Playlist {
   badges          String[]
   videoIds        String[]
   extraChannelIds Json?
+  seasons         Json?
 
   channelId String?
   channel   Channel? @relation(fields: [channelId], references: [id])

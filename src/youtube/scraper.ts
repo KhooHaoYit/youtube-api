@@ -19,6 +19,7 @@ import { getOfferInfo } from './types/export/renderer/sponsorshipsOfferRenderer'
 import { browseAll, browsePlaylist } from './types/export/endpoints/browse';
 import { listAllVideos } from './types/export/generic/playlistItemSection';
 import { getChannelInfo } from './types/export/generic/models/aboutChannelViewModel';
+import { getOriginalText } from './types/export/generic/text';
 
 @Injectable()
 export class YoutubeScraper {
@@ -65,13 +66,20 @@ export class YoutubeScraper {
       throw new Error(`innertubeApiKey not defined`);
     const browsedPlaylist = await browsePlaylist(playlistId);
     const videoIds: string[] = [];
+    const items = browsedPlaylist
+      .contents.twoColumnBrowseResultsRenderer.tabs[0]
+      .tabRenderer.content.sectionListRenderer.contents;
+    const seasons = items[0].itemSectionRenderer.contents[0]
+      .playlistShowMetadataRenderer?.collection.sortFilterSubMenuRenderer
+      .subMenuItems.map(item => [
+        item.title,
+        item.navigationEndpoint.browseEndpoint!.browseId
+          .replace(/^VL/, ''),
+      ] satisfies [any, any]);
     for await (
       const { video, shorts }
       of listAllVideos(
-        browsedPlaylist
-          .contents.twoColumnBrowseResultsRenderer.tabs[0]
-          .tabRenderer.content.sectionListRenderer.contents[0]
-          .itemSectionRenderer,
+        items.at(1)?.itemSectionRenderer ?? items[0].itemSectionRenderer,
         page.innertubeApiKey,
       )
     ) {
@@ -97,6 +105,7 @@ export class YoutubeScraper {
       visibility: playlist.visibility,
       badges: playlist.badges,
       videoIds,
+      seasons,
     });
   }
 
