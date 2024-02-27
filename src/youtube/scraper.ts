@@ -131,10 +131,10 @@ export class YoutubeScraper {
     const page = await this.youtube.scrape(`/channel/${channelId}/community`);
     if (!page.innertubeApiKey)
       throw new Error(`innertubeApiKey not defined`);
-    const initialPosts = getCommunityPosts(
-      getChannelTab(page.ytInitialData!, 'Community')
-        .tabRenderer,
-    );
+    const tab = getChannelTab(page.ytInitialData!, 'Community');
+    if (!tab)
+      return;
+    const initialPosts = getCommunityPosts(tab.tabRenderer);
     for await (
       const { backstagePostThreadRenderer }
       of browseAll(page.innertubeApiKey, initialPosts)
