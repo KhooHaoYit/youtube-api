@@ -9,6 +9,7 @@ export type PlayerMicroformatRenderer = {
   /**
    * `https://i.ytimg.com/vi/ontzsSgjsb0/maxresdefault.jpg`
    * `https://i.ytimg.com/vi/ZZ5tP2hWo0M/maxres2.jpg?sqp=-oaymwEoCIAKENAF8quKqQMcGADwAQH4AZQDgALQBYoCDAgAEAEYZSBlKGUwDw==\u0026rs=AOn4CLB2G4-ahbPww0dNYWyaEPWNFH4RIg`
+   * `https://i.ytimg.com/vi_webp/Upfro_PbDhI/oar2.webp`
    */
   thumbnail: Image,
   /**
@@ -73,8 +74,8 @@ export type PlayerMicroformatRenderer = {
 
 export function getVideoId(data: PlayerMicroformatRenderer) {
   return getUrl(data.thumbnail)
-    .replace(/^[^]+?vi\//, '')
-    .replace(/\/[^]+$/, '');
+    .split('/')
+    .at(-2)!;
 }
 
 export function getHandle(data: PlayerMicroformatRenderer) {

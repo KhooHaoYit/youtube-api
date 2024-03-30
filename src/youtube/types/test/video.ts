@@ -52,6 +52,7 @@ import { Data as v9 } from '../data/videos/ho2IpTpgRUQ';
 import { Data as v10 } from '../data/videos/x8fpeVICeGg';
 import { Data as v11 } from '../data/videos/M2cckDmNLMI';
 import { Data as v12 } from '../data/videos/LNqEMUFl1sc';
+import { Data as v13 } from '../data/videos/SIFY56Cu1Is';
 
 type YtInitialData = Watch['ytInitialData'];
 type YtInitialPlayerResponse = Watch['ytInitialPlayerResponse'];
@@ -73,6 +74,7 @@ type YtInitialPlayerResponse = Watch['ytInitialPlayerResponse'];
 <v10>{} satisfies YtInitialData;
 <v11>{} satisfies YtInitialData;
 <v12>{} satisfies YtInitialData;
+<v13>{} satisfies YtInitialData;
 <haachamachama__video>{} satisfies YtInitialData;
 <MapleAlcesiaCh__video>{} satisfies YtInitialData;
 <UruhaRushia__video>{} satisfies YtInitialData;

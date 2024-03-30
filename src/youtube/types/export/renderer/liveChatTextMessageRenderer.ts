@@ -1,6 +1,7 @@
 import { Image } from "../generic/image";
 import { Runs } from "../generic/runs";
 import { Text } from "../generic/text";
+import { LiveChatAuthorBadgeRenderer } from "./liveChatAuthorBadgeRenderer";
 
 export type LiveChatTextMessageRenderer = {
   id: string
@@ -9,12 +10,7 @@ export type LiveChatTextMessageRenderer = {
   message: Text
   authorName: Text
   authorPhoto: Image
+  authorBadges?: {
+    liveChatAuthorBadgeRenderer:LiveChatAuthorBadgeRenderer
+  }[]
 };
-
-export function getMessageId(data: LiveChatTextMessageRenderer) {
-  return data.id;
-}
-
-export function getMessageTimestamp(data: LiveChatTextMessageRenderer) {
-  return data.timestampUsec;
-}

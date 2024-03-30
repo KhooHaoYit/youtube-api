@@ -14,7 +14,7 @@ export type VideoSecondaryInfoRenderer = {
      * description (need to find ways to fix link back - KpCH4mbj_pk twitter link cut off)
      */
     content: string,
-    commandRuns: {
+    commandRuns?: {
       startIndex: number,
       length: number,
       onTap: {

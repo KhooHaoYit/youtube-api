@@ -21,6 +21,15 @@ import { BackgroundPromoRenderer } from '../renderer/backgroundPromoRenderer';
 import { CommentsEntryPointHeaderRenderer } from '../renderer/commentsEntryPointHeaderRenderer';
 import { ClipSectionRenderer } from '../renderer/clipSectionRenderer';
 import { MerchandiseShelfRenderer } from '../renderer/merchandiseShelfRenderer';
+import { EngagementPanelTitleHeaderRenderer } from '../renderer/engagementPanelTitleHeaderRenderer';
+import { StructuredDescriptionContentRenderer } from '../renderer/structuredDescriptionContentRenderer';
+import { VideoDescriptionHeaderRenderer } from '../renderer/videoDescriptionHeaderRenderer';
+import { ExpandableVideoDescriptionBodyRenderer } from '../renderer/expandableVideoDescriptionBodyRenderer';
+import { OneOfKeyWithEmpty } from 'src/common/typeUtils';
+import { HorizontalCardListRenderer } from '../renderer/horizontalCardListRenderer';
+import { VideoDescriptionTranscriptSectionRenderer } from '../renderer/videoDescriptionTranscriptSectionRenderer';
+import { VideoDescriptionInfocardsSectionRenderer } from '../renderer/videoDescriptionInfocardsSectionRenderer';
+import { ReelShelfRenderer } from '../renderer/reelShelfRenderer';
 
 export type Watch = {
   innertubeApiKey: string,
@@ -193,6 +202,21 @@ type YtInitialData = {
       }
       | {
         targetId: 'engagement-panel-structured-description'
+        header: {
+          engagementPanelTitleHeaderRenderer: EngagementPanelTitleHeaderRenderer
+        }
+        content: {
+          structuredDescriptionContentRenderer: StructuredDescriptionContentRenderer<
+            OneOfKeyWithEmpty<{
+              videoDescriptionHeaderRenderer: VideoDescriptionHeaderRenderer
+              expandableVideoDescriptionBodyRenderer: ExpandableVideoDescriptionBodyRenderer
+              horizontalCardListRenderer: HorizontalCardListRenderer
+              videoDescriptionTranscriptSectionRenderer: VideoDescriptionTranscriptSectionRenderer
+              videoDescriptionInfocardsSectionRenderer: VideoDescriptionInfocardsSectionRenderer
+              reelShelfRenderer: ReelShelfRenderer
+            }>
+          >
+        }
       }
       | {
         targetId: 'engagement-panel-comments-section'

@@ -106,8 +106,6 @@ model Video {
   // TODO: chapters
   // https://youtu.be/EwGAcKnE-y4
   // TODO: watch time heatmap
-  // TODO: membership tier required
-  // https://youtu.be/hURB7goHrYk
   // TODO: video badges (ratings, age restriction)
   // https://youtu.be/XmxZoBLzSSw
   // https://youtu.be/1XOo1OJFAeQ

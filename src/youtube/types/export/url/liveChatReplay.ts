@@ -1,4 +1,5 @@
 
+import { OneOfKeyWithEmpty } from 'src/common/typeUtils';
 import { LiveChatMembershipItemRenderer } from '../renderer/liveChatMembershipItemRenderer';
 import { LiveChatSponsorshipsGiftPurchaseAnnouncementRenderer } from '../renderer/liveChatSponsorshipsGiftPurchaseAnnouncementRenderer';
 import * as liveChatSponsorshipsGiftPurchaseAnnouncementRenderer from '../renderer/liveChatSponsorshipsGiftPurchaseAnnouncementRenderer';
@@ -16,36 +17,45 @@ export type LiveChatReplay = {
   ytInitialPlayerResponse: null,
 };
 
-export function get(data: LiveChatReplay) {
-  if (!data.ytInitialData)
-    throw new Error(`liveChat not found`);
-  const chat = data.ytInitialData.continuationContents.liveChatContinuation.actions[0]
-    .replayChatItemAction.actions[0];
-  const offsetTimestamp = +data.ytInitialData.continuationContents.liveChatContinuation.actions[0]
-    .replayChatItemAction.videoOffsetTimeMsec;
-  let msg;
-  if (msg = chat.addChatItemAction?.item.liveChatSponsorshipsGiftPurchaseAnnouncementRenderer)
-    return {
-      id: liveChatSponsorshipsGiftPurchaseAnnouncementRenderer.getMessageId(msg),
-      offsetTimestamp,
-    };
-  if (msg = chat.addChatItemAction?.item.liveChatTextMessageRenderer)
-    return {
-      id: liveChatTextMessageRenderer.getMessageId(msg),
-      offsetTimestamp,
-    };
-  if (msg = chat.addChatItemAction?.item.liveChatViewerEngagementMessageRenderer)
-    return {
-      id: liveChatViewerEngagementMessageRenderer.getMessageId(msg),
-      offsetTimestamp,
-    };
-  if (msg = chat.addLiveChatTickerItemAction?.item.liveChatTickerSponsorItemRenderer)
-    return {
-      id: liveChatTickerSponsorItemRenderer.getMessageId(msg),
-      offsetTimestamp,
-    };
-  throw new Error(`Unable to parse liveChat`);
-}
+// export function get(data: LiveChatReplay): {
+//   channelId: string
+//   content: string
+// } {
+//   if (!data.ytInitialData)
+//     throw new Error(`liveChat not found`);
+//   const chat = data.ytInitialData.continuationContents.liveChatContinuation.actions[0]
+//     .replayChatItemAction.actions[0];
+//   const offsetTimestamp = +data.ytInitialData.continuationContents.liveChatContinuation.actions[0]
+//     .replayChatItemAction.videoOffsetTimeMsec;
+//   let msg;
+//   if (msg = chat.addChatItemAction?.item.liveChatTextMessageRenderer)
+//     return {
+//       channelId: msg.authorExternalChannelId,
+//       content: msg.message,
+//       id: c
+//     };
+//   if (msg = chat.addChatItemAction?.item.liveChatSponsorshipsGiftPurchaseAnnouncementRenderer)
+//     return {
+//       id: liveChatSponsorshipsGiftPurchaseAnnouncementRenderer.getMessageId(msg),
+//       offsetTimestamp,
+//     };
+//   if (msg = chat.addChatItemAction?.item.liveChatTextMessageRenderer)
+//     return {
+//       id: liveChatTextMessageRenderer.getMessageId(msg),
+//       offsetTimestamp,
+//     };
+//   if (msg = chat.addChatItemAction?.item.liveChatViewerEngagementMessageRenderer)
+//     return {
+//       id: liveChatViewerEngagementMessageRenderer.getMessageId(msg),
+//       offsetTimestamp,
+//     };
+//   if (msg = chat.addLiveChatTickerItemAction?.item.liveChatTickerSponsorItemRenderer)
+//     return {
+//       id: liveChatTickerSponsorItemRenderer.getMessageId(msg),
+//       offsetTimestamp,
+//     };
+//   throw new Error(`Unable to parse liveChat`);
+// }
 
 
 
@@ -55,21 +65,22 @@ type YtInitialData = {
       actions: {
         replayChatItemAction: {
           videoOffsetTimeMsec: string
-          actions: {
-            addChatItemAction?: {
-              item: {
-                liveChatViewerEngagementMessageRenderer?: LiveChatViewerEngagementMessageRenderer
-                liveChatSponsorshipsGiftPurchaseAnnouncementRenderer?: LiveChatSponsorshipsGiftPurchaseAnnouncementRenderer
-                liveChatTextMessageRenderer?: LiveChatTextMessageRenderer
-                liveChatMembershipItemRenderer?: LiveChatMembershipItemRenderer,
-              }
+          actions: OneOfKeyWithEmpty<{
+            addChatItemAction: {
+              clientId?: string
+              item: OneOfKeyWithEmpty<{
+                liveChatViewerEngagementMessageRenderer: LiveChatViewerEngagementMessageRenderer
+                liveChatSponsorshipsGiftPurchaseAnnouncementRenderer: LiveChatSponsorshipsGiftPurchaseAnnouncementRenderer
+                liveChatTextMessageRenderer: LiveChatTextMessageRenderer
+                liveChatMembershipItemRenderer: LiveChatMembershipItemRenderer,
+              }>
             }
-            addLiveChatTickerItemAction?: {
+            addLiveChatTickerItemAction: {
               item: {
                 liveChatTickerSponsorItemRenderer: LiveChatTickerSponsorItemRenderer
               }
             }
-          }[]
+          }>[]
         }
       }[]
     }

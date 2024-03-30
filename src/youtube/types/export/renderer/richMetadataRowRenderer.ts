@@ -1,4 +1,5 @@
 import { Image } from "../generic/image"
+import { NavigationEndpoint } from "../generic/navigationEndpoint"
 import { Text } from "../generic/text"
 
 export type RichMetadataRowRenderer = {
@@ -9,7 +10,7 @@ export type RichMetadataRowRenderer = {
         thumbnail: Image
         title: Text
         subtitle: Text
-
+        endpoint: NavigationEndpoint
       }
       | {
         style: 'RICH_METADATA_RENDERER_STYLE_TOPIC'

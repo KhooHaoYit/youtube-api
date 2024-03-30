@@ -20,7 +20,8 @@ export type NavigationEndpoint = {
     /**
      * `KpCH4mbj_pk`
      */
-    videoId: string,
+    videoId: string
+    startTimeSeconds?: number
   }
   urlEndpoint?: {
     url: string
