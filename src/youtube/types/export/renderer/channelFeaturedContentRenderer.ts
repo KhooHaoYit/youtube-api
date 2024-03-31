@@ -9,5 +9,5 @@ export type ChannelFeaturedContentRenderer = {
 
 export function getVideoIds(data: ChannelFeaturedContentRenderer) {
   return data.items
-    .map(item => videoRenderer.getVideoId(item.videoRenderer));
+    .map(item => videoRenderer.getVideoId(item.videoRenderer)!);
 }

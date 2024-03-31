@@ -89,7 +89,7 @@ export function getContent(post: BackstagePostRenderer) {
 type Extra =
   | null
   | ['image', string[]]
-  | ['video', string]
+  | ['video', string | null]
   | ['playlist', string]
   | ['poll', ReturnType<typeof getPollInfo>]
   | ['quiz', ReturnType<typeof getQuizInfo>];
@@ -102,7 +102,7 @@ export function getExtra(post: BackstagePostRenderer): Extra {
   if (extra?.postMultiImageRenderer)
     return ['image', getAllImageUrls(extra.postMultiImageRenderer)];
   if (extra?.videoRenderer)
-    return ['video', extra.videoRenderer.videoId];
+    return ['video', extra.videoRenderer.videoId ?? null];
   if (extra.playlistRenderer)
     return ['playlist', getPlaylistInfo(extra.playlistRenderer).id];
   if (extra?.pollRenderer)

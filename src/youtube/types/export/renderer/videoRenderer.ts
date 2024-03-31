@@ -4,7 +4,10 @@ import { ViewCountText } from "../generic/viewCountText";
 import { ChannelThumbnailWithLinkRenderer } from "./channelThumbnailWithLinkRenderer";
 
 export type VideoRenderer = {
-  videoId: string,
+  /**
+   * could be null from deleted video
+   */
+  videoId?: string,
   title: Text
   /**
    * contains partial description
