@@ -223,9 +223,8 @@ export async function getAllRelatedPlaylists(innertubeApiKey: string, data: Home
       }
     }
     output.push([
-      getOriginalText(item.endpoint.showEngagementPanelEndpoint!
-        .engagementPanel.engagementPanelSectionListRenderer
-        .header.engagementPanelTitleHeaderRenderer.title),
+      // TODO: test for Multiple playlists where the popup one doesn't have title
+      getOriginalText(content.itemSectionRenderer!.contents[0].shelfRenderer!.title),
       playlistIds,
     ]);
   }
