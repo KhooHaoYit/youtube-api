@@ -31,7 +31,16 @@ export type YtInitialData = {
   /**
    * defined only when requesting /channel/CHANNEL_ID
    */
-  header?: { c4TabbedHeaderRenderer: C4TabbedHeaderRenderer }
+  header?: {
+    pageHeaderRenderer?: {
+      content: {
+        pageHeaderViewModel: {
+
+        }
+      }
+    }
+    c4TabbedHeaderRenderer?: C4TabbedHeaderRenderer
+  }
   /**
    * not defined when channel doesn't exists
    */

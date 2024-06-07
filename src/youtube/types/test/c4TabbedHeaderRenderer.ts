@@ -15,15 +15,15 @@ import { C4TabbedHeaderRenderer } from '../export/renderer/c4TabbedHeaderRendere
 
 
 
-<hololive_about['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
-<hololive_channels['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
-<hololive_community['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
+// <hololive_about['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
+// <hololive_channels['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
+// <hololive_community['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
 <hololive_playlists['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
 <hololive_podcasts['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
 <hololive_shorts['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
 <hololive_streams['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
 <hololive_videos['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
-<haachamachama['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
-<suisei_about['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
-<suisei_releases['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
-<suiseiTopic['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
+// <haachamachama['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
+// <suisei_about['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
+// <suisei_releases['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;
+// <suiseiTopic['header']['c4TabbedHeaderRenderer']>{} satisfies C4TabbedHeaderRenderer;

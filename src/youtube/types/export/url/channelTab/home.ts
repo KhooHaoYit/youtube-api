@@ -119,15 +119,16 @@ export function getFeaturedDisplay(data: Home): (
       .url?.includes('/videos?')
     ) {
       const url = item.shelfRenderer.endpoint.commandMetadata.webCommandMetadata.url;
-      if (url.endsWith('/videos?view=0&sort=dd&shelf_id=0')) // Videos
+      // shelf_id can be ignored since it's the index of the item in the featured tab
+      if (/\/videos\?view=0&sort=dd&shelf_id=\d+$/.test(url)) // Videos
         return ['playlist', channelId.replace('UC', 'UULF')];
-      if (url.endsWith('/videos?view=0&sort=p&shelf_id=0')) // Popular videos
+      if (/\/videos\?view=0&sort=p&shelf_id=\d+$/.test(url)) // Popular videos
         return ['playlist', channelId.replace('UC', 'UULP')];
-      if (url.endsWith('/videos?view=2&sort=dd&live_view=503&shelf_id=0')) // Past live streams
+      if (/\/videos\?view=2&sort=dd&live_view=503&shelf_id=\d+$/.test(url)) // Past live streams
         return ['playlist', channelId.replace('UC', 'UULV')];
-      if (url.endsWith('/videos?view=2&sort=dd&live_view=501&shelf_id=0')) // Live now
+      if (/\/videos\?view=2&sort=dd&live_view=501&shelf_id=\d+$/.test(url)) // Live now
         return ['videos', 'Live now'];
-      if (url.endsWith('/videos?view=2&sort=dd&live_view=502&shelf_id=0')) // Upcoming live streams
+      if (/\/videos\?view=2&sort=dd&live_view=502&shelf_id=\d+$/.test(url)) // Upcoming live streams
         return ['videos', 'Upcoming live streams'];
       throw new Error(`Unknown videos: ${url} (${getOriginalText(item.shelfRenderer.title)})`);
     }

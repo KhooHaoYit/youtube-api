@@ -4,7 +4,6 @@ import { YoutubeApi } from './api';
 import { getChannelTab } from './helper';
 import { Visibility } from '@prisma/client';
 import { getPost } from './types/export/renderer/backstagePostThreadRenderer';
-import { getAmountOfVideos, getPlaylistId, getPlaylistTitle } from './types/export/renderer/gridPlaylistRenderer';
 import { getCommunityPosts } from './types/export/url/channelTab/community';
 import { getErrorMessage } from './types/export/url/watch';
 import { getAllRelatedChannel, getAllRelatedPlaylists, getFeaturedDisplay } from './types/export/url/channelTab/home';
@@ -166,10 +165,12 @@ export class YoutubeScraper {
       return;
     if (!page.innertubeApiKey)
       throw new Error('Unable to extract innertubeApiKey');
-    await this.model.handleC4TabbedHeaderRendererUpdate(page.ytInitialData.header.c4TabbedHeaderRenderer);
+    if (page.ytInitialData.header.c4TabbedHeaderRenderer) {
+      await this.model.handleC4TabbedHeaderRendererUpdate(page.ytInitialData.header.c4TabbedHeaderRenderer);
+    }
     const tab = getChannelTab(page.ytInitialData!, 'Home').tabRenderer;
     await this.model.handleChannelUpdate({
-      id: page.ytInitialData.header.c4TabbedHeaderRenderer.channelId,
+      id: channelId,
       featuredDisplay: getFeaturedDisplay(tab),
       channels: await getAllRelatedChannel(page.innertubeApiKey, tab, channelId),
       playlistsDisplay: await getAllRelatedPlaylists(page.innertubeApiKey, tab, channelId),
@@ -212,7 +213,7 @@ export class YoutubeScraper {
 
   async scrapeChannelAbout(channelId: string) {
     const page = await this.youtube.scrape(`/channel/${channelId}/about`);
-    if (page.ytInitialData?.header)
+    if (page.ytInitialData?.header?.c4TabbedHeaderRenderer)
       await this.model.handleC4TabbedHeaderRendererUpdate(page.ytInitialData.header.c4TabbedHeaderRenderer);
     const about = page.ytInitialData?.onResponseReceivedEndpoints?.[0].showEngagementPanelEndpoint
       ?.engagementPanel.engagementPanelSectionListRenderer.content.sectionListRenderer
