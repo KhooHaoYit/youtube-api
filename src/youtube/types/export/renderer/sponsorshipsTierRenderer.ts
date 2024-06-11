@@ -6,7 +6,7 @@ export type SponsorshipsTierRenderer = {
   /**
    * `通常コース`
    */
-  title: Text
+  title?: Text
   /**
    * `MYR 10.00/month`
    */
@@ -20,7 +20,7 @@ export type SponsorshipsTierRenderer = {
 
 export function getTierInfo(data: SponsorshipsTierRenderer) {
   return {
-    name: getOriginalText(data.title),
+    name: data.title ? getOriginalText(data.title) : '',
     rankId: data.rankId,
     offers: getOffersInfo(data.perks.sponsorshipsPerksRenderer),
   };
