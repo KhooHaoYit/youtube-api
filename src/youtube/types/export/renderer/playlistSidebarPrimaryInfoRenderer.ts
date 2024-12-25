@@ -1,5 +1,6 @@
 import { Runs } from "../generic/runs";
 import { Text, getOriginalText } from "../generic/text";
+import { MetadataBadgeRenderer } from "./metadataBadgeRenderer";
 
 export type PlaylistSidebarPrimaryInfoRenderer = {
   title: Text
@@ -24,6 +25,7 @@ export type PlaylistSidebarPrimaryInfoRenderer = {
     }
   ]
   description?: Text
+  badges?: MetadataBadgeRenderer[]
 };
 
 export function getTitle(data: PlaylistSidebarPrimaryInfoRenderer) {

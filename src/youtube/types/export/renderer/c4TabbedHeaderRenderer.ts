@@ -126,7 +126,7 @@ export function getHandle(data: C4TabbedHeaderRenderer) {
 
 export function isVerified(data: C4TabbedHeaderRenderer) {
   const verifiedBadgeIndex = data.badges
-    ?.findIndex(badge => badge.metadataBadgeRenderer.icon.iconType === 'CHECK_CIRCLE_THICK');
+    ?.findIndex(badge => badge.metadataBadgeRenderer.icon?.iconType === 'CHECK_CIRCLE_THICK');
   return verifiedBadgeIndex === undefined
     ? undefined
     : verifiedBadgeIndex !== -1;

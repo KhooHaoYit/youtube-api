@@ -30,6 +30,7 @@ import { HorizontalCardListRenderer } from '../renderer/horizontalCardListRender
 import { VideoDescriptionTranscriptSectionRenderer } from '../renderer/videoDescriptionTranscriptSectionRenderer';
 import { VideoDescriptionInfocardsSectionRenderer } from '../renderer/videoDescriptionInfocardsSectionRenderer';
 import { ReelShelfRenderer } from '../renderer/reelShelfRenderer';
+import { LockupViewModel } from '../generic/models/lockupViewModel';
 
 export type Watch = {
   innertubeApiKey: string,
@@ -112,6 +113,7 @@ type YtInitialData = {
               messageRenderer?: MessageRenderer
               commentsEntryPointHeaderRenderer?: CommentsEntryPointHeaderRenderer
               backgroundPromoRenderer?: BackgroundPromoRenderer
+              videoMetadataCarouselViewModel?: {}
               continuationItemRenderer?: ContinuationItemRenderer
             }>
           }[]
@@ -127,6 +129,8 @@ type YtInitialData = {
             relatedChipCloudRenderer?: RelatedChipCloudRenderer
             itemSectionRenderer?: ItemSectionRenderer<{}>
             continuationItemRenderer?: ContinuationItemRenderer
+            lockupViewModel?: LockupViewModel
+            reelShelfRenderer?: ReelShelfRenderer
           }[],
         }
       },
@@ -239,6 +243,10 @@ type YtInitialData = {
       | {
         targetId: 'shopping_panel_for_entry_point_9'
       }
+      | {
+        targetId: 'engagement-panel-search-preview-entity-view'
+      }
+      | {}
     )
   }[]
 };

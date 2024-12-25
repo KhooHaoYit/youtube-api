@@ -4,9 +4,9 @@ import { PlaylistShowMetadataRenderer } from "../renderer/playlistShowMetadataRe
 import { PlaylistVideoListRenderer } from "../renderer/playlistVideoListRenderer"
 import * as playlistVideoListRenderer from "../renderer/playlistVideoListRenderer"
 import { PlaylistVideoRenderer } from "../renderer/playlistVideoRenderer"
-import { ReelItemRenderer } from "../renderer/reelItemRenderer"
 import { RichGridRenderer } from "../renderer/richGridRenderer"
 import { RichItemRenderer } from "../renderer/richItemRenderer"
+import { ShortsLockupViewModel } from "./models/shortsLockupViewModel"
 
 export type PlaylistItemSection = ItemSectionRenderer<{
   messageRenderer?: MessageRenderer
@@ -15,7 +15,7 @@ export type PlaylistItemSection = ItemSectionRenderer<{
   richGridRenderer?: RichGridRenderer<{
     content: {
       richItemRenderer: RichItemRenderer<{
-        reelItemRenderer: ReelItemRenderer
+        shortsLockupViewModel: ShortsLockupViewModel
       }>
     }
   }>
@@ -24,7 +24,7 @@ export type PlaylistItemSection = ItemSectionRenderer<{
 export async function* listAllVideos(data: PlaylistItemSection, innertubeApiKey: string)
   : AsyncGenerator<{
     video?: PlaylistVideoRenderer
-    shorts?: ReelItemRenderer
+    shorts?: ShortsLockupViewModel
   }> {
   for (const content of data.contents) {
     if (content.messageRenderer)
@@ -37,7 +37,7 @@ export async function* listAllVideos(data: PlaylistItemSection, innertubeApiKey:
     else
       for (const { richItemRenderer } of content.richGridRenderer!.contents)
         yield {
-          shorts: richItemRenderer.content.reelItemRenderer,
+          shorts: richItemRenderer.content.shortsLockupViewModel,
         };
   }
 }

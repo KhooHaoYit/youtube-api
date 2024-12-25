@@ -1,3 +1,4 @@
+import { LockupViewModel } from "../../generic/models/lockupViewModel";
 import { ChannelSubMenuRenderer } from "../../renderer/channelSubMenuRenderer";
 import * as channelSubMenuRenderer from '../../renderer/channelSubMenuRenderer';
 import { ContinuationItemRenderer } from "../../renderer/continuationItemRenderer";
@@ -22,6 +23,7 @@ export type Playlists = {
             gridPlaylistRenderer?: GridPlaylistRenderer
             gridShowRenderer?: GridShowRenderer
             continuationItemRenderer?: ContinuationItemRenderer
+            lockupViewModel?: LockupViewModel
           }>
           /**
            * defined when showing multiple playlists categories

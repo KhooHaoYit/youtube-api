@@ -32,7 +32,7 @@ export type BackstagePostRenderer = {
             /**
              * `9,455`
              */
-            "label": `Like this comment along with ${StringOfDigitsAndComma} other people`
+            "label": `Like this post along with ${StringOfDigitsAndComma} other people`
           },
         },
       },

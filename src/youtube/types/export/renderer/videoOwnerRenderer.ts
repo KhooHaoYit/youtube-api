@@ -10,6 +10,6 @@ export type VideoOwnerRenderer = {
    */
   title: Text
   navigationEndpoint: NavigationEndpoint
-  subscriberCountText: SubscriberCountText
+  subscriberCountText?: SubscriberCountText
   membershipButton?: {}
 }

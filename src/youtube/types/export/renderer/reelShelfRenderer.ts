@@ -1,7 +1,7 @@
-import { ReelItemRenderer } from "./reelItemRenderer";
+import { ShortsLockupViewModel } from "../generic/models/shortsLockupViewModel";
 
 export type ReelShelfRenderer = {
   "items": {
-    reelItemRenderer: ReelItemRenderer,
+    shortsLockupViewModel: ShortsLockupViewModel,
   }[],
 };

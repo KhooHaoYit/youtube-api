@@ -19,6 +19,7 @@ import { RecognitionShelfRenderer } from "../../renderer/recognitionShelfRendere
 import { ReelShelfRenderer } from "../../renderer/reelShelfRenderer";
 import { SectionListRenderer } from "../../renderer/sectionListRenderer";
 import { VideoRenderer } from "../../renderer/videoRenderer";
+import { LockupViewModel } from "../../generic/models/lockupViewModel";
 
 export type Home = {
   title: 'Home',
@@ -50,6 +51,7 @@ export type Home = {
                   gridVideoRenderer?: GridVideoRenderer
                   gridChannelRenderer?: GridChannelRenderer
                   gridPlaylistRenderer?: GridPlaylistRenderer
+                  lockupViewModel?: LockupViewModel
                 }[]
               }
             }
@@ -139,14 +141,8 @@ export function getFeaturedDisplay(data: Home): (
 }
 
 export async function getAllRelatedChannel(innertubeApiKey: string, data: Home, channelId: string) {
-  const output: [string, string[]][] = [['Subscriptions', []]];
-  // subs
-  const initialItems = await browseChannelSubs(channelId)
-    .then(res => res.onResponseReceivedEndpoints[0]
-      .appendContinuationItemsAction.continuationItems[0]
-      .gridRenderer.items);
-  for await (const { gridChannelRenderer } of browseAll(innertubeApiKey, initialItems))
-    output[0][1].push(gridChannelRenderer!.channelId);
+  const output: [string, string[]][] = [];
+  // not possible to get subs now
   // featured
   for (const content of data.content!.sectionListRenderer.contents) {
     const item = content.itemSectionRenderer?.contents[0]
@@ -158,11 +154,6 @@ export async function getAllRelatedChannel(innertubeApiKey: string, data: Home, 
     const initialItems = item.endpoint.showEngagementPanelEndpoint!
       .engagementPanel.engagementPanelSectionListRenderer
       .content.sectionListRenderer.contents[0].itemSectionRenderer.contents;
-    // skip `Subscriptions` in featured
-    if (
-      initialItems[0].continuationItemRenderer?.continuationEndpoint.continuationCommand.token
-        .includes('aRjhnWXZHaTJ5QVNvS0FoSUFHaVEyT')
-    ) continue;
     const channelIds: string[] = [];
     for await (const { gridRenderer } of browseAll(innertubeApiKey, initialItems)) {
       const initialItems = gridRenderer!.items;
@@ -189,9 +180,10 @@ export async function getAllRelatedPlaylists(innertubeApiKey: string, data: Home
       .itemSectionRenderer.contents[0].gridRenderer?.items);
   if (initialItems) {
     const playlistIds = [];
-    for await (const { gridPlaylistRenderer, gridShowRenderer } of browseAll(innertubeApiKey, initialItems)) {
+    for await (const { gridPlaylistRenderer, gridShowRenderer, lockupViewModel } of browseAll(innertubeApiKey, initialItems)) {
       const playlistId = gridPlaylistRenderer?.playlistId
-        ?? gridShowRenderer?.navigationEndpoint.browseEndpoint?.browseId.replace(/^VL/, '');
+        ?? gridShowRenderer?.navigationEndpoint.browseEndpoint?.browseId.replace(/^VL/, '')
+        ?? lockupViewModel?.contentId;
       if (!playlistId)
         throw new Error(`Unable to get playlistId`);
       playlistIds.push(playlistId);

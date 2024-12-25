@@ -1,5 +1,7 @@
+import { PageHeaderViewModel } from "../generic/models/pageHeaderViewModel";
 import { PlaylistItemSection } from "../generic/playlistItemSection";
-import { getOriginalText } from "../generic/text";
+import { getBrowseId } from "../generic/runs";
+import { getOriginalText, Text } from "../generic/text";
 import { AlertRenderer } from "../renderer/alertRenderer";
 import { AlertWithButtonRenderer } from "../renderer/alertWithButtonRenderer";
 import { ContinuationItemRenderer } from "../renderer/continuationItemRenderer";
@@ -37,13 +39,36 @@ type YtInitialData = {
   sidebar?: {
     playlistSidebarRenderer: PlaylistSidebarRenderer
   }
+  metadata?: {
+    playlistMetadataRenderer: {
+      title: string
+      description?: string
+    }
+  }
   header?: {
-    playlistHeaderRenderer: PlaylistHeaderRenderer
+    playlistHeaderRenderer?: PlaylistHeaderRenderer
+    pageHeaderRenderer?: {
+      content: {
+        pageHeaderViewModel: PageHeaderViewModel
+      }
+    }
   }
   alerts?: {
     alertRenderer?: AlertRenderer
     alertWithButtonRenderer?: AlertWithButtonRenderer
   }[]
+  microformat?: {
+    microformatDataRenderer: (
+      { noindex: true }
+      | {
+        noindex: false
+        urlCanonical: string
+        title: string
+        description: string
+        unlisted: boolean
+      }
+    )
+  }
 };
 
 
@@ -61,7 +86,32 @@ export function hasPlaylist(data: Playlist) {
 
 export function getPlaylist(data: Playlist) {
   const header = data.ytInitialData?.header?.playlistHeaderRenderer;
-  if (!header)
-    throw new Error(`Header is not defined`);
-  return playlistHeaderRenderer.getPlaylistInfo(header);
+  if (header)
+    return playlistHeaderRenderer.getPlaylistInfo(header);
+  if (data.ytInitialData?.microformat?.microformatDataRenderer.noindex === true)
+    throw new Error(`Unable to get playlist`);
+  const playlistSidebarPrimaryInfoRenderer =
+    data.ytInitialData?.sidebar?.playlistSidebarRenderer.items
+      .find(item => item.playlistSidebarPrimaryInfoRenderer)!
+      .playlistSidebarPrimaryInfoRenderer!;
+  const playlistSidebarSecondaryInfoRenderer =
+    data.ytInitialData?.sidebar?.playlistSidebarRenderer.items
+      .find(item => item.playlistSidebarSecondaryInfoRenderer)!
+      .playlistSidebarSecondaryInfoRenderer!;
+  return {
+    id: data.ytInitialData!.microformat!.microformatDataRenderer.urlCanonical.replace(/^[^=]+/, ''),
+    title: data.ytInitialData!.microformat!.microformatDataRenderer.title,
+    description: data.ytInitialData!.metadata?.playlistMetadataRenderer.description ?? '',
+    channelId: getBrowseId(
+      playlistSidebarSecondaryInfoRenderer.videoOwner
+        .videoOwnerRenderer.title.runs!
+    ),
+    visibility: data.ytInitialData!.microformat!.microformatDataRenderer.unlisted
+      ? "UNLISTED" : "PUBLIC",
+    badges: playlistSidebarPrimaryInfoRenderer.badges
+      ?.map(badge => badge.metadataBadgeRenderer.label!),
+    videoCount: +getOriginalText(playlistSidebarPrimaryInfoRenderer.stats[0]).replace(/,| [^]*/g, ''),
+    viewCount: +getOriginalText(playlistSidebarPrimaryInfoRenderer.stats[1]).replace(/,| [^]*/g, ''),
+    lastUpdated: getOriginalText(playlistSidebarPrimaryInfoRenderer.stats[2]),
+  };
 }

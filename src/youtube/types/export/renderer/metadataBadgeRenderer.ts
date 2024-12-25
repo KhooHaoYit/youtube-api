@@ -1,14 +1,12 @@
 export type MetadataBadgeRenderer = {
   metadataBadgeRenderer: {
-    icon: {
+    icon?: {
       /**
-       * `OFFICIAL_ARTIST_BADGE` | haveArtistBadge
+       * `AUDIO_BADGE` | haveArtistBadge
        * `CHECK_CIRCLE_THICK` | isVerified
        */
-      iconType: (
-        | 'OFFICIAL_ARTIST_BADGE'
-        | 'CHECK_CIRCLE_THICK'
-      ),
-    },
+      iconType: string
+    }
+    label?: string
   }
 };

@@ -1,3 +1,4 @@
+import { ShortsLockupViewModel } from "../../generic/models/shortsLockupViewModel";
 import { ContinuationItemRenderer } from "../../renderer/continuationItemRenderer";
 import { ReelItemRenderer } from "../../renderer/reelItemRenderer";
 import { RichGridRenderer } from "../../renderer/richGridRenderer";
@@ -9,7 +10,7 @@ export type Shorts = {
     richGridRenderer: RichGridRenderer<{
       content: {
         richItemRenderer?: RichItemRenderer<{
-          reelItemRenderer: ReelItemRenderer
+          shortsLockupViewModel: ShortsLockupViewModel
         }>
         continuationItemRenderer?: ContinuationItemRenderer
       }

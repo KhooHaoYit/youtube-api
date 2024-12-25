@@ -1,3 +1,4 @@
+import { PageHeaderViewModel } from "../generic/models/pageHeaderViewModel";
 import { ResponseContext } from "../generic/responseContext";
 import { AboutChannelRenderer } from "../renderer/aboutChannelRenderer";
 import { C4TabbedHeaderRenderer } from "../renderer/c4TabbedHeaderRenderer";
@@ -34,9 +35,7 @@ export type YtInitialData = {
   header?: {
     pageHeaderRenderer?: {
       content: {
-        pageHeaderViewModel: {
-
-        }
+        pageHeaderViewModel: PageHeaderViewModel
       }
     }
     c4TabbedHeaderRenderer?: C4TabbedHeaderRenderer
@@ -70,6 +69,7 @@ export type YtInitialData = {
             videoPrimaryInfoRenderer?: VideoPrimaryInfoRenderer
             videoSecondaryInfoRenderer?: VideoSecondaryInfoRenderer
             itemSectionRenderer?: {}
+            merchandiseShelfRenderer?: {}
           }[]
         }
       }

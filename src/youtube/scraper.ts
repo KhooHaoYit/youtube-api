@@ -82,9 +82,10 @@ export class YoutubeScraper {
         page.innertubeApiKey,
       )
     ) {
-      videoIds.push((video ?? shorts!).videoId);
+      const videoId = video?.videoId ?? shorts!.entityId.replace('shorts-shelf-item-', '');
+      videoIds.push(videoId);
       if (shorts) {
-        await this.scrapeVideo(shorts.videoId);
+        await this.scrapeVideo(videoId);
         continue;
       }
       await this.model.handleVideoUpdate({
@@ -190,18 +191,28 @@ export class YoutubeScraper {
     if (!initialItems) // channel have no playlist??
       return;
     for await (
-      const { gridPlaylistRenderer, gridShowRenderer }
+      const { gridPlaylistRenderer, gridShowRenderer, lockupViewModel }
       of browseAll(page.innertubeApiKey, initialItems)
     ) {
       const id = gridPlaylistRenderer?.playlistId
-        ?? gridShowRenderer?.navigationEndpoint.browseEndpoint?.browseId.replace(/^VL/, '');
+        ?? gridShowRenderer?.navigationEndpoint.browseEndpoint?.browseId.replace(/^VL/, '')
+        ?? lockupViewModel?.contentId;
       if (!id)
         throw new Error(`Unable to extract playlistId`);
-      const title = getOriginalText(gridPlaylistRenderer?.title ?? gridShowRenderer?.title!);
-      const estimatedCount = +getOriginalText(
-        gridPlaylistRenderer?.videoCountShortText
-        ?? gridShowRenderer?.thumbnailOverlays[0].thumbnailOverlayBottomPanelRenderer.text!
-      ).replace(/,| [^]+/g, '');
+      const title = getOriginalText(
+        gridPlaylistRenderer?.title
+        ?? gridShowRenderer?.title
+        ?? lockupViewModel?.metadata.lockupMetadataViewModel.title!
+      );
+      let estimatedCount = +(
+        lockupViewModel?.contentImage.collectionThumbnailViewModel.primaryThumbnail.thumbnailViewModel.overlays
+          .find(item => item.thumbnailOverlayBadgeViewModel)!.thumbnailOverlayBadgeViewModel
+          ?.thumbnailBadges[0].thumbnailBadgeViewModel.text.split(' ')[0]!
+        ?? getOriginalText(
+          gridPlaylistRenderer?.videoCountShortText
+          ?? gridShowRenderer?.thumbnailOverlays[0].thumbnailOverlayBottomPanelRenderer.text!
+        ).replace(/,| [^]+/g, '')
+      );
       await this.model.handlePlaylistUpdate({
         channelId,
         id,
@@ -223,6 +234,8 @@ export class YoutubeScraper {
     const channelInfo = getChannelInfo(about);
     await this.model.handleChannelUpdate({
       id: channelInfo.channelId,
+      bannerUrl: page.ytInitialData?.header?.pageHeaderRenderer?.content
+        .pageHeaderViewModel.banner?.imageBannerViewModel.image.sources[0].url,
       viewCount: channelInfo.viewCount,
       description: channelInfo.description,
       handle: channelInfo.handle,
