@@ -2,8 +2,6 @@ import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { PrismaService } from 'nestjs-prisma';
 import { PrismaSelect } from '@paljs/plugins';
 import { GraphQLResolveInfo } from 'graphql';
-import { Prisma } from '@prisma/client';
-import { GraphQLBigInt } from 'graphql-scalars';
 import { AppService } from './app.service';
 import { Video } from './@generated/video/video.model';
 
@@ -23,7 +21,7 @@ export class AppResolver {
     const { select } = new PrismaSelect(info).value;
     return await this.prisma.video.findUnique({
       where: { id },
-      select,
+      select
     });
   }
 
