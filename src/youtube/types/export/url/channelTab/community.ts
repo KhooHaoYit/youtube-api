@@ -7,7 +7,7 @@ import { MessageRenderer } from "../../renderer/messageRenderer";
 import { BackgroundPromoRenderer } from "../../renderer/backgroundPromoRenderer";
 
 export type Community = {
-  title: 'Community',
+  title: 'Posts',
   content?: {
     sectionListRenderer: SectionListRenderer<{
       content: {

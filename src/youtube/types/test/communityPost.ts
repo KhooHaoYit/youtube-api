@@ -26,7 +26,7 @@ const addSchema = (data: Record<string, any>, key: string) => {
   c5,
 ].forEach((data: any) => data
   .contents.twoColumnBrowseResultsRenderer.tabs
-  .find((tab: any) => tab.tabRenderer?.title === 'Community')
+  .find((tab: any) => tab.tabRenderer?.title === 'Posts')
   .tabRenderer.content.sectionListRenderer.contents[0]
   .itemSectionRenderer.contents.forEach((content: any) => {
     if ('continuationItemRenderer' in content)
@@ -51,7 +51,7 @@ const addSchema = (data: Record<string, any>, key: string) => {
   for await (
     const item
     of browseAll(innertubeApiKey, (<any>ytInitialData).contents.twoColumnBrowseResultsRenderer.tabs
-      .find((tab: any) => tab.tabRenderer?.title === 'Community')
+      .find((tab: any) => tab.tabRenderer?.title === 'Posts')
       .tabRenderer.content.sectionListRenderer.contents[0]
       .itemSectionRenderer.contents)
   ) {

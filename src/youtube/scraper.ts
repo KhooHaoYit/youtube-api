@@ -10,7 +10,6 @@ import { getAllRelatedChannel, getAllRelatedPlaylists, getFeaturedDisplay } from
 import { getPlaylist, getUnviewableReason, hasPlaylist } from './types/export/url/playlist';
 import { getVideoInfo } from './types/export/renderer/playlistVideoRenderer';
 import { PrismaService } from 'nestjs-prisma';
-import { getReleases } from './types/export/url/channelTab/releases';
 import { getCurrentPerksInfo } from './types/export/renderer/sponsorshipsExpandablePerksRenderer';
 import { getOffer } from './types/export/endpoints/getOffer';
 import * as ypcTransactionErrorMessageRenderer from './types/export/renderer/ypcTransactionErrorMessageRenderer';
@@ -19,6 +18,7 @@ import { browseAll, browsePlaylist } from './types/export/endpoints/browse';
 import { listAllVideos } from './types/export/generic/playlistItemSection';
 import { getChannelInfo } from './types/export/generic/models/aboutChannelViewModel';
 import { getOriginalText } from './types/export/generic/text';
+import { getPlaylistInfo } from './types/export/renderer/playlistRenderer';
 
 @Injectable()
 export class YoutubeScraper {
@@ -111,19 +111,27 @@ export class YoutubeScraper {
 
   async scrapeChannelReleasesTab(channelId: string) {
     const page = await this.youtube.scrape(`/channel/${channelId}/releases`);
+    if (!page.innertubeApiKey)
+      throw new Error(`innertubeApiKey not defined`);
     const tab = getChannelTab(page.ytInitialData!, 'Releases');
     if (!tab)
       return;
-    const releases = getReleases(tab.tabRenderer);
-    if (!releases)
-      return;
-    await Promise.all(releases.map(release => this.model.handlePlaylistUpdate({
-      id: release.id,
-      extraChannelIds: release.extraChannelIds,
-    })));
+    const initialReleases = tab.tabRenderer.content?.richGridRenderer.contents;
+    const releases = [];
+    for await (
+      const { richItemRenderer }
+      of browseAll(page.innertubeApiKey, initialReleases)
+    ) {
+      const playlist = getPlaylistInfo(richItemRenderer!.content.playlistRenderer);
+      releases.push(playlist.id);
+      await this.model.handlePlaylistUpdate({
+        id: playlist.id,
+        extraChannelIds: playlist.extraChannelIds,
+      });
+    }
     await this.model.handleChannelUpdate({
       id: channelId,
-      releases: releases.map(release => release.id),
+      releases,
     });
   }
 
@@ -131,7 +139,7 @@ export class YoutubeScraper {
     const page = await this.youtube.scrape(`/channel/${channelId}/community`);
     if (!page.innertubeApiKey)
       throw new Error(`innertubeApiKey not defined`);
-    const tab = getChannelTab(page.ytInitialData!, 'Community');
+    const tab = getChannelTab(page.ytInitialData!, 'Posts');
     if (!tab)
       return;
     const initialPosts = getCommunityPosts(tab.tabRenderer);

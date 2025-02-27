@@ -1,3 +1,4 @@
+import { ContinuationItemRenderer } from "../../renderer/continuationItemRenderer";
 import { PlaylistRenderer, getPlaylistInfo } from "../../renderer/playlistRenderer";
 import { RichGridRenderer } from "../../renderer/richGridRenderer";
 import { RichItemRenderer } from "../../renderer/richItemRenderer";
@@ -7,15 +8,11 @@ export type Releases = {
   content?: {
     richGridRenderer: RichGridRenderer<{
       content: {
-        richItemRenderer: RichItemRenderer<{
+        richItemRenderer?: RichItemRenderer<{
           playlistRenderer: PlaylistRenderer
         }>
+        continuationItemRenderer?: ContinuationItemRenderer
       }
     }>
   }
 };
-
-export function getReleases(data: Releases) {
-  return data.content?.richGridRenderer.contents.map(({ richItemRenderer }) =>
-    getPlaylistInfo(richItemRenderer.content.playlistRenderer));
-}

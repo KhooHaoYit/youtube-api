@@ -23,7 +23,7 @@ export function getChannelTab<T extends 'Channels'>(
   data: ChannelPage,
   tabName: T,
 ): { tabRenderer: Channels };
-export function getChannelTab<T extends 'Community'>(
+export function getChannelTab<T extends 'Posts'>(
   data: ChannelPage,
   tabName: T,
 ): { tabRenderer: Community } | undefined;

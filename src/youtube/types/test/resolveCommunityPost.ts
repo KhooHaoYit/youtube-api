@@ -20,7 +20,7 @@ const posts = [
   c6,
 ].map((data: any) => data
   .contents.twoColumnBrowseResultsRenderer.tabs
-  .find((tab: any) => tab.tabRenderer?.title === 'Community')
+  .find((tab: any) => tab.tabRenderer?.title === 'Posts')
   .tabRenderer.content.sectionListRenderer.contents[0]
   .itemSectionRenderer.contents.map((content: any) => {
     if ('continuationItemRenderer' in content)
