@@ -101,6 +101,7 @@ export function getFeaturedDisplay(data: Home): (
     if (
       item.shelfRenderer?.content.horizontalListRenderer?.items[0].gridPlaylistRenderer
       || item.shelfRenderer?.content.expandedShelfContentsRenderer?.items[0].playlistRenderer
+      || item.shelfRenderer?.content.horizontalListRenderer?.items[0].lockupViewModel?.contentId.startsWith('PL')
     )
       return [
         'playlists',
@@ -132,11 +133,13 @@ export function getFeaturedDisplay(data: Home): (
         return ['videos', 'Live now'];
       if (/\/videos\?view=2&sort=dd&live_view=502&shelf_id=\d+$/.test(url)) // Upcoming live streams
         return ['videos', 'Upcoming live streams'];
+      // if (/\/videos\?view=2&sort=dd&live_view=502&shelf_id=\d+$/.test(url)) // Upcoming live streams
+      //   return ['playlists', 'Created playlists'];
       throw new Error(`Unknown videos: ${url} (${getOriginalText(item.shelfRenderer.title)})`);
     }
     if (item.reelShelfRenderer)
       return ['playlist', channelId.replace('UC', 'UUSH')];
-    throw new Error(`Unknown featured display`);
+    throw new Error(`Unknown featured display: ${Object.keys(item)[0]}`);
   });
 }
 
