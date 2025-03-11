@@ -1,12 +1,13 @@
 ARG PNPM_VERSION=8.10.0
 
 FROM node:22-alpine AS BUILDER
+ARG PNPM_VERSION
 RUN apk add --no-cache openssl && npm i -g pnpm@$PNPM_VERSION
 WORKDIR /app
 COPY pnpm-lock.yaml ./
 RUN pnpm fetch
 COPY package.json ./
-RUN pnpm i
+RUN pnpm i --offline
 COPY prisma/schema.prisma prisma/schema.prisma
 RUN npx prisma generate
 
@@ -15,12 +16,13 @@ RUN rm -rf src/youtube/types/test \
   && npm run build
 
 FROM node:22-alpine AS PRODUCTION_PACKAGE
+ARG PNPM_VERSION
 RUN apk add --no-cache openssl && npm i -g pnpm@$PNPM_VERSION
 WORKDIR /app
 COPY pnpm-lock.yaml ./
 RUN pnpm fetch --prod
 COPY package.json ./
-RUN pnpm i -P
+RUN pnpm i -P --offline
 COPY prisma/schema.prisma prisma/schema.prisma
 RUN npx prisma generate
 
