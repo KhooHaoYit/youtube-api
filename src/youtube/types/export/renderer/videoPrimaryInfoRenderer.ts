@@ -1,5 +1,6 @@
 import { Text } from "../generic/text";
 import { MenuNavigationItemRenderer } from "./menuNavigationItemRenderer";
+import { MenuServiceItemRenderer } from "./menuServiceItemRenderer";
 import { VideoViewCountRenderer } from "./videoViewCountRenderer";
 
 export type VideoPrimaryInfoRenderer = {
@@ -13,7 +14,8 @@ export type VideoPrimaryInfoRenderer = {
   videoActions: {
     menuRenderer: {
       items: {
-        menuNavigationItemRenderer: MenuNavigationItemRenderer
+        menuNavigationItemRenderer?: MenuNavigationItemRenderer
+        menuServiceItemRenderer?: MenuServiceItemRenderer
       }[]
     }
   },

@@ -213,7 +213,7 @@ export class YoutubeScraper {
         ?? lockupViewModel?.metadata.lockupMetadataViewModel.title!
       );
       let estimatedCount = +(
-        lockupViewModel?.contentImage.collectionThumbnailViewModel.primaryThumbnail.thumbnailViewModel.overlays
+        lockupViewModel?.contentImage.collectionThumbnailViewModel?.primaryThumbnail.thumbnailViewModel.overlays
           .find(item => item.thumbnailOverlayBadgeViewModel)!.thumbnailOverlayBadgeViewModel
           ?.thumbnailBadges[0].thumbnailBadgeViewModel.text.split(' ')[0]!
         ?? getOriginalText(

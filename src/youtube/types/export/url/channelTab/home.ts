@@ -52,6 +52,7 @@ export type Home = {
                   gridChannelRenderer?: GridChannelRenderer
                   gridPlaylistRenderer?: GridPlaylistRenderer
                   lockupViewModel?: LockupViewModel
+                  postRenderer?: {}
                 }[]
               }
             }
@@ -64,6 +65,7 @@ export type Home = {
 
 export function getFeaturedDisplay(data: Home): (
   | ['membersRecognition']
+  | ['communityPosts']
   | ['live', string[]]
   | ['featured', string]
   | ['playlist', string]
@@ -139,6 +141,8 @@ export function getFeaturedDisplay(data: Home): (
     }
     if (item.reelShelfRenderer)
       return ['playlist', channelId.replace('UC', 'UUSH')];
+    if (item.shelfRenderer?.content.horizontalListRenderer?.items[0].postRenderer)
+      return ['communityPosts'];
     throw new Error(`Unknown featured display: ${Object.keys(item)[0]}`);
   });
 }

@@ -8,7 +8,8 @@ export type LockupViewModel = {
     }
   }
   contentImage: {
-    collectionThumbnailViewModel: {
+    thumbnailViewModel?: {}
+    collectionThumbnailViewModel?: {
       primaryThumbnail: {
         thumbnailViewModel: {
           overlays: (

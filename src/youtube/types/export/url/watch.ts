@@ -106,6 +106,7 @@ type YtInitialData = {
             videoPrimaryInfoRenderer?: VideoPrimaryInfoRenderer
             videoSecondaryInfoRenderer?: VideoSecondaryInfoRenderer
             merchandiseShelfRenderer?: MerchandiseShelfRenderer
+            compositeVideoPrimaryInfoRenderer?: {}
             itemSectionRenderer?: ItemSectionRenderer<{
               /**
                * `Comments are turned off`
@@ -182,7 +183,7 @@ type YtInitialData = {
         }
         | {
           type: 'ENTITY_MUTATION_TYPE_DELETE'
-          options: {}
+          options?: {}
         }
       )[]
     }

@@ -59,6 +59,7 @@ export type YtInitialData = {
         | Shorts
         | Podcasts
         | Store
+        | { selected: true, title?: undefined }
         expandableTabRenderer?: Search
       }[]
     }
@@ -68,6 +69,7 @@ export type YtInitialData = {
           contents: {
             videoPrimaryInfoRenderer?: VideoPrimaryInfoRenderer
             videoSecondaryInfoRenderer?: VideoSecondaryInfoRenderer
+            compositeVideoPrimaryInfoRenderer?: {}
             itemSectionRenderer?: {}
             merchandiseShelfRenderer?: {}
           }[]

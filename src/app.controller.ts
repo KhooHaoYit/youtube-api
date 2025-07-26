@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Header,
   Param,
   Post,
   Query,
@@ -86,6 +87,7 @@ export class AppController {
   }
 
   @Get('/channel/:id')
+  @Header('Content-Type', 'application/json')
   async getChannel(@Param('id') id: string) {
     return await this.prisma.channel.findUnique({
       where: { id },

@@ -133,6 +133,7 @@ export function isVerified(data: C4TabbedHeaderRenderer) {
 }
 
 export function haveMembershipFeature(data: C4TabbedHeaderRenderer) {
+  console.log(data);
   return 'sponsorButton' in data;
 }
 

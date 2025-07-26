@@ -2,10 +2,18 @@ import { request } from "../../src/doApi";
 
 export type ContinuationItemRenderer = {
   continuationEndpoint: {
-    continuationCommand: {
-      token: string,
-    },
-  },
+    continuationCommand?: {
+      token: string
+    }
+    commandExecutorCommand?: {
+      commands: {
+        [key: string]: unknown
+        continuationCommand?: {
+          token: string
+        }
+      }[]
+    }
+  }
 };
 
 export async function* listAll<
@@ -26,7 +34,10 @@ export async function* listAll<
     if (!continuation)
       break;
     data = await request(innertubeApiKey, {
-      continuation: continuation.continuationEndpoint.continuationCommand.token,
+      continuation: continuation.continuationEndpoint.continuationCommand?.token
+        || continuation.continuationEndpoint.commandExecutorCommand!.commands
+          .find(command => command.continuationCommand)!
+          .continuationCommand!.token,
     }).then(res => {
       if ('onResponseReceivedActions' in res)
         return res.onResponseReceivedActions[0].appendContinuationItemsAction.continuationItems ?? [];
